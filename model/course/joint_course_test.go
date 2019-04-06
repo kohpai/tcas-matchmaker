@@ -13,10 +13,6 @@ func TestNewJointCourse_Always_ReturnsJointCourse(t *testing.T) {
 		t.Error("Joint course available spots is incorrect", jointCourse)
 	}
 
-	if jointCourse.limit != 100 {
-		t.Error("Joint course limit is incorrect", jointCourse)
-	}
-
 	if len(jointCourse.courses) != 0 {
 		t.Error("Courses is not empty", jointCourse)
 	}

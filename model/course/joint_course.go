@@ -5,15 +5,16 @@ import "fmt"
 type JointCourse struct {
 	id             string
 	availableSpots uint16
-	limit          uint16
 	courses        []Course
 }
 
 func NewJointCourse(id string, availableSpots uint16) *JointCourse {
+	courses := make([]Course, 0)
+
 	return &JointCourse{
-		id:             id,
-		availableSpots: availableSpots,
-		courses:        make([]Course, 0),
+		id,
+		availableSpots,
+		courses,
 	}
 }
 
