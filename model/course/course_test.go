@@ -19,7 +19,7 @@ func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
 	course := NewCourse("1234", jointCourse)
 
-	if course.IsFull() {
+	if course.isFull {
 		t.Error("Course is full", course)
 	}
 }
@@ -30,7 +30,7 @@ func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 
 	jointCourse.Apply()
 
-	if !course.IsFull() {
+	if !course.isFull {
 		t.Error("Course is NOT full", course)
 	}
 }
@@ -39,7 +39,7 @@ func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 0)
 	course := NewCourse("1234", jointCourse)
 
-	if !course.IsFull() {
+	if !course.isFull {
 		t.Error("Course is NOT full", course)
 	}
 }
