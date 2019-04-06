@@ -10,6 +10,8 @@ type Course struct {
 	name    string
 	faculty string
 	project string
+	jointId string
+	limit   uint16
 }
 
 type Student struct {
