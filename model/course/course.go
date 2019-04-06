@@ -7,11 +7,15 @@ type Course struct {
 }
 
 func NewCourse(id string, jointCourse *JointCourse) *Course {
-	return &Course{
+	course := &Course{
 		id,
 		false,
 		jointCourse,
 	}
+
+	jointCourse.courses = append(jointCourse.courses, course)
+
+	return course
 }
 
 func (course *Course) IsFull() bool {

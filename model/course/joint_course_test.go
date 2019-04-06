@@ -41,3 +41,23 @@ func TestApply_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
 		t.Error("Joint course available spots is incorrect", jointCourse)
 	}
 }
+
+func TestRegisterCourse_ByDefault_RegistersCourse(t *testing.T) {
+	jointCourse := NewJointCourse("1234", 10)
+	courses := []*Course{
+		NewCourse("1234", jointCourse),
+		NewCourse("1235", jointCourse),
+		NewCourse("1236", jointCourse),
+	}
+
+	if len(jointCourse.courses) != 3 {
+		t.Error("Courses length is incorrect", jointCourse)
+	}
+
+	for i := 0; i < 3; i++ {
+		course := jointCourse.courses[i]
+		if course != courses[i] {
+			t.Errorf("Course %d is incorrect", i)
+		}
+	}
+}

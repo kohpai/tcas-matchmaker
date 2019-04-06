@@ -5,11 +5,11 @@ import "fmt"
 type JointCourse struct {
 	id             string
 	availableSpots uint16
-	courses        []Course
+	courses        []*Course
 }
 
 func NewJointCourse(id string, availableSpots uint16) *JointCourse {
-	courses := make([]Course, 0)
+	courses := make([]*Course, 0)
 
 	return &JointCourse{
 		id,
@@ -24,6 +24,7 @@ func (jointCourse *JointCourse) Apply() bool {
 	}
 
 	jointCourse.availableSpots -= 1
+
 	return true
 }
 
