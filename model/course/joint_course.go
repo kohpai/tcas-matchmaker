@@ -25,6 +25,12 @@ func (jointCourse *JointCourse) Apply() bool {
 
 	jointCourse.availableSpots -= 1
 
+	if jointCourse.availableSpots == 0 {
+		for _, course := range jointCourse.courses {
+			course.isFull = true
+		}
+	}
+
 	return true
 }
 
