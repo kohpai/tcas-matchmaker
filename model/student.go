@@ -1,18 +1,19 @@
-package student
+package model
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type Student struct {
 	citizenId         string
 	applicationStatus ApplicationStatus
+	preferredCourses  [6]*Course
+	course            *Course
 }
 
 func (student *Student) SetStatus(status ApplicationStatus) {
 	student.applicationStatus = status
-}
-
-func (student *Student) Propose() {
-	// for each course in perferredCourses
 }
 
 func NewStudent(citizenId string) *Student {
@@ -20,6 +21,15 @@ func NewStudent(citizenId string) *Student {
 		citizenId:         citizenId,
 		applicationStatus: ApplicationStatuses().Pending,
 	}
+}
+
+func (student *Student) SetPreferredCourse(priority uint8, course *Course) error {
+	if priority < 1 || 6 < priority {
+		return errors.New("priority out of range")
+	}
+
+	student.preferredCourses[priority-1] = course
+	return nil
 }
 
 func (student *Student) String() string {

@@ -1,20 +1,18 @@
-package course
+package model
 
 import (
 	"log"
-
-	"github.com/kohpai/tcas-3rd-round-resolver/model/student"
 )
 
 type Course struct {
 	id          string
 	isFull      bool
 	jointCourse *JointCourse
-	students    []*student.Student
+	students    []*Student
 }
 
 func NewCourse(id string, jointCourse *JointCourse) *Course {
-	students := make([]*student.Student, 0)
+	students := make([]*Student, 0)
 	course := &Course{
 		id,
 		false,
@@ -31,7 +29,7 @@ func NewCourse(id string, jointCourse *JointCourse) *Course {
 	return course
 }
 
-func (course *Course) Apply(s *student.Student) bool {
+func (course *Course) Apply(s *Student) bool {
 	if course.isFull {
 		return false
 	}

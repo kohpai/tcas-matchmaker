@@ -1,4 +1,4 @@
-package student
+package model
 
 import (
 	"sync"

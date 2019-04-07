@@ -1,4 +1,4 @@
-package course
+package model
 
 import "fmt"
 
