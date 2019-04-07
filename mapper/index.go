@@ -1,17 +1,13 @@
 package mapper
 
-type University struct {
-	id   string
-	name string
-}
-
 type Course struct {
-	id      string
-	name    string
-	faculty string
-	project string
-	jointId string
-	limit   uint16
+	id         string
+	jointId    string
+	name       string
+	project    string
+	faculty    string
+	university string
+	limit      uint16
 }
 
 type Student struct {
