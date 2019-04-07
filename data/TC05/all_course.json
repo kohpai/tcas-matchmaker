@@ -1,0 +1,317 @@
+[
+ {
+   "course_id": "C0001",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0002",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0003",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0004",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0005",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0006",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0007",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0008",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0009",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0010",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0011",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0012",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0013",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0014",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0043",
+   "round_3_join_id": "",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0015",
+   "round_3_join_id": "A1",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0016",
+   "round_3_join_id": "A1",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0017",
+   "round_3_join_id": "A2",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0018",
+   "round_3_join_id": "A2",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0019",
+   "round_3_join_id": "A3",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0020",
+   "round_3_join_id": "A3",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0021",
+   "round_3_join_id": "A4",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0022",
+   "round_3_join_id": "A4",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0023",
+   "round_3_join_id": "A5",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0024",
+   "round_3_join_id": "A5",
+   "round_3_receive": 5,
+   "round_3_condition": 1,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0025",
+   "round_3_join_id": "A6",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0026",
+   "round_3_join_id": "A6",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0027",
+   "round_3_join_id": "A7",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0028",
+   "round_3_join_id": "A7",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0029",
+   "round_3_join_id": "A8",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0030",
+   "round_3_join_id": "A8",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0031",
+   "round_3_join_id": "A9",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0032",
+   "round_3_join_id": "A9",
+   "round_3_receive": 5,
+   "round_3_condition": 2,
+   "round_3_add_limit": 0
+ },
+ {
+   "course_id": "C0033",
+   "round_3_join_id": "A10",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0034",
+   "round_3_join_id": "A10",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0035",
+   "round_3_join_id": "A11",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0036",
+   "round_3_join_id": "A11",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0037",
+   "round_3_join_id": "A12",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0038",
+   "round_3_join_id": "A12",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0039",
+   "round_3_join_id": "A13",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0040",
+   "round_3_join_id": "A13",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0041",
+   "round_3_join_id": "A14",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0042",
+   "round_3_join_id": "A14",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0044",
+   "round_3_join_id": "A15",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0045",
+   "round_3_join_id": "A15",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ }
+]

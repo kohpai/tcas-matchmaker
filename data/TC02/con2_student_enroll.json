@@ -1,0 +1,128 @@
+[
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000201",
+   "course_id": "C0006",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000202",
+   "course_id": "C0006",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000203",
+   "course_id": "C0006",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000204",
+   "course_id": "C0006",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000205",
+   "course_id": "C0006",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000206",
+   "course_id": "C0007",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000207",
+   "course_id": "C0007",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000208",
+   "course_id": "C0007",
+   "priority": 3
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000209",
+   "course_id": "C0007",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000210",
+   "course_id": "C0007",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000220",
+   "course_id": "C0007",
+   "priority": 6
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000211",
+   "course_id": "C0008",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000212",
+   "course_id": "C0008",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000213",
+   "course_id": "C0008",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000214",
+   "course_id": "C0008",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000215",
+   "course_id": "C0008",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000216",
+   "course_id": "C0008",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000217",
+   "course_id": "C0009",
+   "priority": 1
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000218",
+   "course_id": "C0009",
+   "priority": 2
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000219",
+   "course_id": "C0009",
+   "priority": 3
+ },
+ {
+   "round": "3/2562",
+   "citizen_id": "TH0000000220",
+   "course_id": "C0009",
+   "priority": 4
+ }
+]
