@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/gocarina/gocsv"
-
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
 )
 
