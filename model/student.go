@@ -54,7 +54,7 @@ func (student *Student) SetPreferredCourse(priority uint8, course *Course) error
 
 func (student *Student) String() string {
 	return fmt.Sprintf(
-		"{\n\tCitizen ID: %s,\n\t Application Status: %s\n}",
+		"{citizenId: %s, applicationStatus: %s}",
 		student.citizenId,
 		student.applicationStatus,
 	)

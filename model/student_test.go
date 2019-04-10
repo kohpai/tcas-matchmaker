@@ -32,7 +32,7 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 
 func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse)
+	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
 
 	if err := student.SetPreferredCourse(2, course); err != nil {
@@ -46,7 +46,7 @@ func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 
 func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse)
+	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
 
 	if err := student.SetPreferredCourse(7, course); err == nil {

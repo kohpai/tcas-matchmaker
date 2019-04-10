@@ -1,12 +1,13 @@
 package model
 
 import (
+	"container/heap"
 	"testing"
 )
 
 func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 10)
-	course := NewCourse("1234", jointCourse)
+	course := NewCourse("1234", jointCourse, nil)
 
 	if course.id != "1234" {
 		t.Error("Course ID not matched", course)
@@ -19,7 +20,7 @@ func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
 
 func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse)
+	course := NewCourse("1234", jointCourse, nil)
 
 	if course.isFull {
 		t.Error("Course is full", course)
@@ -28,7 +29,7 @@ func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 
 func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse)
+	course := NewCourse("1234", jointCourse, nil)
 
 	jointCourse.Apply()
 
@@ -39,7 +40,7 @@ func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 
 func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 0)
-	course := NewCourse("1234", jointCourse)
+	course := NewCourse("1234", jointCourse, nil)
 
 	if !course.isFull {
 		t.Error("Course is NOT full", course)
@@ -48,7 +49,10 @@ func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
 
 func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse)
+	ranking := map[string]uint16{
+		"1349": 1,
+	}
+	course := NewCourse("1234", jointCourse, ranking)
 
 	s := NewStudent("1349")
 
@@ -59,7 +63,10 @@ func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 
 func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse)
+	ranking := map[string]uint16{
+		"1349": 1,
+	}
+	course := NewCourse("1234", jointCourse, ranking)
 
 	s := NewStudent("1349")
 	course.Apply(s)
@@ -71,7 +78,12 @@ func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 
 func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 3)
-	course := NewCourse("1234", jointCourse)
+	ranking := map[string]uint16{
+		"1351": 1,
+		"1350": 2,
+		"1349": 3,
+	}
+	course := NewCourse("1234", jointCourse, ranking)
 
 	ss := []*Student{
 		NewStudent("1349"),
@@ -83,9 +95,13 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 		course.Apply(s)
 	}
 
-	for i, s := range course.students {
-		if s != ss[i] {
-			t.Errorf("Student is not enrolled, %d", i)
-		}
+	if s := heap.Pop(&course.students).(*RankedStudent); ss[2] != s.student {
+		t.Error("Student is not matched,", s)
+	}
+	if s := heap.Pop(&course.students).(*RankedStudent); ss[1] != s.student {
+		t.Error("Student is not matched,", s)
+	}
+	if s := heap.Pop(&course.students).(*RankedStudent); ss[0] != s.student {
+		t.Error("Student is not matched,", s)
 	}
 }

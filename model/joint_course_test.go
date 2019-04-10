@@ -45,9 +45,9 @@ func TestApply_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
 func TestRegisterCourse_ByDefault_RegistersCourse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 10)
 	courses := []*Course{
-		NewCourse("1234", jointCourse),
-		NewCourse("1235", jointCourse),
-		NewCourse("1236", jointCourse),
+		NewCourse("1234", jointCourse, nil),
+		NewCourse("1235", jointCourse, nil),
+		NewCourse("1236", jointCourse, nil),
 	}
 
 	if len(jointCourse.courses) != 3 {
