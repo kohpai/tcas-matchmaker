@@ -29,6 +29,22 @@ func NewCourse(id string, jointCourse *JointCourse) *Course {
 	return course
 }
 
+func (course *Course) Id() string {
+	return course.id
+}
+
+func (course *Course) IsFull() bool {
+	return course.isFull
+}
+
+func (course *Course) JointCourse() *JointCourse {
+	return course.jointCourse
+}
+
+func (course *Course) Students() []*Student {
+	return course.students
+}
+
 func (course *Course) Apply(s *Student) bool {
 	if course.isFull {
 		return false

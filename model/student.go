@@ -23,6 +23,26 @@ func NewStudent(citizenId string) *Student {
 	}
 }
 
+func (student *Student) CitizenId() string {
+	return student.citizenId
+}
+
+func (student *Student) ApplicationStatus() ApplicationStatus {
+	return student.applicationStatus
+}
+
+func (student *Student) PreferredCourse(priority uint8) (*Course, error) {
+	if priority < 1 || 6 < priority {
+		return nil, errors.New("priority out of range")
+	}
+
+	return student.preferredCourses[priority-1], nil
+}
+
+func (student *Student) Course() *Course {
+	return student.course
+}
+
 func (student *Student) SetPreferredCourse(priority uint8, course *Course) error {
 	if priority < 1 || 6 < priority {
 		return errors.New("priority out of range")

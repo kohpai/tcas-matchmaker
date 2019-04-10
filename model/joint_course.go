@@ -18,6 +18,18 @@ func NewJointCourse(id string, availableSpots uint16) *JointCourse {
 	}
 }
 
+func (jointCourse *JointCourse) Id() string {
+	return jointCourse.id
+}
+
+func (jointCourse *JointCourse) AvailableSpots() uint16 {
+	return jointCourse.availableSpots
+}
+
+func (jointCourse *JointCourse) Courses() []*Course {
+	return jointCourse.courses
+}
+
 func (jointCourse *JointCourse) Apply() bool {
 	if jointCourse.availableSpots == 0 {
 		return false
@@ -36,7 +48,7 @@ func (jointCourse *JointCourse) Apply() bool {
 
 func (jointCourse *JointCourse) String() string {
 	return fmt.Sprintf(
-		"{\n\tCourse ID: %s, \n\t Available Spots: %d,\n}",
+		"{Course ID: %s, Available Spots: %d}",
 		jointCourse.id,
 		jointCourse.availableSpots,
 	)
