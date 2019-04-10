@@ -6,9 +6,24 @@ import (
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
 )
 
+type RankingMap map[string]model.Ranking          // course ID -> citizen ID -> rank
 type JointCourseMap map[string]*model.JointCourse // joint ID -> joint course
 type CourseMap map[string]*model.Course           // course ID -> course
 type StudentMap map[string]*model.Student         // citizen ID -> student
+
+func createRankingMap(rankings []Ranking) RankingMap {
+	rankingMap := make(RankingMap)
+
+	for _, r := range rankings {
+		courseId := r.CourseId
+		if rankingMap[courseId] == nil {
+			rankingMap[courseId] = make(model.Ranking)
+		}
+		rankingMap[courseId][r.CitizenId] = r.Rank
+	}
+
+	return rankingMap
+}
 
 func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
@@ -24,8 +39,9 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	return jointCourseMap
 }
 
-func CreateCourseMap(courses []Course) CourseMap {
+func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
 	jointCourseMap := createJointCourseMap(courses)
+	rankingMap := createRankingMap(rankings)
 	courseMap := make(CourseMap)
 
 	for _, c := range courses {
@@ -36,7 +52,7 @@ func CreateCourseMap(courses []Course) CourseMap {
 			jointCourse = jointCourseMap[c.JointId]
 		}
 
-		courseMap[c.Id] = model.NewCourse(c.Id, jointCourse)
+		courseMap[c.Id] = model.NewCourse(c.Id, jointCourse, rankingMap[c.Id])
 	}
 
 	return courseMap

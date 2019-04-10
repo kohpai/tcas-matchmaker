@@ -17,5 +17,5 @@ type Student struct {
 type Ranking struct {
 	CourseId  string `csv:"course_id"`
 	CitizenId string `csv:"citizen_id"`
-	Rank      uint8  `csv:"ranking"`
+	Rank      uint16 `csv:"ranking"`
 }
