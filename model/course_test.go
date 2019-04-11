@@ -60,6 +60,62 @@ func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 	}
 }
 
+func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
+	jointCourse := NewJointCourse("1234", 1)
+	ranking := map[string]uint16{
+		"1349": 2,
+		"1350": 1,
+	}
+	course := NewCourse("1234", jointCourse, ranking)
+
+	ss := []*Student{
+		NewStudent("1349"),
+		NewStudent("1350"),
+	}
+
+	course.Apply(ss[0])
+	if !course.Apply(ss[1]) {
+		t.Error("Apply returns false", ss[1])
+	}
+
+	statuses := ApplicationStatuses()
+	if ss[0].ApplicationStatus() != statuses.Pending {
+		t.Error("Student has incorrect status", ss[0])
+	}
+
+	if ss[1].ApplicationStatus() != statuses.Accepted {
+		t.Error("Student has incorrect status", ss[1])
+	}
+}
+
+func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
+	jointCourse := NewJointCourse("1234", 1)
+	ranking := map[string]uint16{
+		"1349": 1,
+		"1350": 2,
+	}
+	course := NewCourse("1234", jointCourse, ranking)
+
+	ss := []*Student{
+		NewStudent("1349"),
+		NewStudent("1350"),
+	}
+
+	course.Apply(ss[0])
+	if course.Apply(ss[1]) {
+		t.Error("Apply returns true", ss[1])
+	}
+
+	statuses := ApplicationStatuses()
+	if ss[0].ApplicationStatus() != statuses.Accepted {
+		t.Error("Student has incorrect status", ss[0])
+	}
+
+	if ss[1].ApplicationStatus() != statuses.Pending {
+		t.Error("Student has incorrect status", ss[1])
+	}
+}
+
 func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
 	ranking := map[string]uint16{
@@ -96,13 +152,13 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 
 	regStudents := course.Students()
 
-	if s := regStudents.Pop(); ss[2] != s.student {
+	if s := regStudents.Pop(); ss[0] != s.student {
 		t.Error("Student is not matched,", s)
 	}
 	if s := regStudents.Pop(); ss[1] != s.student {
 		t.Error("Student is not matched,", s)
 	}
-	if s := regStudents.Pop(); ss[0] != s.student {
+	if s := regStudents.Pop(); ss[2] != s.student {
 		t.Error("Student is not matched,", s)
 	}
 }

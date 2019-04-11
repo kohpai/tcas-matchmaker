@@ -49,8 +49,19 @@ func (course *Course) Students() *PriorityQueue {
 }
 
 func (course *Course) Apply(s *Student) bool {
+	rankedStudent := &RankedStudent{
+		s, course.ranking[s.CitizenId()], nil, nil,
+	}
+
+	course.students.Push(rankedStudent)
+
+	statuses := ApplicationStatuses()
+	rankedStudent.student.SetStatus(statuses.Accepted)
+
 	if course.isFull {
-		return false
+		rs := course.students.Pop()
+		rs.student.SetStatus(statuses.Pending)
+		return rankedStudent != rs
 	}
 
 	// @ASSERTION, this shouldn't happen
@@ -58,10 +69,5 @@ func (course *Course) Apply(s *Student) bool {
 		log.Println("Apply returns false")
 	}
 
-	rankedStudent := &RankedStudent{
-		s, course.ranking[s.CitizenId()], nil, nil,
-	}
-
-	course.students.Push(rankedStudent)
 	return true
 }

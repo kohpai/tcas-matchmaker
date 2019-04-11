@@ -76,12 +76,12 @@ func (pq *PriorityQueue) Push(rs *RankedStudent) {
 }
 
 func (pq *PriorityQueue) Pop() *RankedStudent {
-	if pq.head == nil {
+	if pq.tail == nil {
 		return nil
 	}
 
-	poping := pq.head
-	pq.head = poping.next
+	poping := pq.tail
+	pq.tail = poping.prev
 	pq.len -= 1
 
 	return poping
