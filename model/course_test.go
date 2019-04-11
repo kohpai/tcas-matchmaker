@@ -9,11 +9,11 @@ func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 10)
 	course := NewCourse("1234", jointCourse, nil)
 
-	if course.id != "1234" {
+	if course.Id() != "1234" {
 		t.Error("Course ID not matched", course)
 	}
 
-	if course.jointCourse != jointCourse {
+	if course.JointCourse() != jointCourse {
 		t.Error("Joint course is incorrect", course)
 	}
 }
@@ -22,7 +22,7 @@ func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
 	course := NewCourse("1234", jointCourse, nil)
 
-	if course.isFull {
+	if course.IsFull() {
 		t.Error("Course is full", course)
 	}
 }
@@ -33,7 +33,7 @@ func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 
 	jointCourse.Apply()
 
-	if !course.isFull {
+	if !course.IsFull() {
 		t.Error("Course is NOT full", course)
 	}
 }
@@ -42,7 +42,7 @@ func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 0)
 	course := NewCourse("1234", jointCourse, nil)
 
-	if !course.isFull {
+	if !course.IsFull() {
 		t.Error("Course is NOT full", course)
 	}
 }
@@ -71,7 +71,7 @@ func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 	s := NewStudent("1349")
 	course.Apply(s)
 
-	if !course.isFull {
+	if !course.IsFull() {
 		t.Error("Course is NOT full", course)
 	}
 }
@@ -95,13 +95,15 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 		course.Apply(s)
 	}
 
-	if s := heap.Pop(&course.students).(*RankedStudent); ss[2] != s.student {
+	regStudents := course.Students()
+
+	if s := heap.Pop(&regStudents).(*RankedStudent); ss[2] != s.student {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(&course.students).(*RankedStudent); ss[1] != s.student {
+	if s := heap.Pop(&regStudents).(*RankedStudent); ss[1] != s.student {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(&course.students).(*RankedStudent); ss[0] != s.student {
+	if s := heap.Pop(&regStudents).(*RankedStudent); ss[0] != s.student {
 		t.Error("Student is not matched,", s)
 	}
 }

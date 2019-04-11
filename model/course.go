@@ -27,12 +27,11 @@ func NewCourse(id string, jointCourse *JointCourse, ranking Ranking) *Course {
 		students,
 	}
 
-	if jointCourse.availableSpots == 0 {
+	if jointCourse.AvailableSpots() == 0 {
 		course.isFull = true
 	}
 
-	jointCourse.courses = append(jointCourse.courses, course)
-
+	jointCourse.RegisterCourse(course)
 	return course
 }
 

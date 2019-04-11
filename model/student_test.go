@@ -5,27 +5,23 @@ import "testing"
 func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 	student := NewStudent("1349900696510")
 
-	if student.citizenId != "1349900696510" {
+	if student.CitizenId() != "1349900696510" {
 		t.Error("Citizen ID not matched", student)
 	}
 
-	if student.applicationStatus != ApplicationStatuses().Pending {
+	if student.ApplicationStatus() != ApplicationStatuses().Pending {
 		t.Error("Application status is not PENDING", student)
 	}
 
-	isEmpty := true
-	for _, course := range student.preferredCourses {
-		if course != nil {
-			isEmpty = false
+	for i := 1; i < 7; i++ {
+		course, err := student.PreferredCourse(uint8(i))
+		if course != nil || err != nil {
+			t.Error("Preferred Courses is not empty", student, err)
 			break
 		}
 	}
 
-	if !isEmpty {
-		t.Error("Preferred Courses is not empty", student)
-	}
-
-	if student.course != nil {
+	if student.Course() != nil {
 		t.Error("Course is not nil", student)
 	}
 }
@@ -39,8 +35,8 @@ func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 		t.Error("Cannot set preferred course", err)
 	}
 
-	if student.preferredCourses[1] != course {
-		t.Error("Course does not matched", student)
+	if c, err := student.PreferredCourse(2); c != course || err != nil {
+		t.Error("Course does not matched", student, err)
 	}
 }
 
@@ -53,15 +49,11 @@ func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
 		t.Error("Set preferred course without error")
 	}
 
-	isEmpty := true
-	for _, course := range student.preferredCourses {
-		if course != nil {
-			isEmpty = false
+	for i := 1; i < 7; i++ {
+		course, err := student.PreferredCourse(uint8(i))
+		if course != nil || err != nil {
+			t.Error("Preferred Courses is not empty", student, err)
 			break
 		}
-	}
-
-	if !isEmpty {
-		t.Error("Preferred Courses is not empty", student)
 	}
 }

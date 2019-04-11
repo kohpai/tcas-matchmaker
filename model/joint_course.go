@@ -30,6 +30,10 @@ func (jointCourse *JointCourse) Courses() []*Course {
 	return jointCourse.courses
 }
 
+func (jointCourse *JointCourse) RegisterCourse(course *Course) {
+	jointCourse.courses = append(jointCourse.courses, course)
+}
+
 func (jointCourse *JointCourse) Apply() bool {
 	if jointCourse.availableSpots == 0 {
 		return false
@@ -48,8 +52,9 @@ func (jointCourse *JointCourse) Apply() bool {
 
 func (jointCourse *JointCourse) String() string {
 	return fmt.Sprintf(
-		"{Course ID: %s, Available Spots: %d}",
+		"{id: %s, availabelSpots: %d, courses: %v}",
 		jointCourse.id,
 		jointCourse.availableSpots,
+		jointCourse.courses,
 	)
 }
