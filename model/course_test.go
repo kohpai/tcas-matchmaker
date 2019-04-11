@@ -1,7 +1,6 @@
 package model
 
 import (
-	"container/heap"
 	"testing"
 )
 
@@ -97,13 +96,13 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 
 	regStudents := course.Students()
 
-	if s := heap.Pop(&regStudents).(*RankedStudent); ss[2] != s.student {
+	if s := regStudents.Pop(); ss[2] != s.student {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(&regStudents).(*RankedStudent); ss[1] != s.student {
+	if s := regStudents.Pop(); ss[1] != s.student {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(&regStudents).(*RankedStudent); ss[0] != s.student {
+	if s := regStudents.Pop(); ss[0] != s.student {
 		t.Error("Student is not matched,", s)
 	}
 }
