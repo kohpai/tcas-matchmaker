@@ -52,6 +52,23 @@ func (student *Student) SetPreferredCourse(priority uint8, course *Course) error
 	return nil
 }
 
+func (student *Student) Propose() {
+	isAccepted := false
+	for _, course := range student.preferredCourses {
+		if course == nil {
+			continue
+		}
+
+		if isAccepted = course.Apply(student); isAccepted {
+			break
+		}
+	}
+
+	if !isAccepted {
+		student.SetStatus(ApplicationStatuses().Rejected)
+	}
+}
+
 func (student *Student) String() string {
 	return fmt.Sprintf(
 		"{citizenId: %s, applicationStatus: %s}",
