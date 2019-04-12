@@ -89,10 +89,15 @@ func ToOutput(students []*model.Student) []Output {
 			}
 
 			citizenId := student.CitizenId()
+			ranking := course.Ranking()[citizenId]
+			if ranking == 0 {
+				continue
+			}
+
 			output := Output{
 				CourseId:  course.Id(),
 				CitizenId: citizenId,
-				Ranking:   course.Ranking()[citizenId],
+				Ranking:   ranking,
 			}
 
 			statuses := AdmitStatuses()
