@@ -80,7 +80,7 @@ func action(c *cli.Context) error {
 	}
 
 	outputs := mapper.ToOutput(allStudents)
-	if err := util.WriteCsvFile("output.csv", &outputs); err != nil {
+	if err := util.WriteCsvFile(c.String("output"), &outputs); err != nil {
 		return err
 	}
 
