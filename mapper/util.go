@@ -74,3 +74,7 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 
 	return studentMap
 }
+
+func ToOutput(acceptedStudents []*Student, rejectedStudents []*Student) []Output {
+	outputs := make([]Output, len(acceptedStudents)+len(rejectedStudents))
+}
