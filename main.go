@@ -1,25 +1,61 @@
 package main
 
 import (
+	"errors"
 	"log"
+	"os"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
 	"github.com/kohpai/tcas-3rd-round-resolver/util"
+	"github.com/urfave/cli"
 )
 
 func main() {
-	students, err := util.ReadStudents()
-	if err != nil {
-		log.Fatalln(err)
+	app := cli.NewApp()
+	app.Name = "resolver"
+	app.Usage = "resolve for admitted students"
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:     "students",
+			FilePath: "students.json",
+			Usage:    "a file to input as student-course enrollment",
+		},
+		cli.StringFlag{
+			Name:     "courses",
+			FilePath: "courses.json",
+			Usage:    "a file to input all courses in the system",
+		},
+		cli.StringFlag{
+			Name:     "rankings",
+			FilePath: "ranking.csv",
+			Usage:    "a file to input as ranking for students in each course",
+		},
+		cli.StringFlag{
+			Name:     "output",
+			FilePath: "output.csv",
+			Usage:    "a file to be saved as a result output",
+		},
 	}
-	courses, err := util.ReadCourses()
-	if err != nil {
-		log.Fatalln(err)
+	app.Action = action
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
 	}
-	rankings, err := util.ReadRankings()
+}
+
+func action(c *cli.Context) error {
+	students, err := util.ReadStudents(c.String("students"))
 	if err != nil {
-		log.Fatalln(err)
+		return err
+	}
+	courses, err := util.ReadCourses(c.String("courses"))
+	if err != nil {
+		return err
+	}
+	rankings, err := util.ReadRankings(c.String("rankings"))
+	if err != nil {
+		return err
 	}
 
 	clearingHouse := model.NewClearingHouse(
@@ -40,11 +76,13 @@ func main() {
 
 	// @ASSERTION, this shouldn't happen!
 	if len(allStudents) != len(clearingHouse.AcceptedStudents())+len(clearingHouse.RejectedStudents()) {
-		log.Fatal("some students are missing")
+		return errors.New("some students are missing")
 	}
 
 	outputs := mapper.ToOutput(allStudents)
 	if err := util.WriteCsvFile("output.csv", &outputs); err != nil {
-		log.Fatal(err)
+		return err
 	}
+
+	return nil
 }

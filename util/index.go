@@ -11,27 +11,27 @@ import (
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
 )
 
-func ReadStudents() ([]mapper.Student, error) {
+func ReadStudents(filename string) ([]mapper.Student, error) {
 	var students []mapper.Student
-	err := readJsonFile("data/TC01/con1_student_enroll.json", &students)
+	err := readJsonFile(filename, &students)
 	if err != nil {
 		return nil, err
 	}
 	return students, nil
 }
 
-func ReadCourses() ([]mapper.Course, error) {
+func ReadCourses(filename string) ([]mapper.Course, error) {
 	var courses []mapper.Course
-	err := readJsonFile("data/TC01/all_course.json", &courses)
+	err := readJsonFile(filename, &courses)
 	if err != nil {
 		return nil, err
 	}
 	return courses, nil
 }
 
-func ReadRankings() ([]mapper.Ranking, error) {
+func ReadRankings(filename string) ([]mapper.Ranking, error) {
 	var rankings []mapper.Ranking
-	err := readCsvFile("data/TC01/con1_course_accept.csv", &rankings)
+	err := readCsvFile(filename, &rankings)
 	if err != nil {
 		return nil, err
 	}
