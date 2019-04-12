@@ -1,6 +1,7 @@
 package model
 
 import (
+	"container/heap"
 	"log"
 )
 
@@ -11,11 +12,11 @@ type Course struct {
 	isFull      bool
 	jointCourse *JointCourse
 	ranking     Ranking
-	students    *PriorityQueue
+	students    PriorityQueue
 }
 
 func NewCourse(id string, jointCourse *JointCourse, ranking Ranking) *Course {
-	students := &PriorityQueue{}
+	students := PriorityQueue{}
 	course := &Course{
 		id,
 		false,
@@ -44,22 +45,22 @@ func (course *Course) JointCourse() *JointCourse {
 	return course.jointCourse
 }
 
-func (course *Course) Students() *PriorityQueue {
+func (course *Course) Students() PriorityQueue {
 	return course.students
 }
 
 func (course *Course) Apply(s *Student) bool {
 	rankedStudent := &RankedStudent{
-		s, course.ranking[s.CitizenId()], nil, nil,
+		s, course.ranking[s.CitizenId()], 0,
 	}
 
-	course.students.Push(rankedStudent)
+	heap.Push(&course.students, rankedStudent)
 
 	statuses := ApplicationStatuses()
 	rankedStudent.student.SetStatus(statuses.Accepted)
 
 	if course.isFull {
-		rs := course.students.Pop()
+		rs := heap.Pop(&course.students).(*RankedStudent)
 		rs.student.SetStatus(statuses.Pending)
 		return rankedStudent != rs
 	}

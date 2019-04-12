@@ -52,7 +52,12 @@ func (student *Student) SetPreferredCourse(priority uint8, course *Course) error
 	return nil
 }
 
-func (student *Student) Propose() {
+func (student *Student) Propose() ApplicationStatus {
+	statuses := ApplicationStatuses()
+	if student.applicationStatus != statuses.Pending {
+		return student.applicationStatus
+	}
+
 	isAccepted := false
 	for _, course := range student.preferredCourses {
 		if course == nil {
@@ -65,8 +70,10 @@ func (student *Student) Propose() {
 	}
 
 	if !isAccepted {
-		student.SetStatus(ApplicationStatuses().Rejected)
+		student.SetStatus(statuses.Rejected)
 	}
+
+	return student.applicationStatus
 }
 
 func (student *Student) String() string {
