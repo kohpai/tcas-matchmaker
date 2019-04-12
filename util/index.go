@@ -73,6 +73,21 @@ func readCsvFile(filename string, data interface{}) error {
 	return nil
 }
 
+func WriteCsvFile(filename string, data interface{}) error {
+	outputFile, err := os.Create(filename)
+	if err != nil {
+		return errors.New("cannot create file: " + err.Error())
+	}
+
+	defer outputFile.Close()
+
+	if err := gocsv.MarshalFile(data, outputFile); err != nil {
+		return errors.New("cannot write file: " + err.Error())
+	}
+
+	return nil
+}
+
 func GetPendingStudents(studentMap mapper.StudentMap) []*model.Student {
 	pendingStudents := make([]*model.Student, len(studentMap))
 
