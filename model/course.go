@@ -45,6 +45,10 @@ func (course *Course) JointCourse() *JointCourse {
 	return course.jointCourse
 }
 
+func (course *Course) Ranking() Ranking {
+	return course.ranking
+}
+
 func (course *Course) Students() PriorityQueue {
 	return course.students
 }

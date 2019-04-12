@@ -1,121 +1,58 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
-	"io/ioutil"
 	"log"
 	"os"
 
 	"github.com/gocarina/gocsv"
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-3rd-round-resolver/util"
 )
 
 func main() {
-	students, err := readStudents()
+	students, err := util.ReadStudents()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	courses, err := readCourses()
+	courses, err := util.ReadCourses()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	rankings, err := readRankings()
+	rankings, err := util.ReadRankings()
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	pendingStudents := getPendingStudents(
-		mapper.CreateStudentMap(
-			students,
-			mapper.CreateCourseMap(
-				courses,
-				rankings,
+	clearingHouse := model.NewClearingHouse(
+		util.GetPendingStudents(
+			mapper.CreateStudentMap(
+				students,
+				mapper.CreateCourseMap(
+					courses,
+					rankings,
+				),
 			),
 		),
 	)
 
-	clearingHouse := model.NewClearingHouse(pendingStudents)
 	clearingHouse.Execute()
 
-	if len(pendingStudents) != len(clearingHouse.AcceptedStudents())+len(clearingHouse.RejectedStudents()) {
+	allStudents, acceptedStudents, rejectedStudents := clearingHouse.Students(), clearingHouse.AcceptedStudents(), clearingHouse.RejectedStudents()
+	if len(allStudents) != len(acceptedStudents)+len(rejectedStudents) {
 		log.Fatal("some students are missing")
 	}
 
-	log.Println(clearingHouse)
-}
-
-func readStudents() ([]mapper.Student, error) {
-	var students []mapper.Student
-	err := readJsonFile("data/TC01/con1_student_enroll.json", &students)
+	outputs := mapper.ToOutput(allStudents)
+	outputFile, err := os.Create("output.csv")
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
-	return students, nil
-}
 
-func readCourses() ([]mapper.Course, error) {
-	var courses []mapper.Course
-	err := readJsonFile("data/TC01/all_course.json", &courses)
+	defer outputFile.Close()
+
+	err = gocsv.MarshalFile(&outputs, outputFile)
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
-	return courses, nil
-}
-
-func readRankings() ([]mapper.Ranking, error) {
-	var rankings []mapper.Ranking
-	err := readCsvFile("data/TC01/con1_course_accept.csv", &rankings)
-	if err != nil {
-		return nil, err
-	}
-	return rankings, nil
-}
-
-func readJsonFile(filename string, data interface{}) error {
-	jsonFile, err := os.Open(filename)
-	if err != nil {
-		return errors.New("cannot read JSON file: " + err.Error())
-	}
-
-	defer jsonFile.Close()
-
-	bytes, err := ioutil.ReadAll(jsonFile)
-	if err != nil {
-		return errors.New("cannot read bytes: " + err.Error())
-	}
-
-	if err = json.Unmarshal(bytes, data); err != nil {
-		return errors.New("cannot unmarshal: " + err.Error())
-	}
-
-	return nil
-}
-
-func readCsvFile(filename string, data interface{}) error {
-	csvFile, err := os.Open(filename)
-	if err != nil {
-		return errors.New("cannot read CSV file: " + err.Error())
-	}
-
-	defer csvFile.Close()
-
-	if err := gocsv.UnmarshalFile(csvFile, data); err != nil {
-		return errors.New("cannot unmarshal: " + err.Error())
-	}
-
-	return nil
-}
-
-func getPendingStudents(studentMap mapper.StudentMap) []*model.Student {
-	pendingStudents := make([]*model.Student, len(studentMap))
-
-	i := 0
-	for _, student := range studentMap {
-		pendingStudents[i] = student
-		i++
-	}
-
-	return pendingStudents
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type ClearingHouse struct {
-	pendingStudents  []*Student
+	students         []*Student
 	acceptedStudents []*Student
 	rejectedStudents []*Student
 }
@@ -17,8 +17,8 @@ func NewClearingHouse(students []*Student) *ClearingHouse {
 	}
 }
 
-func (ch *ClearingHouse) PendingStudents() []*Student {
-	return ch.pendingStudents
+func (ch *ClearingHouse) Students() []*Student {
+	return ch.students
 }
 
 func (ch *ClearingHouse) AcceptedStudents() []*Student {
@@ -33,7 +33,7 @@ func (ch *ClearingHouse) Execute() {
 	ch.executePending()
 
 	statuses := ApplicationStatuses()
-	for _, student := range ch.pendingStudents {
+	for _, student := range ch.students {
 		switch student.ApplicationStatus() {
 		case statuses.Accepted:
 			ch.acceptedStudents = append(ch.acceptedStudents, student)
@@ -41,14 +41,12 @@ func (ch *ClearingHouse) Execute() {
 			ch.rejectedStudents = append(ch.rejectedStudents, student)
 		}
 	}
-
-	ch.pendingStudents = []*Student{}
 }
 
 func (ch *ClearingHouse) executePending() {
 	statuses := ApplicationStatuses()
 	isPending := false
-	for _, student := range ch.pendingStudents {
+	for _, student := range ch.students {
 		if student.ApplicationStatus() == statuses.Pending {
 			isPending = true
 			student.Propose()
@@ -62,8 +60,8 @@ func (ch *ClearingHouse) executePending() {
 
 func (ch *ClearingHouse) String() string {
 	return fmt.Sprintf(
-		"{pendingStudents: %v, acceptedStudents: %v, rejectedStudents: %v}",
-		ch.pendingStudents,
+		"{students: %v, acceptedStudents: %v, rejectedStudents: %v}",
+		ch.students,
 		ch.acceptedStudents,
 		ch.rejectedStudents,
 	)

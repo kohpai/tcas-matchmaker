@@ -1,4 +1,4 @@
-package main
+package util
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ import (
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
 )
 
-func readStudents() ([]mapper.Student, error) {
+func ReadStudents() ([]mapper.Student, error) {
 	var students []mapper.Student
 	err := readJsonFile("data/TC01/con1_student_enroll.json", &students)
 	if err != nil {
@@ -20,7 +20,7 @@ func readStudents() ([]mapper.Student, error) {
 	return students, nil
 }
 
-func readCourses() ([]mapper.Course, error) {
+func ReadCourses() ([]mapper.Course, error) {
 	var courses []mapper.Course
 	err := readJsonFile("data/TC01/all_course.json", &courses)
 	if err != nil {
@@ -29,7 +29,7 @@ func readCourses() ([]mapper.Course, error) {
 	return courses, nil
 }
 
-func readRankings() ([]mapper.Ranking, error) {
+func ReadRankings() ([]mapper.Ranking, error) {
 	var rankings []mapper.Ranking
 	err := readCsvFile("data/TC01/con1_course_accept.csv", &rankings)
 	if err != nil {
@@ -73,7 +73,7 @@ func readCsvFile(filename string, data interface{}) error {
 	return nil
 }
 
-func getPendingStudents(studentMap mapper.StudentMap) []*model.Student {
+func GetPendingStudents(studentMap mapper.StudentMap) []*model.Student {
 	pendingStudents := make([]*model.Student, len(studentMap))
 
 	i := 0

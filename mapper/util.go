@@ -75,6 +75,39 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	return studentMap
 }
 
-func ToOutput(acceptedStudents []*Student, rejectedStudents []*Student) []Output {
-	outputs := make([]Output, len(acceptedStudents)+len(rejectedStudents))
+func ToOutput(students []*model.Student) []Output {
+	outputs := make([]Output, 0)
+
+	for _, student := range students {
+		courseIndex := student.CourseIndex()
+
+		for i := 0; i < 6; i++ {
+			course, _ := student.PreferredCourse(uint8(i) + 1)
+
+			if course == nil {
+				continue
+			}
+
+			citizenId := student.CitizenId()
+			output := Output{
+				CourseId:  course.Id(),
+				CitizenId: citizenId,
+				Ranking:   course.Ranking()[citizenId],
+			}
+
+			statuses := AdmitStatuses()
+			switch {
+			case i < courseIndex || courseIndex == -1:
+				output.AdmitStatus = statuses.Full
+			case i == courseIndex:
+				output.AdmitStatus = statuses.Admitted
+			case i > courseIndex:
+				output.AdmitStatus = statuses.Late
+			}
+
+			outputs = append(outputs, output)
+		}
+	}
+
+	return outputs
 }
