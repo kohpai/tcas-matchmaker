@@ -21,8 +21,8 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 		}
 	}
 
-	if student.Course() != nil {
-		t.Error("Course is not nil", student)
+	if student.CourseIndex() != -1 {
+		t.Error("course index is not -1", student)
 	}
 }
 

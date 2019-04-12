@@ -56,12 +56,11 @@ func (course *Course) Apply(s *Student) bool {
 
 	heap.Push(&course.students, rankedStudent)
 
-	statuses := ApplicationStatuses()
-	rankedStudent.student.SetStatus(statuses.Accepted)
+	rankedStudent.student.SetCourse(course)
 
 	if course.isFull {
 		rs := heap.Pop(&course.students).(*RankedStudent)
-		rs.student.SetStatus(statuses.Pending)
+		rs.student.ClearCourse()
 		return rankedStudent != rs
 	}
 
