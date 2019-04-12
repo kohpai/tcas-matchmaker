@@ -26,19 +26,22 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	courseMap := mapper.CreateCourseMap(courses, rankings)
-	studentMap := mapper.CreateStudentMap(students, courseMap)
-
-	pendingStudents := make([]*model.Student, len(studentMap))
-
-	i := 0
-	for _, student := range studentMap {
-		pendingStudents[i] = student
-		i++
-	}
+	pendingStudents := getPendingStudents(
+		mapper.CreateStudentMap(
+			students,
+			mapper.CreateCourseMap(
+				courses,
+				rankings,
+			),
+		),
+	)
 
 	clearingHouse := model.NewClearingHouse(pendingStudents)
 	clearingHouse.Execute()
+
+	if len(pendingStudents) != len(clearingHouse.AcceptedStudents())+len(clearingHouse.RejectedStudents()) {
+		log.Fatal("some students are missing")
+	}
 
 	log.Println(clearingHouse)
 }
@@ -103,4 +106,16 @@ func readCsvFile(filename string, data interface{}) error {
 	}
 
 	return nil
+}
+
+func getPendingStudents(studentMap mapper.StudentMap) []*model.Student {
+	pendingStudents := make([]*model.Student, len(studentMap))
+
+	i := 0
+	for _, student := range studentMap {
+		pendingStudents[i] = student
+		i++
+	}
+
+	return pendingStudents
 }
