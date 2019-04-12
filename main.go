@@ -17,24 +17,24 @@ func main() {
 	app.Usage = "resolve for admitted students"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:     "students",
-			FilePath: "students.json",
-			Usage:    "a file to input as student-course enrollment",
+			Name:  "students",
+			Value: "students.json",
+			Usage: "a file to input as student-course enrollment",
 		},
 		cli.StringFlag{
-			Name:     "courses",
-			FilePath: "courses.json",
-			Usage:    "a file to input all courses in the system",
+			Name:  "courses",
+			Value: "courses.json",
+			Usage: "a file to input all courses in the system",
 		},
 		cli.StringFlag{
-			Name:     "rankings",
-			FilePath: "ranking.csv",
-			Usage:    "a file to input as ranking for students in each course",
+			Name:  "rankings",
+			Value: "ranking.csv",
+			Usage: "a file to input as ranking for students in each course",
 		},
 		cli.StringFlag{
-			Name:     "output",
-			FilePath: "output.csv",
-			Usage:    "a file to be saved as a result output",
+			Name:  "output",
+			Value: "output.csv",
+			Usage: "a file to be saved as a result output",
 		},
 	}
 	app.Action = action
