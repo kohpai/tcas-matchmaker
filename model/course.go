@@ -24,6 +24,19 @@ func NewCourse(
 	jointCourse *JointCourse,
 	ranking Ranking,
 ) *Course {
+	if condition == Conditions().DenyAll {
+		rankCount := make(RankCount)
+		for _, rank := range ranking {
+			rankCount[rank] += 1
+		}
+
+		for key, rank := range ranking {
+			if rankCount[rank] > 1 {
+				delete(ranking, key)
+			}
+		}
+	}
+
 	isFull := jointCourse.AvailableSpots() == 0
 	course := &Course{
 		id,
@@ -78,11 +91,20 @@ func (course *Course) Apply(s *Student) bool {
 	switch course.condition {
 	case conditions.AllowAll:
 		return course.applyAll(rankedStudent)
-	case conditions.AllowSome:
-		return course.applySome(rankedStudent)
-	}
+	default:
+		if course.isFull {
+			rs := heap.Pop(&course.students).(*RankedStudent)
+			rs.student.ClearCourse()
+			return rankedStudent != rs
+		}
 
-	return true
+		// @ASSERTION, this shouldn't happen
+		if !course.jointCourse.Apply() {
+			log.Println("Apply returns false")
+		}
+
+		return true
+	}
 }
 
 func (course *Course) applyAll(rankedStudent *RankedStudent) bool {
@@ -105,17 +127,5 @@ func (course *Course) applyAll(rankedStudent *RankedStudent) bool {
 	return true
 }
 
-func (course *Course) applySome(rankedStudent *RankedStudent) bool {
-	if course.isFull {
-		rs := heap.Pop(&course.students).(*RankedStudent)
-		rs.student.ClearCourse()
-		return rankedStudent != rs
-	}
-
-	// @ASSERTION, this shouldn't happen
-	if !course.jointCourse.Apply() {
-		log.Println("Apply returns false")
-	}
-
-	return true
-}
+// func (course *Course) applySome(rankedStudent *RankedStudent) bool {
+// }
