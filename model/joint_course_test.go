@@ -45,9 +45,9 @@ func TestApply_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
 func TestRegisterCourse_ByDefault_RegistersCourse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 10)
 	courses := []*Course{
-		NewCourse("1234", jointCourse, nil),
-		NewCourse("1235", jointCourse, nil),
-		NewCourse("1236", jointCourse, nil),
+		NewCourse("1234", Conditions().AllowAll, jointCourse, nil),
+		NewCourse("1235", Conditions().AllowAll, jointCourse, nil),
+		NewCourse("1236", Conditions().AllowAll, jointCourse, nil),
 	}
 
 	regCourses := jointCourse.Courses()

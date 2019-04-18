@@ -52,7 +52,12 @@ func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
 			jointCourse = jointCourseMap[c.JointId]
 		}
 
-		courseMap[c.Id] = model.NewCourse(c.Id, jointCourse, rankingMap[c.Id])
+		courseMap[c.Id] = model.NewCourse(
+			c.Id,
+			c.Condition,
+			jointCourse,
+			rankingMap[c.Id],
+		)
 	}
 
 	return courseMap

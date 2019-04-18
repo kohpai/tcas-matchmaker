@@ -7,7 +7,7 @@ import (
 
 func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 10)
-	course := NewCourse("1234", jointCourse, nil)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, nil)
 
 	if course.Id() != "1234" {
 		t.Error("Course ID not matched", course)
@@ -20,7 +20,7 @@ func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
 
 func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse, nil)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, nil)
 
 	if course.IsFull() {
 		t.Error("Course is full", course)
@@ -29,7 +29,7 @@ func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 
 func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 1)
-	course := NewCourse("1234", jointCourse, nil)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, nil)
 
 	jointCourse.Apply()
 
@@ -40,7 +40,7 @@ func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 
 func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
 	jointCourse := NewJointCourse("1234", 0)
-	course := NewCourse("1234", jointCourse, nil)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, nil)
 
 	if !course.IsFull() {
 		t.Error("Course is NOT full", course)
@@ -52,7 +52,7 @@ func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 	ranking := map[string]uint16{
 		"1349": 1,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, ranking)
 
 	s := NewStudent("1349")
 
@@ -67,7 +67,7 @@ func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
 		"1349": 2,
 		"1350": 1,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, ranking)
 
 	ss := []*Student{
 		NewStudent("1349"),
@@ -95,7 +95,7 @@ func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
 		"1349": 1,
 		"1350": 2,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, ranking)
 
 	ss := []*Student{
 		NewStudent("1349"),
@@ -122,7 +122,7 @@ func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 	ranking := map[string]uint16{
 		"1349": 1,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, ranking)
 
 	s := NewStudent("1349")
 	course.Apply(s)
@@ -139,7 +139,7 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 		"1350": 2,
 		"1349": 3,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := NewCourse("1234", Conditions().AllowAll, jointCourse, ranking)
 
 	ss := []*Student{
 		NewStudent("1349"),
