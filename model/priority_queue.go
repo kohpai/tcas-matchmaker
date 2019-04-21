@@ -1,5 +1,7 @@
 package model
 
+import "fmt"
+
 type RankedStudent struct {
 	student *Student
 	rank    uint16
@@ -36,4 +38,8 @@ func (pq *PriorityQueue) Pop() interface{} {
 	item.index = -1 // for safety
 	*pq = old[0 : n-1]
 	return item
+}
+
+func (rs *RankedStudent) String() string {
+	return fmt.Sprintf("{student: %v, rank: %v}", rs.student, rs.rank)
 }

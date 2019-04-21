@@ -46,7 +46,7 @@ func (ch *ClearingHouse) Execute() {
 func (ch *ClearingHouse) executePending() {
 	statuses := ApplicationStatuses()
 	isPending := true
-	for i := 0; isPending; i++ {
+	for isPending {
 		isPending = false
 		for _, student := range ch.students {
 			if student.ApplicationStatus() == statuses.Pending {
