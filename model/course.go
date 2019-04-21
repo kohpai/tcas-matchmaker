@@ -2,7 +2,6 @@ package model
 
 import (
 	"container/heap"
-	"log"
 )
 
 type Ranking map[string]uint16
@@ -11,11 +10,10 @@ type RankCount map[uint16]uint16
 type Course struct {
 	id          string
 	isFull      bool
-	condition   Condition
-	jointCourse *JointCourse
 	ranking     Ranking
-	rankCount   RankCount
-	students    PriorityQueue
+	strategy    ApplyStrategy
+	jointCourse *JointCourse
+	students    *PriorityQueue
 }
 
 func NewCourse(
@@ -24,30 +22,22 @@ func NewCourse(
 	jointCourse *JointCourse,
 	ranking Ranking,
 ) *Course {
-	if condition == Conditions().DenyAll {
-		rankCount := make(RankCount)
-		for _, rank := range ranking {
-			rankCount[rank] += 1
-		}
-
-		for key, rank := range ranking {
-			if rankCount[rank] > 1 {
-				delete(ranking, key)
-			}
-		}
-	}
+	strategy := NewApplyStrategy(condition)
+	ranking = strategy.InitRanking(ranking)
 
 	isFull := jointCourse.AvailableSpots() == 0
 	course := &Course{
 		id,
 		isFull,
-		condition,
-		jointCourse,
 		ranking,
-		make(RankCount),
-		PriorityQueue{},
+		strategy,
+		jointCourse,
+		&PriorityQueue{
+			[]*RankedStudent{},
+		},
 	}
 
+	strategy.SetCourse(course)
 	jointCourse.RegisterCourse(course)
 	return course
 }
@@ -68,7 +58,7 @@ func (course *Course) Ranking() Ranking {
 	return course.ranking
 }
 
-func (course *Course) Students() PriorityQueue {
+func (course *Course) Students() *PriorityQueue {
 	return course.students
 }
 
@@ -78,54 +68,14 @@ func (course *Course) Apply(s *Student) bool {
 		return false
 	}
 
-	course.rankCount[rank] += 1
+	strategy := course.strategy
+	strategy.IncRankCount(rank)
 	rankedStudent := &RankedStudent{
 		s, rank, 0,
 	}
 
-	heap.Push(&course.students, rankedStudent)
-
+	heap.Push(course.students, rankedStudent)
 	rankedStudent.student.SetCourse(course)
 
-	conditions := Conditions()
-	switch course.condition {
-	case conditions.AllowAll:
-		return course.applyAll(rankedStudent)
-	default:
-		if course.isFull {
-			rs := heap.Pop(&course.students).(*RankedStudent)
-			rs.student.ClearCourse()
-			return rankedStudent != rs
-		}
-
-		// @ASSERTION, this shouldn't happen
-		if !course.jointCourse.Apply() {
-			log.Println("Apply returns false")
-		}
-
-		return true
-	}
+	return strategy.Apply(rankedStudent)
 }
-
-func (course *Course) applyAll(rankedStudent *RankedStudent) bool {
-	rank := rankedStudent.rank
-	if course.rankCount[rank] > 1 {
-		return true
-	}
-
-	if course.isFull {
-		rs := heap.Pop(&course.students).(*RankedStudent)
-		rs.student.ClearCourse()
-		return rankedStudent != rs
-	}
-
-	// @ASSERTION, this shouldn't happen
-	if !course.jointCourse.Apply() {
-		log.Println("Apply returns false")
-	}
-
-	return true
-}
-
-// func (course *Course) applySome(rankedStudent *RankedStudent) bool {
-// }
