@@ -7,7 +7,6 @@ import (
 
 type ApplyStrategy interface {
 	SetCourse(*Course)
-	IncRankCount(uint16)
 	InitRanking(Ranking) Ranking
 	Apply(*RankedStudent) bool
 }
@@ -41,10 +40,6 @@ func NewApplyStrategy(condition Condition) ApplyStrategy {
 
 func (strategy *BaseStrategy) SetCourse(course *Course) {
 	strategy.course = course
-}
-
-func (strategy *BaseStrategy) IncRankCount(rank uint16) {
-	strategy.rankCount[rank] += 1
 }
 
 func (strategy *BaseStrategy) InitRanking(ranking Ranking) Ranking {

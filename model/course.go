@@ -69,8 +69,6 @@ func (course *Course) Apply(s *Student) bool {
 		return false
 	}
 
-	strategy := course.strategy
-	strategy.IncRankCount(rank)
 	rankedStudent := &RankedStudent{
 		s, rank, 0,
 	}
@@ -78,7 +76,7 @@ func (course *Course) Apply(s *Student) bool {
 	heap.Push(course.students, rankedStudent)
 	rankedStudent.student.SetCourse(course)
 
-	return strategy.Apply(rankedStudent)
+	return course.strategy.Apply(rankedStudent)
 }
 
 func (course *Course) String() string {
