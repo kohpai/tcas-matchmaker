@@ -45,6 +45,10 @@ func (pq *PriorityQueue) Pop() interface{} {
 	return item
 }
 
+func (pq *PriorityQueue) Students() []*RankedStudent {
+	return pq.students
+}
+
 func (rs *RankedStudent) Student() *Student {
 	return rs.student
 }

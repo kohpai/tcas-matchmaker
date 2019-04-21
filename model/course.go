@@ -2,6 +2,7 @@ package model
 
 import (
 	"container/heap"
+	"fmt"
 )
 
 type Ranking map[string]uint16
@@ -78,4 +79,14 @@ func (course *Course) Apply(s *Student) bool {
 	rankedStudent.student.SetCourse(course)
 
 	return strategy.Apply(rankedStudent)
+}
+
+func (course *Course) String() string {
+	return fmt.Sprintf(
+		"{id: %v, isFull: %v, ranking: %v, students: %v}",
+		course.id,
+		course.isFull,
+		course.ranking,
+		course.students.students,
+	)
 }
