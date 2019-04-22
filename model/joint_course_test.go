@@ -3,7 +3,8 @@ package model
 import "testing"
 
 func TestNewJointCourse_Always_ReturnsJointCourse(t *testing.T) {
-	jointCourse := NewJointCourse("1234", 100)
+	strategy := NewApplyStrategy(Conditions().AllowAll)
+	jointCourse := NewJointCourse("1234", 100, strategy)
 
 	if jointCourse.Id() != "1234" {
 		t.Error("Joint course ID not matched", jointCourse)
@@ -18,36 +19,31 @@ func TestNewJointCourse_Always_ReturnsJointCourse(t *testing.T) {
 	}
 }
 
-func TestApply_AvailableSpotsGreaterThanZero_DecreasesByOne(t *testing.T) {
-	jointCourse := NewJointCourse("1234", 100)
+func TestDecSpots_AvailableSpotsGreaterThanZero_DecreasesByOne(t *testing.T) {
+	strategy := NewApplyStrategy(Conditions().AllowAll)
+	jointCourse := NewJointCourse("1234", 100, strategy)
 
-	if !jointCourse.Apply() {
-		t.Error("Apply returns false", jointCourse)
-	}
-
-	if jointCourse.AvailableSpots() != 99 {
+	if jointCourse.DecSpots(); jointCourse.AvailableSpots() != 99 {
 		t.Error("Joint course available spots is incorrect", jointCourse)
 	}
 }
 
-func TestApply_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
-	jointCourse := NewJointCourse("1234", 0)
+func TestDecSpots_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
+	strategy := NewApplyStrategy(Conditions().AllowAll)
+	jointCourse := NewJointCourse("1234", 0, strategy)
 
-	if jointCourse.Apply() {
-		t.Error("Apply returns true", jointCourse)
-	}
-
-	if jointCourse.AvailableSpots() != 0 {
+	if jointCourse.DecSpots(); jointCourse.AvailableSpots() != 0 {
 		t.Error("Joint course available spots is incorrect", jointCourse)
 	}
 }
 
 func TestRegisterCourse_ByDefault_RegistersCourse(t *testing.T) {
-	jointCourse := NewJointCourse("1234", 10)
+	strategy := NewApplyStrategy(Conditions().AllowAll)
+	jointCourse := NewJointCourse("1234", 10, strategy)
 	courses := []*Course{
-		NewCourse("1234", Conditions().AllowAll, jointCourse, nil),
-		NewCourse("1235", Conditions().AllowAll, jointCourse, nil),
-		NewCourse("1236", Conditions().AllowAll, jointCourse, nil),
+		NewCourse("1234", jointCourse, nil),
+		NewCourse("1235", jointCourse, nil),
+		NewCourse("1236", jointCourse, nil),
 	}
 
 	regCourses := jointCourse.Courses()

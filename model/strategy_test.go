@@ -1,9 +1,12 @@
 package model
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestApply_AllowAll_AllStudentsAreAdmitted(t *testing.T) {
-	jointCourse := NewJointCourse("1234", 3)
+	strategy := NewApplyStrategy(Conditions().AllowAll)
+	jointCourse := NewJointCourse("1234", 4, strategy)
 	ranking := Ranking{
 		"1352": 1,
 		"1351": 1,
@@ -12,7 +15,7 @@ func TestApply_AllowAll_AllStudentsAreAdmitted(t *testing.T) {
 		"1348": 3,
 		"1347": 3,
 	}
-	course := NewCourse("1234", Conditions().AllowAll, jointCourse, ranking)
+	course := NewCourse("1234", jointCourse, ranking)
 
 	ss := []*Student{
 		NewStudent("1347"),
@@ -27,13 +30,14 @@ func TestApply_AllowAll_AllStudentsAreAdmitted(t *testing.T) {
 		course.Apply(s)
 	}
 
-	if len(course.Students().Students()) != len(ss) {
-		t.Error("Not all students are admitted", course)
+	if students := jointCourse.Students().Students(); len(students) != len(ss) {
+		t.Error("Not all students are admitted", students)
 	}
 }
 
 func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
-	jointCourse := NewJointCourse("1234", 3)
+	strategy := NewApplyStrategy(0)
+	jointCourse := NewJointCourse("1234", 3, strategy)
 	ranking := Ranking{
 		"1352": 1,
 		"1351": 1,
@@ -42,7 +46,7 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 		"1348": 3,
 		"1347": 3,
 	}
-	course := NewCourse("1234", 0, jointCourse, ranking)
+	course := NewCourse("1234", jointCourse, ranking)
 
 	ss := []*Student{
 		NewStudent("1347"),
@@ -57,13 +61,14 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 		course.Apply(s)
 	}
 
-	if len(course.Students().Students()) != 3 {
-		t.Error("Wrong number of students admitted", course)
+	if students := jointCourse.Students().Students(); len(students) != 3 {
+		t.Error("Wrong number of students admitted", students)
 	}
 }
 
 func TestApply_DenyAll_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
-	jointCourse := NewJointCourse("1234", 3)
+	strategy := NewApplyStrategy(Conditions().DenyAll)
+	jointCourse := NewJointCourse("1234", 3, strategy)
 	ranking := Ranking{
 		"1352": 1,
 		"1351": 1,
@@ -72,7 +77,7 @@ func TestApply_DenyAll_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 		"1348": 3,
 		"1347": 3,
 	}
-	course := NewCourse("1234", Conditions().DenyAll, jointCourse, ranking)
+	course := NewCourse("1234", jointCourse, ranking)
 
 	ss := []*Student{
 		NewStudent("1347"),
@@ -87,7 +92,7 @@ func TestApply_DenyAll_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 		course.Apply(s)
 	}
 
-	if len(course.Students().Students()) != 1 {
-		t.Error("Students are replicated", course)
+	if students := jointCourse.Students().Students(); len(students) != 1 {
+		t.Error("Students are replicated", students)
 	}
 }

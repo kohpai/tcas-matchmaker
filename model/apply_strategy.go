@@ -2,24 +2,20 @@ package model
 
 import (
 	"container/heap"
-	"log"
 )
 
 type ApplyStrategy interface {
-	SetCourse(*Course)
-	InitRanking(Ranking) Ranking
+	SetJointCourse(*JointCourse)
 	Apply(*RankedStudent) bool
 }
 
 type BaseStrategy struct {
-	course    *Course
-	rankCount RankCount
+	jointCourse *JointCourse
 }
 
 func NewApplyStrategy(condition Condition) ApplyStrategy {
 	base := BaseStrategy{
 		nil,
-		make(RankCount),
 	}
 
 	conditions := Conditions()
@@ -38,26 +34,19 @@ func NewApplyStrategy(condition Condition) ApplyStrategy {
 	return &base
 }
 
-func (strategy *BaseStrategy) SetCourse(course *Course) {
-	strategy.course = course
-}
-
-func (strategy *BaseStrategy) InitRanking(ranking Ranking) Ranking {
-	return ranking
+func (strategy *BaseStrategy) SetJointCourse(jc *JointCourse) {
+	strategy.jointCourse = jc
 }
 
 func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
-	course := strategy.course
-	if course.IsFull() {
-		rs := heap.Pop(course.Students()).(*RankedStudent)
-		rs.Student().ClearCourse()
-		return rankedStudent != rs
-	}
+	pq := strategy.jointCourse.Students()
+	heap.Push(pq, rankedStudent)
+	rs := heap.Pop(pq).(*RankedStudent)
+	rs.Student().ClearCourse()
+	return rankedStudent != rs
 
 	// @ASSERTION, this shouldn't happen
-	if !course.JointCourse().Apply() {
-		log.Println("Apply returns false")
-	}
-
-	return true
+	// if !course.JointCourse().Apply() {
+	// 	log.Println("Apply returns false")
+	// }
 }

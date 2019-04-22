@@ -53,6 +53,10 @@ func (rs *RankedStudent) Student() *Student {
 	return rs.student
 }
 
+func (rs *RankedStudent) Rank() uint16 {
+	return rs.rank
+}
+
 func (rs *RankedStudent) String() string {
 	return fmt.Sprintf("{student: %v, rank: %v}", rs.student, rs.rank)
 }
