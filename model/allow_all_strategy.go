@@ -6,7 +6,7 @@ type AllowAllStrategy struct {
 	BaseStrategy
 }
 
-func (strategy *AllowAllStrategy) countRemovingReplicas() uint16 {
+func (strategy *AllowAllStrategy) countBeingRemovedReplicas() uint16 {
 	jc := strategy.jointCourse
 	students := jc.Students().Students()
 	length := uint16(len(students))
@@ -41,6 +41,12 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	jc := strategy.jointCourse
 	pq := jc.Students()
 
+	if !jc.IsFull() {
+		heap.Push(pq, rankedStudent)
+		jc.DecSpots()
+		return true
+	}
+
 	rank := rankedStudent.Rank()
 	lastRank := pq.Students()[0].Rank()
 
@@ -50,18 +56,18 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return true
 	case rank > lastRank:
 		return false
-	default:
-		count := strategy.countRemovingReplicas()
-		if count > 0 {
-			jc.IncSpots()
-		}
-
-		heap.Push(pq, rankedStudent)
-		for i := uint16(0); i < count; i++ {
-			rs := heap.Pop(pq).(*RankedStudent)
-			rs.Student().ClearCourse()
-		}
-
-		return true
 	}
+
+	count := strategy.countBeingRemovedReplicas()
+	if count > 0 {
+		jc.IncSpots()
+	}
+
+	heap.Push(pq, rankedStudent)
+	for ; count > 0; count-- {
+		rs := heap.Pop(pq).(*RankedStudent)
+		rs.Student().ClearCourse()
+	}
+
+	return true
 }

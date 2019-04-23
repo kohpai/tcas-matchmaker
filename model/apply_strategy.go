@@ -28,6 +28,8 @@ func NewApplyStrategy(condition Condition) ApplyStrategy {
 	case conditions.DenyAll:
 		return &DenyAllStrategy{
 			base,
+			0,
+			make(RankCount),
 		}
 	}
 
@@ -39,14 +41,17 @@ func (strategy *BaseStrategy) SetJointCourse(jc *JointCourse) {
 }
 
 func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
-	pq := strategy.jointCourse.Students()
+	jc := strategy.jointCourse
+	pq := jc.Students()
+
+	if !jc.IsFull() {
+		heap.Push(pq, rankedStudent)
+		jc.DecSpots()
+		return true
+	}
+
 	heap.Push(pq, rankedStudent)
 	rs := heap.Pop(pq).(*RankedStudent)
 	rs.Student().ClearCourse()
 	return rankedStudent != rs
-
-	// @ASSERTION, this shouldn't happen
-	// if !course.JointCourse().Apply() {
-	// 	log.Println("Apply returns false")
-	// }
 }

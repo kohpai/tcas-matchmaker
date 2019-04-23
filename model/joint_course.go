@@ -1,7 +1,6 @@
 package model
 
 import (
-	"container/heap"
 	"fmt"
 	"log"
 )
@@ -94,14 +93,7 @@ func (jointCourse *JointCourse) DecSpots() {
 }
 
 func (jointCourse *JointCourse) Apply(rankedStudent *RankedStudent) bool {
-	if jointCourse.IsFull() {
-		return jointCourse.strategy.Apply(rankedStudent)
-	}
-
-	heap.Push(jointCourse.students, rankedStudent)
-	jointCourse.DecSpots()
-
-	return true
+	return jointCourse.strategy.Apply(rankedStudent)
 }
 
 func (jointCourse *JointCourse) String() string {

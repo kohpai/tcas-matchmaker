@@ -68,10 +68,12 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 
 func TestApply_DenyAll_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().DenyAll)
-	jointCourse := NewJointCourse("1234", 3, strategy)
+	jointCourse := NewJointCourse("1234", 4, strategy)
 	ranking := Ranking{
-		"1352": 1,
-		"1351": 1,
+		"1354": 1,
+		"1353": 1,
+		"1352": 2,
+		"1351": 2,
 		"1350": 2,
 		"1349": 3,
 		"1348": 3,
@@ -86,13 +88,15 @@ func TestApply_DenyAll_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 		NewStudent("1350"),
 		NewStudent("1351"),
 		NewStudent("1352"),
+		NewStudent("1353"),
+		NewStudent("1354"),
 	}
 
 	for _, s := range ss {
 		course.Apply(s)
 	}
 
-	if students := jointCourse.Students().Students(); len(students) != 1 {
-		t.Error("Students are replicated", students)
+	if students := jointCourse.Students().Students(); len(students) != 2 {
+		t.Error("Wrong number of students", students)
 	}
 }
