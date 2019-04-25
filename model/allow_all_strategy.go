@@ -12,10 +12,6 @@ func (strategy *AllowAllStrategy) countBeingRemovedReplicas() uint16 {
 	length := uint16(len(students))
 	limit := jc.Limit()
 
-	if length < limit {
-		return 0
-	}
-
 	count, rank := uint16(1), students[0].Rank()
 	for _, s := range students[1:] {
 		if s.Rank() != rank {
@@ -24,17 +20,10 @@ func (strategy *AllowAllStrategy) countBeingRemovedReplicas() uint16 {
 		count++
 	}
 
-	if length == limit {
-		if count > 1 {
-			return 0
-		}
-		return 1
+	if delta := length - limit; count <= delta {
+		return count
 	}
-
-	if delta := length - limit; count > delta+1 {
-		return 0
-	}
-	return count
+	return 0
 }
 
 func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
@@ -58,12 +47,9 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return false
 	}
 
-	count := strategy.countBeingRemovedReplicas()
-	if count > 0 {
-		jc.IncSpots()
-	}
-
 	heap.Push(pq, rankedStudent)
+	count := strategy.countBeingRemovedReplicas()
+
 	for ; count > 0; count-- {
 		rs := heap.Pop(pq).(*RankedStudent)
 		rs.Student().ClearCourse()
