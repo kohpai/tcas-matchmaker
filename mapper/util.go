@@ -29,10 +29,11 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
 
 	for _, c := range courses {
+		strategy := model.NewApplyStrategy(c.Condition, c.AddLimit)
 		if c.JointId == "" {
-			jointCourseMap[c.Id] = model.NewJointCourse(c.Id, c.Limit)
+			jointCourseMap[c.Id] = model.NewJointCourse(c.Id, c.Limit, strategy)
 		} else if jointCourseMap[c.JointId] == nil {
-			jointCourseMap[c.JointId] = model.NewJointCourse(c.JointId, c.Limit)
+			jointCourseMap[c.JointId] = model.NewJointCourse(c.JointId, c.Limit, strategy)
 		}
 	}
 
@@ -54,7 +55,6 @@ func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
 
 		courseMap[c.Id] = model.NewCourse(
 			c.Id,
-			c.Condition,
 			jointCourse,
 			rankingMap[c.Id],
 		)

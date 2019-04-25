@@ -35,6 +35,37 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 	}
 }
 
+func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
+	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
+	jointCourse := NewJointCourse("1234", 5, strategy)
+	ranking := Ranking{
+		"1352": 1,
+		"1351": 2,
+		"1350": 2,
+		"1349": 3,
+		"1348": 4,
+		"1347": 5,
+	}
+	course := NewCourse("1234", jointCourse, ranking)
+
+	ss := []*Student{
+		NewStudent("1347"),
+		NewStudent("1348"),
+		NewStudent("1349"),
+		NewStudent("1350"),
+		NewStudent("1351"),
+		NewStudent("1352"),
+	}
+
+	for _, s := range ss {
+		course.Apply(s)
+	}
+
+	if students := jointCourse.Students().Students(); len(students) != 5 {
+		t.Error("Not all students are admitted", students)
+	}
+}
+
 func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy(0, 0)
 	jointCourse := NewJointCourse("1234", 3, strategy)
