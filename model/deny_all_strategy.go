@@ -8,7 +8,7 @@ type DenyAllStrategy struct {
 	rankCount           RankCount
 }
 
-func (strategy *DenyAllStrategy) countEdgeReplicas() uint16 {
+func (strategy *DenyAllStrategy) countBeingRemovedReplicas() uint16 {
 	students := strategy.jointCourse.Students().Students()
 	count, rank := uint16(1), students[0].Rank()
 	for _, s := range students[1:] {
@@ -45,7 +45,7 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	if rank < lastRank {
-		count := strategy.countEdgeReplicas()
+		count := strategy.countBeingRemovedReplicas()
 		strategy.rankCount[lastRank] = count
 		strategy.leastReplicatedRank = lastRank
 		for ; count > 0; count-- {

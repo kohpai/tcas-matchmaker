@@ -13,7 +13,7 @@ type BaseStrategy struct {
 	jointCourse *JointCourse
 }
 
-func NewApplyStrategy(condition Condition) ApplyStrategy {
+func NewApplyStrategy(condition Condition, exceedLimit uint16) ApplyStrategy {
 	base := BaseStrategy{
 		nil,
 	}
@@ -30,6 +30,13 @@ func NewApplyStrategy(condition Condition) ApplyStrategy {
 			base,
 			0,
 			make(RankCount),
+		}
+	case conditions.AllowSome:
+		return &AllowSomeStrategy{
+			base,
+			0,
+			make(RankCount),
+			exceedLimit,
 		}
 	}
 

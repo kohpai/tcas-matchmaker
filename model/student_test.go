@@ -27,7 +27,7 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 }
 
 func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll)
+	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", 1, strategy)
 	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
@@ -42,7 +42,7 @@ func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 }
 
 func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll)
+	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", 1, strategy)
 	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
