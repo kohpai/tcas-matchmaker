@@ -53,7 +53,9 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		jc.IncSpots()
 	}
 
-	jc.DecSpots()
-
-	return rank < lastRank
+	if rank < lastRank {
+		jc.DecSpots()
+		return true
+	}
+	return false
 }
