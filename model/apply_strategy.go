@@ -62,3 +62,18 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 	rs.Student().ClearCourse()
 	return rankedStudent != rs
 }
+
+func (strategy *BaseStrategy) countEdgeReplicas() uint16 {
+	pq := strategy.jointCourse.Students()
+	students := []*RankedStudent{
+		heap.Pop(pq).(*RankedStudent),
+	}
+	count, rank := uint16(0), students[0].Rank()
+	for ; students[count].Rank() == rank; students = append(students, heap.Pop(pq).(*RankedStudent)) {
+		count++
+	}
+	for i := uint16(0); i <= count; i++ {
+		heap.Push(pq, students[i])
+	}
+	return count
+}

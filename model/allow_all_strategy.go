@@ -9,16 +9,8 @@ type AllowAllStrategy struct {
 func (strategy *AllowAllStrategy) countBeingRemovedReplicas() uint16 {
 	jc := strategy.jointCourse
 	students := jc.Students().Students()
-	length := uint16(len(students))
-	limit := jc.Limit()
-
-	count, rank := uint16(1), students[0].Rank()
-	for _, s := range students[1:] {
-		if s.Rank() != rank {
-			break
-		}
-		count++
-	}
+	length, limit := uint16(len(students)), jc.Limit()
+	count := strategy.countEdgeReplicas()
 
 	if delta := length - limit; count <= delta {
 		return count
@@ -37,7 +29,9 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	rank := rankedStudent.Rank()
-	lastRank := pq.Students()[0].Rank()
+	tmp := heap.Pop(pq).(*RankedStudent)
+	heap.Push(pq, tmp)
+	lastRank := tmp.Rank()
 
 	switch {
 	case rank == lastRank:

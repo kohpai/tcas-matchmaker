@@ -9,15 +9,7 @@ type DenyAllStrategy struct {
 }
 
 func (strategy *DenyAllStrategy) countBeingRemovedReplicas() uint16 {
-	students := strategy.jointCourse.Students().Students()
-	count, rank := uint16(1), students[0].Rank()
-	for _, s := range students[1:] {
-		if s.Rank() != rank {
-			break
-		}
-		count++
-	}
-	return count
+	return strategy.countEdgeReplicas()
 }
 
 func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
@@ -39,7 +31,9 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return false
 	}
 
-	lastRank := pq.Students()[0].Rank()
+	tmp := heap.Pop(pq).(*RankedStudent)
+	heap.Push(pq, tmp)
+	lastRank := tmp.Rank()
 	if rank > lastRank {
 		return false
 	}
@@ -53,9 +47,7 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		jc.IncSpots()
 	}
 
-	if rank < lastRank {
-		jc.DecSpots()
-		return true
-	}
-	return false
+	jc.DecSpots()
+
+	return rank < lastRank
 }
