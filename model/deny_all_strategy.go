@@ -44,27 +44,16 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return false
 	}
 
-	if rank < lastRank {
-		count := strategy.countBeingRemovedReplicas()
-		strategy.rankCount[lastRank] = count
-		strategy.leastReplicatedRank = lastRank
-		for ; count > 0; count-- {
-			rs := heap.Pop(pq).(*RankedStudent)
-			rs.Student().ClearCourse()
-			jc.IncSpots()
-		}
-
-		heap.Push(pq, rankedStudent)
-		jc.DecSpots()
-
-		return true
+	heap.Push(pq, rankedStudent)
+	count := strategy.countBeingRemovedReplicas()
+	strategy.rankCount[lastRank], strategy.leastReplicatedRank = count, lastRank
+	for ; count > 0; count-- {
+		rs := heap.Pop(pq).(*RankedStudent)
+		rs.Student().ClearCourse()
+		jc.IncSpots()
 	}
 
-	rs := heap.Pop(pq).(*RankedStudent)
-	rs.Student().ClearCourse()
-	strategy.rankCount[rank] = 2
-	strategy.leastReplicatedRank = rank
-	jc.IncSpots()
+	jc.DecSpots()
 
-	return false
+	return rank < lastRank
 }
