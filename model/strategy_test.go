@@ -17,17 +17,17 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+	ss := []Student{
+		*NewStudent("1347"),
+		*NewStudent("1348"),
+		*NewStudent("1349"),
+		*NewStudent("1350"),
+		*NewStudent("1351"),
+		*NewStudent("1352"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	if students := jointCourse.Students().Students(); len(students) != len(ss) {
@@ -48,17 +48,17 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+	ss := []Student{
+		*NewStudent("1347"),
+		*NewStudent("1348"),
+		*NewStudent("1349"),
+		*NewStudent("1350"),
+		*NewStudent("1351"),
+		*NewStudent("1352"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	if students := jointCourse.Students().Students(); len(students) != 5 {
@@ -79,17 +79,17 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+	ss := []Student{
+		*NewStudent("1347"),
+		*NewStudent("1348"),
+		*NewStudent("1349"),
+		*NewStudent("1350"),
+		*NewStudent("1351"),
+		*NewStudent("1352"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	if students := jointCourse.Students().Students(); len(students) != 3 {
@@ -112,19 +112,19 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []Student{
+		*NewStudent("1347"),
+		*NewStudent("1348"),
+		*NewStudent("1349"),
+		*NewStudent("1350"),
+		*NewStudent("1351"),
+		*NewStudent("1352"),
+		*NewStudent("1353"),
+		*NewStudent("1354"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	if students := jointCourse.Students().Students(); len(students) != 2 {
@@ -143,15 +143,15 @@ func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []Student{
+		*NewStudent("1351"),
+		*NewStudent("1352"),
+		*NewStudent("1353"),
+		*NewStudent("1354"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	if students := jointCourse.Students().Students(); len(students) != 1 {
@@ -170,15 +170,15 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []Student{
+		*NewStudent("1351"),
+		*NewStudent("1352"),
+		*NewStudent("1353"),
+		*NewStudent("1354"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	if students := jointCourse.Students().Students(); len(students) != 4 {
@@ -199,17 +199,17 @@ func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []Student{
+		*NewStudent("1349"),
+		*NewStudent("1350"),
+		*NewStudent("1351"),
+		*NewStudent("1352"),
+		*NewStudent("1353"),
+		*NewStudent("1354"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	if students := jointCourse.Students().Students(); len(students) != 3 {

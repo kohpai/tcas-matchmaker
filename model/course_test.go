@@ -73,13 +73,13 @@ func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
+	ss := []Student{
+		*NewStudent("1349"),
+		*NewStudent("1350"),
 	}
 
-	course.Apply(ss[0])
-	if !course.Apply(ss[1]) {
+	course.Apply(&ss[0])
+	if !course.Apply(&ss[1]) {
 		t.Error("Apply returns false", ss[1])
 	}
 
@@ -102,13 +102,13 @@ func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
+	ss := []Student{
+		*NewStudent("1349"),
+		*NewStudent("1350"),
 	}
 
-	course.Apply(ss[0])
-	if course.Apply(ss[1]) {
+	course.Apply(&ss[0])
+	if course.Apply(&ss[1]) {
 		t.Error("Apply returns true", ss[1])
 	}
 
@@ -148,25 +148,25 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
+	ss := []Student{
+		*NewStudent("1349"),
+		*NewStudent("1350"),
+		*NewStudent("1351"),
 	}
 
-	for _, s := range ss {
-		course.Apply(s)
+	for i := range ss {
+		course.Apply(&ss[i])
 	}
 
 	regStudents := jointCourse.Students()
 
-	if s := heap.Pop(regStudents).(RankedStudent); ss[0] != s.student {
+	if s := heap.Pop(regStudents).(RankedStudent); &ss[0] != s.student {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(regStudents).(RankedStudent); ss[1] != s.student {
+	if s := heap.Pop(regStudents).(RankedStudent); &ss[1] != s.student {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(regStudents).(RankedStudent); ss[2] != s.student {
+	if s := heap.Pop(regStudents).(RankedStudent); &ss[2] != s.student {
 		t.Error("Student is not matched,", s)
 	}
 }
