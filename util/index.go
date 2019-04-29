@@ -88,12 +88,12 @@ func WriteCsvFile(filename string, data interface{}) error {
 	return nil
 }
 
-func GetPendingStudents(studentMap mapper.StudentMap) []*model.Student {
-	pendingStudents := make([]*model.Student, len(studentMap))
+func GetPendingStudents(studentMap mapper.StudentMap) []model.Student {
+	pendingStudents := make([]model.Student, len(studentMap))
 
 	i := 0
 	for _, student := range studentMap {
-		pendingStudents[i] = student
+		pendingStudents[i] = *student
 		i++
 	}
 

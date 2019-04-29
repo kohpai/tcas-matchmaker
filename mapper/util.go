@@ -80,7 +80,7 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	return studentMap
 }
 
-func ToOutput(students []*model.Student) []Output {
+func ToOutput(students []model.Student) []Output {
 	outputs := make([]Output, 0)
 
 	for _, student := range students {

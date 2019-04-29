@@ -5,27 +5,27 @@ import (
 )
 
 type ClearingHouse struct {
-	students         []*Student
-	acceptedStudents []*Student
-	rejectedStudents []*Student
+	students         []Student
+	acceptedStudents []Student
+	rejectedStudents []Student
 }
 
-func NewClearingHouse(students []*Student) *ClearingHouse {
-	as, rs := make([]*Student, 0), make([]*Student, 0)
+func NewClearingHouse(students []Student) *ClearingHouse {
+	as, rs := make([]Student, 0), make([]Student, 0)
 	return &ClearingHouse{
 		students, as, rs,
 	}
 }
 
-func (ch *ClearingHouse) Students() []*Student {
+func (ch *ClearingHouse) Students() []Student {
 	return ch.students
 }
 
-func (ch *ClearingHouse) AcceptedStudents() []*Student {
+func (ch *ClearingHouse) AcceptedStudents() []Student {
 	return ch.acceptedStudents
 }
 
-func (ch *ClearingHouse) RejectedStudents() []*Student {
+func (ch *ClearingHouse) RejectedStudents() []Student {
 	return ch.rejectedStudents
 }
 
@@ -46,12 +46,13 @@ func (ch *ClearingHouse) Execute() {
 func (ch *ClearingHouse) executePending() {
 	statuses := ApplicationStatuses()
 	isPending := true
+	students := ch.students
 	for isPending {
 		isPending = false
-		for _, student := range ch.students {
-			if student.ApplicationStatus() == statuses.Pending {
+		for i := range students {
+			if students[i].ApplicationStatus() == statuses.Pending {
 				isPending = true
-				student.Propose()
+				students[i].Propose()
 			}
 		}
 	}
