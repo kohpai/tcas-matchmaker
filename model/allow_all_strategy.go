@@ -23,29 +23,29 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	pq := jc.Students()
 
 	if !jc.IsFull() {
-		heap.Push(pq, rankedStudent)
+		heap.Push(pq, *rankedStudent)
 		jc.DecSpots()
 		return true
 	}
 
 	rank := rankedStudent.Rank()
-	tmp := heap.Pop(pq).(*RankedStudent)
+	tmp := heap.Pop(pq).(RankedStudent)
 	heap.Push(pq, tmp)
 	lastRank := tmp.Rank()
 
 	switch {
 	case rank == lastRank:
-		heap.Push(pq, rankedStudent)
+		heap.Push(pq, *rankedStudent)
 		return true
 	case rank > lastRank:
 		return false
 	}
 
-	heap.Push(pq, rankedStudent)
+	heap.Push(pq, *rankedStudent)
 	count := strategy.countBeingRemovedReplicas()
 
 	for ; count > 0; count-- {
-		rs := heap.Pop(pq).(*RankedStudent)
+		rs := heap.Pop(pq).(RankedStudent)
 		rs.Student().ClearCourse()
 	}
 

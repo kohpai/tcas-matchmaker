@@ -10,7 +10,7 @@ type RankedStudent struct {
 
 // A PriorityQueue implements heap.Interface and holds Items.
 type PriorityQueue struct {
-	students []*RankedStudent
+	students []RankedStudent
 }
 
 func (pq *PriorityQueue) Len() int { return len(pq.students) }
@@ -31,7 +31,7 @@ func (pq *PriorityQueue) Swap(i, j int) {
 func (pq *PriorityQueue) Push(x interface{}) {
 	students := pq.students
 	n := len(students)
-	item := x.(*RankedStudent)
+	item := x.(RankedStudent)
 	item.index = n
 	pq.students = append(students, item)
 }
@@ -45,7 +45,7 @@ func (pq *PriorityQueue) Pop() interface{} {
 	return item
 }
 
-func (pq *PriorityQueue) Students() []*RankedStudent {
+func (pq *PriorityQueue) Students() []RankedStudent {
 	return pq.students
 }
 

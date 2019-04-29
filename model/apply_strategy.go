@@ -52,28 +52,27 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 	pq := jc.Students()
 
 	if !jc.IsFull() {
-		heap.Push(pq, rankedStudent)
+		heap.Push(pq, *rankedStudent)
 		jc.DecSpots()
 		return true
 	}
 
-	heap.Push(pq, rankedStudent)
-	rs := heap.Pop(pq).(*RankedStudent)
+	heap.Push(pq, *rankedStudent)
+	rs := heap.Pop(pq).(RankedStudent)
 	rs.Student().ClearCourse()
-	return rankedStudent != rs
+	return rankedStudent.Student().CitizenId() != rs.Student().CitizenId()
 }
 
 func (strategy *BaseStrategy) countEdgeReplicas() uint16 {
 	pq := strategy.jointCourse.Students()
-	students := []*RankedStudent{
-		heap.Pop(pq).(*RankedStudent),
+	students := []RankedStudent{
+		heap.Pop(pq).(RankedStudent),
 	}
-	count, rank := uint16(0), students[0].Rank()
-	for ; students[count].Rank() == rank; students = append(students, heap.Pop(pq).(*RankedStudent)) {
-		count++
+	rank := students[0].Rank()
+	for ; students[len(students)-1].Rank() == rank; students = append(students, heap.Pop(pq).(RankedStudent)) {
 	}
-	for i := uint16(0); i <= count; i++ {
-		heap.Push(pq, students[i])
+	for _, student := range students {
+		heap.Push(pq, student)
 	}
-	return count
+	return uint16(len(students))
 }

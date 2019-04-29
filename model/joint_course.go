@@ -27,7 +27,7 @@ func NewJointCourse(
 		availableSpots,
 		courses,
 		&PriorityQueue{
-			[]*RankedStudent{},
+			[]RankedStudent{},
 		},
 		strategy,
 	}

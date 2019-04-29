@@ -34,7 +34,7 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	if !jc.IsFull() {
 		lrr := strategy.leastReplicatedRank
 		if lrr == 0 || rank < lrr {
-			heap.Push(pq, rankedStudent)
+			heap.Push(pq, *rankedStudent)
 			jc.DecSpots()
 			return true
 		}
@@ -45,14 +45,14 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return false
 	}
 
-	tmp := heap.Pop(pq).(*RankedStudent)
+	tmp := heap.Pop(pq).(RankedStudent)
 	heap.Push(pq, tmp)
 	lastRank := tmp.Rank()
 	if rank > lastRank {
 		return false
 	}
 
-	heap.Push(pq, rankedStudent)
+	heap.Push(pq, *rankedStudent)
 	count, inc := strategy.countBeingRemovedReplicas()
 
 	if count > 0 {
@@ -61,7 +61,7 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	for ; count > 0; count-- {
-		rs := heap.Pop(pq).(*RankedStudent)
+		rs := heap.Pop(pq).(RankedStudent)
 		rs.Student().ClearCourse()
 	}
 	for ; inc > 0; inc-- {
