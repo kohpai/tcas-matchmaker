@@ -74,5 +74,5 @@ func (strategy *BaseStrategy) countEdgeReplicas() uint16 {
 	for _, student := range students {
 		heap.Push(pq, student)
 	}
-	return uint16(len(students))
+	return uint16(len(students) - 1)
 }
