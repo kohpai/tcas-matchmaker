@@ -4,7 +4,7 @@ import "fmt"
 
 type RankedStudent struct {
 	student *Student
-	rank    uint16
+	rank    int
 	index   int
 }
 
@@ -53,7 +53,7 @@ func (rs *RankedStudent) Student() *Student {
 	return rs.student
 }
 
-func (rs *RankedStudent) Rank() uint16 {
+func (rs *RankedStudent) Rank() int {
 	return rs.rank
 }
 

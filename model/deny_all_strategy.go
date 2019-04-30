@@ -4,11 +4,11 @@ import "container/heap"
 
 type DenyAllStrategy struct {
 	BaseStrategy
-	leastReplicatedRank uint16
+	leastReplicatedRank int
 	rankCount           RankCount
 }
 
-func (strategy *DenyAllStrategy) countBeingRemovedReplicas() uint16 {
+func (strategy *DenyAllStrategy) countBeingRemovedReplicas() int {
 	return strategy.countEdgeReplicas()
 }
 

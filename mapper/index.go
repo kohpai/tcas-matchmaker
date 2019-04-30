@@ -9,21 +9,21 @@ import (
 type Course struct {
 	Id        string          `json:"course_id"`
 	JointId   string          `json:"round_3_join_id"`
-	Limit     uint16          `json:"round_3_receive"`
+	Limit     int             `json:"round_3_receive"`
 	Condition model.Condition `json:"round_3_condition"`
-	AddLimit  uint16          `json:"round_3_add_limit"`
+	AddLimit  int             `json:"round_3_add_limit"`
 }
 
 type Student struct {
 	CitizenId string `json:"citizen_id"`
 	CourseId  string `json:"course_id"`
-	Priority  uint8  `json:"priority"`
+	Priority  int    `json:"priority"`
 }
 
 type Ranking struct {
 	CourseId  string `csv:"course_id"`
 	CitizenId string `csv:"citizen_id"`
-	Rank      uint16 `csv:"ranking"`
+	Rank      int    `csv:"ranking"`
 }
 
 type AdmitStatus int8
@@ -52,7 +52,7 @@ type Output struct {
 	InterviewLocation string      `csv:"interview_location"`
 	InterviewDate     string      `csv:"interview_date"`
 	InterviewTime     string      `csv:"interview_time"`
-	Ranking           uint16      `csv:"ranking"`
+	Ranking           int         `csv:"ranking"`
 	Round             string      `csv:"round"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
 }

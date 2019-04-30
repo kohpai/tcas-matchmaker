@@ -6,10 +6,10 @@ type AllowAllStrategy struct {
 	BaseStrategy
 }
 
-func (strategy *AllowAllStrategy) countBeingRemovedReplicas() uint16 {
+func (strategy *AllowAllStrategy) countBeingRemovedReplicas() int {
 	jc := strategy.jointCourse
 	students := jc.Students().Students()
-	length, limit := uint16(len(students)), jc.Limit()
+	length, limit := len(students), jc.Limit()
 	count := strategy.countEdgeReplicas()
 
 	if delta := length - limit; count <= delta {

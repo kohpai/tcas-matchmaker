@@ -87,7 +87,7 @@ func ToOutput(students []*model.Student) []Output {
 		courseIndex := student.CourseIndex()
 
 		for i := 0; i < 6; i++ {
-			course, _ := student.PreferredCourse(uint8(i) + 1)
+			course, _ := student.PreferredCourse(i + 1)
 
 			if course == nil {
 				continue

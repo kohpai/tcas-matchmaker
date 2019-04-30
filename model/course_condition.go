@@ -2,7 +2,7 @@ package model
 
 import "sync"
 
-type Condition uint8
+type Condition int
 
 type condition struct {
 	once      sync.Once

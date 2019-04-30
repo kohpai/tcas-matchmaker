@@ -14,7 +14,7 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 	}
 
 	for i := 1; i < 7; i++ {
-		course, err := student.PreferredCourse(uint8(i))
+		course, err := student.PreferredCourse(i)
 		if course != nil || err != nil {
 			t.Error("Preferred Courses is not empty", student, err)
 			break
@@ -52,7 +52,7 @@ func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
 	}
 
 	for i := 1; i < 7; i++ {
-		course, err := student.PreferredCourse(uint8(i))
+		course, err := student.PreferredCourse(i)
 		if course != nil || err != nil {
 			t.Error("Preferred Courses is not empty", student, err)
 			break

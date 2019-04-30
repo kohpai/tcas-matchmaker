@@ -7,8 +7,8 @@ import (
 
 type JointCourse struct {
 	id             string
-	limit          uint16
-	availableSpots uint16
+	limit          int
+	availableSpots int
 	courses        []*Course
 	students       *PriorityQueue
 	strategy       ApplyStrategy
@@ -16,7 +16,7 @@ type JointCourse struct {
 
 func NewJointCourse(
 	id string,
-	availableSpots uint16,
+	availableSpots int,
 	strategy ApplyStrategy,
 ) *JointCourse {
 	courses := make([]*Course, 0)
@@ -40,11 +40,11 @@ func (jointCourse *JointCourse) Id() string {
 	return jointCourse.id
 }
 
-func (jointCourse *JointCourse) Limit() uint16 {
+func (jointCourse *JointCourse) Limit() int {
 	return jointCourse.limit
 }
 
-func (jointCourse *JointCourse) AvailableSpots() uint16 {
+func (jointCourse *JointCourse) AvailableSpots() int {
 	return jointCourse.availableSpots
 }
 

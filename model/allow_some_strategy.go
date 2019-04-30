@@ -4,15 +4,15 @@ import "container/heap"
 
 type AllowSomeStrategy struct {
 	BaseStrategy
-	leastReplicatedRank uint16
+	leastReplicatedRank int
 	rankCount           RankCount
-	exceedLimit         uint16
+	exceedLimit         int
 }
 
-func (strategy *AllowSomeStrategy) countBeingRemovedReplicas() (uint16, uint16) {
+func (strategy *AllowSomeStrategy) countBeingRemovedReplicas() (int, int) {
 	jc := strategy.jointCourse
 	students := jc.Students().Students()
-	length, limit := uint16(len(students)), jc.Limit()
+	length, limit := len(students), jc.Limit()
 	delta := length - limit
 	count := strategy.countEdgeReplicas()
 

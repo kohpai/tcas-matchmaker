@@ -13,7 +13,7 @@ type BaseStrategy struct {
 	jointCourse *JointCourse
 }
 
-func NewApplyStrategy(condition Condition, exceedLimit uint16) ApplyStrategy {
+func NewApplyStrategy(condition Condition, exceedLimit int) ApplyStrategy {
 	base := BaseStrategy{
 		nil,
 	}
@@ -63,16 +63,16 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 	return rankedStudent != rs
 }
 
-func (strategy *BaseStrategy) countEdgeReplicas() uint16 {
+func (strategy *BaseStrategy) countEdgeReplicas() int {
 	pq := strategy.jointCourse.Students()
 	students := []*RankedStudent{
 		heap.Pop(pq).(*RankedStudent),
 	}
-	count, rank := uint16(0), students[0].Rank()
+	count, rank := 0, students[0].Rank()
 	for ; students[count].Rank() == rank; students = append(students, heap.Pop(pq).(*RankedStudent)) {
 		count++
 	}
-	for i := uint16(0); i <= count; i++ {
+	for i := 0; i <= count; i++ {
 		heap.Push(pq, students[i])
 	}
 	return count

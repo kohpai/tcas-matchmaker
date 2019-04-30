@@ -43,7 +43,7 @@ func (student *Student) ApplicationStatus() ApplicationStatus {
 	return student.applicationStatus
 }
 
-func (student *Student) PreferredCourse(priority uint8) (*Course, error) {
+func (student *Student) PreferredCourse(priority int) (*Course, error) {
 	if priority < 1 || 6 < priority {
 		return nil, errors.New("priority out of range")
 	}
@@ -55,7 +55,7 @@ func (student *Student) CourseIndex() int {
 	return student.courseIndex
 }
 
-func (student *Student) SetPreferredCourse(priority uint8, course *Course) error {
+func (student *Student) SetPreferredCourse(priority int, course *Course) error {
 	if priority < 1 || 6 < priority {
 		return errors.New("priority out of range")
 	}
