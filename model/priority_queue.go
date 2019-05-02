@@ -1,9 +1,13 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+)
 
 type RankedStudent struct {
-	student *Student
+	student common.Student
 	rank    int
 	index   int
 }
@@ -49,7 +53,7 @@ func (pq *PriorityQueue) Students() []*RankedStudent {
 	return pq.students
 }
 
-func (rs *RankedStudent) Student() *Student {
+func (rs *RankedStudent) Student() common.Student {
 	return rs.student
 }
 

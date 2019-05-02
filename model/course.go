@@ -2,22 +2,23 @@ package model
 
 import (
 	"fmt"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
 )
 
-type Ranking map[string]int
 type RankCount map[int]int
 
 type Course struct {
 	id          string
 	isFull      bool
-	ranking     Ranking
+	ranking     common.Ranking
 	jointCourse *JointCourse
 }
 
 func NewCourse(
 	id string,
 	jointCourse *JointCourse,
-	ranking Ranking,
+	ranking common.Ranking,
 ) *Course {
 	isFull := jointCourse.AvailableSpots() == 0
 	course := &Course{
@@ -47,11 +48,11 @@ func (course *Course) JointCourse() *JointCourse {
 	return course.jointCourse
 }
 
-func (course *Course) Ranking() Ranking {
+func (course *Course) Ranking() common.Ranking {
 	return course.ranking
 }
 
-func (course *Course) Apply(student *Student) bool {
+func (course *Course) Apply(student common.Student) bool {
 	rank := course.ranking[student.CitizenId()]
 	if rank == 0 {
 		return false

@@ -1,13 +1,17 @@
-package model
+package model_test
 
 import (
 	"testing"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	st "github.com/kohpai/tcas-3rd-round-resolver/model/student"
 )
 
 func TestApply_AllowAll_AdmitAll(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 4, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 4, strategy)
+	ranking := common.Ranking{
 		"1352": 1,
 		"1351": 1,
 		"1350": 2,
@@ -15,15 +19,15 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 		"1348": 3,
 		"1347": 3,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+	ss := []*st.Student{
+		st.NewStudent("1347"),
+		st.NewStudent("1348"),
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
+		st.NewStudent("1351"),
+		st.NewStudent("1352"),
 	}
 
 	for _, s := range ss {
@@ -36,9 +40,9 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 }
 
 func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 5, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 5, strategy)
+	ranking := common.Ranking{
 		"1352": 1,
 		"1351": 2,
 		"1350": 2,
@@ -46,15 +50,15 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 		"1348": 4,
 		"1347": 5,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+	ss := []*st.Student{
+		st.NewStudent("1347"),
+		st.NewStudent("1348"),
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
+		st.NewStudent("1351"),
+		st.NewStudent("1352"),
 	}
 
 	for _, s := range ss {
@@ -67,9 +71,9 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 }
 
 func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
-	strategy := NewApplyStrategy(0, 0)
-	jointCourse := NewJointCourse("1234", 3, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(0, 0)
+	jointCourse := model.NewJointCourse("1234", 3, strategy)
+	ranking := common.Ranking{
 		"1352": 1,
 		"1351": 1,
 		"1350": 2,
@@ -77,15 +81,15 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 		"1348": 3,
 		"1347": 3,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+	ss := []*st.Student{
+		st.NewStudent("1347"),
+		st.NewStudent("1348"),
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
+		st.NewStudent("1351"),
+		st.NewStudent("1352"),
 	}
 
 	for _, s := range ss {
@@ -98,9 +102,9 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 }
 
 func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().DenyAll, 0)
-	jointCourse := NewJointCourse("1234", 4, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().DenyAll, 0)
+	jointCourse := model.NewJointCourse("1234", 4, strategy)
+	ranking := common.Ranking{
 		"1354": 1,
 		"1353": 1,
 		"1352": 2,
@@ -110,17 +114,17 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 		"1348": 3,
 		"1347": 3,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []*st.Student{
+		st.NewStudent("1347"),
+		st.NewStudent("1348"),
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
+		st.NewStudent("1351"),
+		st.NewStudent("1352"),
+		st.NewStudent("1353"),
+		st.NewStudent("1354"),
 	}
 
 	for _, s := range ss {
@@ -133,21 +137,21 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 }
 
 func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().DenyAll, 0)
-	jointCourse := NewJointCourse("1234", 3, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().DenyAll, 0)
+	jointCourse := model.NewJointCourse("1234", 3, strategy)
+	ranking := common.Ranking{
 		"1354": 1,
 		"1353": 2,
 		"1352": 2,
 		"1351": 2,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []*st.Student{
+		st.NewStudent("1351"),
+		st.NewStudent("1352"),
+		st.NewStudent("1353"),
+		st.NewStudent("1354"),
 	}
 
 	for _, s := range ss {
@@ -160,21 +164,21 @@ func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 }
 
 func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowSome, 1)
-	jointCourse := NewJointCourse("1234", 3, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowSome, 1)
+	jointCourse := model.NewJointCourse("1234", 3, strategy)
+	ranking := common.Ranking{
 		"1354": 1,
 		"1353": 2,
 		"1352": 2,
 		"1351": 2,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []*st.Student{
+		st.NewStudent("1351"),
+		st.NewStudent("1352"),
+		st.NewStudent("1353"),
+		st.NewStudent("1354"),
 	}
 
 	for _, s := range ss {
@@ -187,9 +191,9 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 }
 
 func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowSome, 2)
-	jointCourse := NewJointCourse("1234", 3, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowSome, 2)
+	jointCourse := model.NewJointCourse("1234", 3, strategy)
+	ranking := common.Ranking{
 		"1354": 1,
 		"1353": 1,
 		"1352": 2,
@@ -197,15 +201,15 @@ func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
 		"1350": 3,
 		"1349": 3,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+	ss := []*st.Student{
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
+		st.NewStudent("1351"),
+		st.NewStudent("1352"),
+		st.NewStudent("1353"),
+		st.NewStudent("1354"),
 	}
 
 	for _, s := range ss {

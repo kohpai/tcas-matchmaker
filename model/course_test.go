@@ -1,14 +1,18 @@
-package model
+package model_test
 
 import (
 	"container/heap"
 	"testing"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	st "github.com/kohpai/tcas-3rd-round-resolver/model/student"
 )
 
 func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 10, strategy)
-	course := NewCourse("1234", jointCourse, nil)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 10, strategy)
+	course := model.NewCourse("1234", jointCourse, nil)
 
 	if course.Id() != "1234" {
 		t.Error("Course ID not matched", course)
@@ -20,9 +24,9 @@ func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
 }
 
 func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
-	course := NewCourse("1234", jointCourse, nil)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 1, strategy)
+	course := model.NewCourse("1234", jointCourse, nil)
 
 	if course.IsFull() {
 		t.Error("Course is full", course)
@@ -30,9 +34,9 @@ func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 }
 
 func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
-	course := NewCourse("1234", jointCourse, nil)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 1, strategy)
+	course := model.NewCourse("1234", jointCourse, nil)
 
 	if jointCourse.DecSpots(); !course.IsFull() {
 		t.Error("Course is NOT full", course)
@@ -40,9 +44,9 @@ func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 }
 
 func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 0, strategy)
-	course := NewCourse("1234", jointCourse, nil)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 0, strategy)
+	course := model.NewCourse("1234", jointCourse, nil)
 
 	if !course.IsFull() {
 		t.Error("Course is NOT full", course)
@@ -50,14 +54,14 @@ func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
 }
 
 func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 1, strategy)
+	ranking := common.Ranking{
 		"1349": 1,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	s := NewStudent("1349")
+	s := st.NewStudent("1349")
 
 	if !course.Apply(s) {
 		t.Error("Apply returns false", course)
@@ -65,17 +69,17 @@ func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 }
 
 func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 1, strategy)
+	ranking := common.Ranking{
 		"1349": 2,
 		"1350": 1,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
+	ss := []*st.Student{
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
 	}
 
 	course.Apply(ss[0])
@@ -83,7 +87,7 @@ func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
 		t.Error("Apply returns false", ss[1])
 	}
 
-	statuses := ApplicationStatuses()
+	statuses := st.ApplicationStatuses()
 	if ss[0].ApplicationStatus() != statuses.Pending {
 		t.Error("Student has incorrect status", ss[0])
 	}
@@ -94,17 +98,17 @@ func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
 }
 
 func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 1, strategy)
+	ranking := common.Ranking{
 		"1349": 1,
 		"1350": 2,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
+	ss := []*st.Student{
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
 	}
 
 	course.Apply(ss[0])
@@ -112,7 +116,7 @@ func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
 		t.Error("Apply returns true", ss[1])
 	}
 
-	statuses := ApplicationStatuses()
+	statuses := st.ApplicationStatuses()
 	if ss[0].ApplicationStatus() != statuses.Accepted {
 		t.Error("Student has incorrect status", ss[0])
 	}
@@ -123,14 +127,14 @@ func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
 }
 
 func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 1, strategy)
+	ranking := common.Ranking{
 		"1349": 1,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	s := NewStudent("1349")
+	s := st.NewStudent("1349")
 	course.Apply(s)
 
 	if !course.IsFull() {
@@ -139,19 +143,19 @@ func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 }
 
 func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 3, strategy)
-	ranking := Ranking{
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	jointCourse := model.NewJointCourse("1234", 3, strategy)
+	ranking := common.Ranking{
 		"1351": 1,
 		"1350": 2,
 		"1349": 3,
 	}
-	course := NewCourse("1234", jointCourse, ranking)
+	course := model.NewCourse("1234", jointCourse, ranking)
 
-	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
+	ss := []*st.Student{
+		st.NewStudent("1349"),
+		st.NewStudent("1350"),
+		st.NewStudent("1351"),
 	}
 
 	for _, s := range ss {
@@ -160,13 +164,13 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 
 	regStudents := jointCourse.Students()
 
-	if s := heap.Pop(regStudents).(*RankedStudent); ss[0] != s.student {
+	if s := heap.Pop(regStudents).(*model.RankedStudent); ss[0] != s.Student() {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(regStudents).(*RankedStudent); ss[1] != s.student {
+	if s := heap.Pop(regStudents).(*model.RankedStudent); ss[1] != s.Student() {
 		t.Error("Student is not matched,", s)
 	}
-	if s := heap.Pop(regStudents).(*RankedStudent); ss[2] != s.student {
+	if s := heap.Pop(regStudents).(*model.RankedStudent); ss[2] != s.Student() {
 		t.Error("Student is not matched,", s)
 	}
 }

@@ -4,12 +4,14 @@ import (
 	"log"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	st "github.com/kohpai/tcas-3rd-round-resolver/model/student"
 )
 
-type RankingMap map[string]model.Ranking          // course ID -> citizen ID -> rank
+type RankingMap map[string]common.Ranking         // course ID -> citizen ID -> rank
 type JointCourseMap map[string]*model.JointCourse // joint ID -> joint course
 type CourseMap map[string]*model.Course           // course ID -> course
-type StudentMap map[string]*model.Student         // citizen ID -> student
+type StudentMap map[string]*st.Student            // citizen ID -> student
 
 func createRankingMap(rankings []Ranking) RankingMap {
 	rankingMap := make(RankingMap)
@@ -17,7 +19,7 @@ func createRankingMap(rankings []Ranking) RankingMap {
 	for _, r := range rankings {
 		courseId := r.CourseId
 		if rankingMap[courseId] == nil {
-			rankingMap[courseId] = make(model.Ranking)
+			rankingMap[courseId] = make(common.Ranking)
 		}
 		rankingMap[courseId][r.CitizenId] = r.Rank
 	}
@@ -69,7 +71,7 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	for _, s := range students {
 		citizenId := s.CitizenId
 		if studentMap[citizenId] == nil {
-			studentMap[citizenId] = model.NewStudent(citizenId)
+			studentMap[citizenId] = st.NewStudent(citizenId)
 		}
 
 		if err := studentMap[citizenId].SetPreferredCourse(s.Priority, courseMap[s.CourseId]); err != nil {
@@ -80,7 +82,7 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	return studentMap
 }
 
-func ToOutput(students []*model.Student) []Output {
+func ToOutput(students []*st.Student) []Output {
 	outputs := make([]Output, 0)
 
 	for _, student := range students {
@@ -94,15 +96,15 @@ func ToOutput(students []*model.Student) []Output {
 			}
 
 			citizenId := student.CitizenId()
-			ranking := course.Ranking()[citizenId]
-			if ranking == 0 {
+			rank := course.Ranking()[citizenId]
+			if rank == 0 {
 				continue
 			}
 
 			output := Output{
 				CourseId:  course.Id(),
 				CitizenId: citizenId,
-				Ranking:   ranking,
+				Ranking:   rank,
 			}
 
 			statuses := AdmitStatuses()
