@@ -1,6 +1,7 @@
 package model
 
 import (
+	"container/heap"
 	"fmt"
 	"log"
 )
@@ -20,15 +21,17 @@ func NewJointCourse(
 	strategy ApplyStrategy,
 ) *JointCourse {
 	courses := make([]*Course, 0)
+	queue := &PriorityQueue{
+		[]*RankedStudent{},
+	}
+	heap.Init(queue)
 
 	jointCourse := &JointCourse{
 		id,
 		availableSpots,
 		availableSpots,
 		courses,
-		&PriorityQueue{
-			[]*RankedStudent{},
-		},
+		queue,
 		strategy,
 	}
 
