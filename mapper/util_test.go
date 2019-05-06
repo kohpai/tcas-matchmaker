@@ -71,10 +71,10 @@ func TestCreateRankingMap_Always_ReturnRankingMap(t *testing.T) {
 
 func TestCreateJointCourseMap_Always_ReturnsJointCourseMap(t *testing.T) {
 	courses := []Course{
-		{"1234", "", 10, 1, 0},
-		{"1235", "", 11, 1, 0},
-		{"1236", "123", 12, 1, 0},
-		{"1237", "123", 12, 1, 0},
+		{"1234", "", 10, "1", 0},
+		{"1235", "", 11, "1", 0},
+		{"1236", "123", 12, "1", 0},
+		{"1237", "123", 12, "1", 0},
 	}
 
 	jointCourseMap := createJointCourseMap(courses)
@@ -133,10 +133,10 @@ func TestCreateCourseMap_Always_ReturnsCourseMap(t *testing.T) {
 	rankingInfoMap, _, _ := ExtractRankings(rankings)
 
 	courses := []Course{
-		{"1234", "", 10, 1, 0},
-		{"1235", "", 11, 1, 0},
-		{"1236", "123", 12, 1, 0},
-		{"1237", "123", 12, 1, 0},
+		{"1234", "", 10, "1", 0},
+		{"1235", "", 11, "1", 0},
+		{"1236", "123", 12, "1", 0},
+		{"1237", "123", 12, "1", 0},
 	}
 
 	courseMap := CreateCourseMap(courses, rankingInfoMap)
@@ -207,10 +207,10 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 		},
 	}
 	courses := []Course{
-		{"1234", "", 10, 1, 0},
-		{"1235", "", 11, 1, 0},
-		{"1236", "123", 12, 1, 0},
-		{"1237", "123", 12, 1, 0},
+		{"1234", "", 10, "1", 0},
+		{"1235", "", 11, "1", 0},
+		{"1236", "123", 12, "1", 0},
+		{"1237", "123", 12, "1", 0},
 	}
 	students := []Student{
 		{"13499", "1234", 1},

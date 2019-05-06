@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
 )
@@ -34,7 +35,11 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
 
 	for _, c := range courses {
-		strategy := model.NewApplyStrategy(c.Condition, c.AddLimit)
+		condition, err := strconv.Atoi(c.Condition)
+		if err != nil {
+			log.Fatal("condition cannot be parsed", err)
+		}
+		strategy := model.NewApplyStrategy(model.Condition(condition), c.AddLimit)
 		if c.JointId == "" {
 			jointCourseMap[c.Id] = model.NewJointCourse(c.Id, c.Limit, strategy)
 		} else if jointCourseMap[c.JointId] == nil {
