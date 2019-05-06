@@ -11,15 +11,20 @@ type JointCourseMap map[string]*model.JointCourse // joint ID -> joint course
 type CourseMap map[string]*model.Course           // course ID -> course
 type StudentMap map[string]*model.Student         // citizen ID -> student
 
-func createRankingMap(rankings []Ranking) RankingMap {
+type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
+type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
+type CourseInfoMap map[string]CourseInfo   // course ID -> course info
+type StudentInfoMap map[string]StudentInfo // citizen ID -> student info
+
+func createRankingMap(rankingInfoMap RankingInfoMap) RankingMap {
 	rankingMap := make(RankingMap)
 
-	for _, r := range rankings {
-		courseId := r.CourseId
-		if rankingMap[courseId] == nil {
-			rankingMap[courseId] = make(model.Ranking)
+	for courseId, rankInfoMap := range rankingInfoMap {
+		ranking := make(model.Ranking)
+		for citizenId, rankInfo := range rankInfoMap {
+			ranking[citizenId] = rankInfo.Rank
 		}
-		rankingMap[courseId][r.CitizenId] = r.Rank
+		rankingMap[courseId] = ranking
 	}
 
 	return rankingMap
@@ -40,9 +45,58 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	return jointCourseMap
 }
 
-func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
+func ExtractRankings(rankings []Ranking) (RankingInfoMap, CourseInfoMap, StudentInfoMap) {
+	rankInfoMap := make(RankingInfoMap)
+	courseInfoMap := make(CourseInfoMap)
+	studentInfoMap := make(StudentInfoMap)
+
+	for _, r := range rankings {
+		courseId := r.CourseId
+		citizenId := r.CitizenId
+
+		if _, ok := courseInfoMap[courseId]; !ok {
+			courseInfoMap[courseId] = CourseInfo{
+				UniversityId:   r.UniversityId,
+				UniversityName: r.UniversityName,
+				CourseId:       courseId,
+				FacultyName:    r.FacultyName,
+				CourseName:     r.CourseName,
+				ProjectName:    r.ProjectName,
+			}
+		}
+
+		if _, ok := studentInfoMap[citizenId]; !ok {
+			studentInfoMap[citizenId] = StudentInfo{
+				CitizenId:   r.CitizenId,
+				Title:       r.Title,
+				FirstName:   r.FirstName,
+				LastName:    r.LastName,
+				PhoneNumber: r.PhoneNumber,
+				Email:       r.Email,
+			}
+		}
+
+		if _, ok := rankInfoMap[courseId]; !ok {
+			rankInfoMap[courseId] = make(RankInfoMap)
+		}
+
+		rankInfoMap[courseId][citizenId] = RankInfo{
+			ApplicationId:     r.ApplicationId,
+			ApplicationDate:   r.ApplicationDate,
+			InterviewLocation: r.InterviewLocation,
+			InterviewDate:     r.InterviewDate,
+			InterviewTime:     r.InterviewTime,
+			Rank:              r.Rank,
+			Round:             r.Round,
+		}
+	}
+
+	return rankInfoMap, courseInfoMap, studentInfoMap
+}
+
+func CreateCourseMap(courses []Course, rankingInfoMap RankingInfoMap) CourseMap {
 	jointCourseMap := createJointCourseMap(courses)
-	rankingMap := createRankingMap(rankings)
+	rankingMap := createRankingMap(rankingInfoMap)
 	courseMap := make(CourseMap)
 
 	for _, c := range courses {
@@ -53,8 +107,9 @@ func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
 			jointCourse = jointCourseMap[c.JointId]
 		}
 
-		courseMap[c.Id] = model.NewCourse(
-			c.Id,
+		courseId := c.Id
+		courseMap[courseId] = model.NewCourse(
+			courseId,
 			jointCourse,
 			rankingMap[c.Id],
 		)

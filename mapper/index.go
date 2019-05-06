@@ -51,6 +51,34 @@ type Ranking struct {
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
 }
 
+type CourseInfo struct {
+	UniversityId   string
+	UniversityName string
+	CourseId       string
+	FacultyName    string
+	CourseName     string
+	ProjectName    string
+}
+
+type StudentInfo struct {
+	CitizenId   string
+	Title       string
+	FirstName   string
+	LastName    string
+	PhoneNumber string
+	Email       string
+}
+
+type RankInfo struct {
+	ApplicationId     string
+	ApplicationDate   string
+	InterviewLocation string
+	InterviewDate     string
+	InterviewTime     string
+	Rank              uint16
+	Round             string
+}
+
 var once sync.Once
 var _admitStatus admitStatus
 
