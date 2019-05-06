@@ -135,7 +135,12 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	return studentMap
 }
 
-func ToOutput(students []*model.Student) []Ranking {
+func ToOutput(
+	students []*model.Student,
+	courseInfoMap CourseInfoMap,
+	studentInfoMap StudentInfoMap,
+	rankingInfoMap RankingInfoMap,
+) []Ranking {
 	outputs := make([]Ranking, 0, len(students)*6)
 
 	for _, student := range students {
@@ -154,10 +159,30 @@ func ToOutput(students []*model.Student) []Ranking {
 				continue
 			}
 
+			courseId := course.Id()
+			courseInfo := courseInfoMap[courseId]
+			studentInfo := studentInfoMap[citizenId]
+			rankInfo := rankingInfoMap[courseId][citizenId]
 			output := Ranking{
-				CourseId:  course.Id(),
-				CitizenId: citizenId,
-				Rank:      rank,
+				UniversityId:      courseInfo.UniversityId,
+				UniversityName:    courseInfo.UniversityName,
+				CourseId:          courseId,
+				FacultyName:       courseInfo.FacultyName,
+				CourseName:        courseInfo.CourseName,
+				ProjectName:       courseInfo.ProjectName,
+				CitizenId:         citizenId,
+				Title:             studentInfo.Title,
+				FirstName:         studentInfo.FirstName,
+				LastName:          studentInfo.LastName,
+				PhoneNumber:       studentInfo.PhoneNumber,
+				Email:             studentInfo.Email,
+				ApplicationId:     rankInfo.ApplicationId,
+				ApplicationDate:   rankInfo.ApplicationDate,
+				InterviewLocation: rankInfo.InterviewLocation,
+				InterviewDate:     rankInfo.InterviewDate,
+				InterviewTime:     rankInfo.InterviewTime,
+				Rank:              rank,
+				Round:             rankInfo.Round,
 			}
 
 			statuses := AdmitStatuses()

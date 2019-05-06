@@ -58,7 +58,7 @@ func action(c *cli.Context) error {
 		return err
 	}
 
-	rankingInfoMap, _, _ := mapper.ExtractRankings(rankings)
+	rankingInfoMap, courseInfoMap, studentInfoMap := mapper.ExtractRankings(rankings)
 	clearingHouse := model.NewClearingHouse(
 		util.GetPendingStudents(
 			mapper.CreateStudentMap(
@@ -80,7 +80,7 @@ func action(c *cli.Context) error {
 		return errors.New("some students are missing")
 	}
 
-	outputs := mapper.ToOutput(allStudents)
+	outputs := mapper.ToOutput(allStudents, courseInfoMap, studentInfoMap, rankingInfoMap)
 	if err := util.WriteCsvFile(c.String("output"), &outputs); err != nil {
 		return err
 	}
