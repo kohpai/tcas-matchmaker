@@ -1,13 +1,13 @@
 package main
 
 import (
-	"errors"
 	"log"
 	"os"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
 	"github.com/kohpai/tcas-3rd-round-resolver/model"
 	"github.com/kohpai/tcas-3rd-round-resolver/util"
+	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
 
@@ -47,15 +47,15 @@ func main() {
 func action(c *cli.Context) error {
 	students, err := util.ReadStudents(c.String("students"))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "students")
 	}
 	courses, err := util.ReadCourses(c.String("courses"))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "courses")
 	}
 	rankings, err := util.ReadRankings(c.String("rankings"))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "rankings")
 	}
 
 	rankingInfoMap, courseInfoMap, studentInfoMap := mapper.ExtractRankings(rankings)
