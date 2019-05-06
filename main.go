@@ -58,13 +58,14 @@ func action(c *cli.Context) error {
 		return err
 	}
 
+	rankingInfoMap, _, _ := mapper.ExtractRankings(rankings)
 	clearingHouse := model.NewClearingHouse(
 		util.GetPendingStudents(
 			mapper.CreateStudentMap(
 				students,
 				mapper.CreateCourseMap(
 					courses,
-					rankings,
+					rankingInfoMap,
 				),
 			),
 		),
