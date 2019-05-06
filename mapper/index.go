@@ -20,12 +20,6 @@ type Student struct {
 	Priority  uint8  `json:"priority"`
 }
 
-type Ranking struct {
-	CourseId  string `csv:"course_id"`
-	CitizenId string `csv:"citizen_id"`
-	Rank      uint16 `csv:"ranking"`
-}
-
 type AdmitStatus int8
 
 type admitStatus struct {
@@ -34,7 +28,7 @@ type admitStatus struct {
 	Late     AdmitStatus
 }
 
-type Output struct {
+type Ranking struct {
 	UniversityId      string      `csv:"university_id"`
 	UniversityName    string      `csv:"university_name"`
 	CourseId          string      `csv:"course_id"`
@@ -52,7 +46,7 @@ type Output struct {
 	InterviewLocation string      `csv:"interview_location"`
 	InterviewDate     string      `csv:"interview_date"`
 	InterviewTime     string      `csv:"interview_time"`
-	Ranking           uint16      `csv:"ranking"`
+	Rank              uint16      `csv:"ranking"`
 	Round             string      `csv:"round"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
 }

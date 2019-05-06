@@ -80,8 +80,8 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	return studentMap
 }
 
-func ToOutput(students []*model.Student) []Output {
-	outputs := make([]Output, 0)
+func ToOutput(students []*model.Student) []Ranking {
+	outputs := make([]Ranking, 0, len(students)*6)
 
 	for _, student := range students {
 		courseIndex := student.CourseIndex()
@@ -94,15 +94,15 @@ func ToOutput(students []*model.Student) []Output {
 			}
 
 			citizenId := student.CitizenId()
-			ranking := course.Ranking()[citizenId]
-			if ranking == 0 {
+			rank := course.Ranking()[citizenId]
+			if rank == 0 {
 				continue
 			}
 
-			output := Output{
+			output := Ranking{
 				CourseId:  course.Id(),
 				CitizenId: citizenId,
-				Ranking:   ranking,
+				Rank:      rank,
 			}
 
 			statuses := AdmitStatuses()

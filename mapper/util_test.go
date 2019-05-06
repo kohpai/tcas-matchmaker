@@ -6,13 +6,41 @@ import (
 
 func TestCreateRankingMap_Always_ReturnRankingMap(t *testing.T) {
 	rankings := []Ranking{
-		{"1234", "13499", 1},
-		{"1234", "13501", 2},
-		{"1234", "13502", 3},
-		{"1235", "13500", 2},
-		{"1236", "13499", 1},
-		{"1237", "13500", 1},
-		{"1237", "13499", 2},
+		{
+			CourseId:  "1234",
+			CitizenId: "13499",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1234",
+			CitizenId: "13501",
+			Rank:      2,
+		},
+		{
+			CourseId:  "1234",
+			CitizenId: "13502",
+			Rank:      3,
+		},
+		{
+			CourseId:  "1235",
+			CitizenId: "13500",
+			Rank:      2,
+		},
+		{
+			CourseId:  "1236",
+			CitizenId: "13499",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1237",
+			CitizenId: "13500",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1237",
+			CitizenId: "13499",
+			Rank:      2,
+		},
 	}
 
 	rankingMap := createRankingMap(rankings)
@@ -65,13 +93,41 @@ func TestCreateJointCourseMap_Always_ReturnsJointCourseMap(t *testing.T) {
 
 func TestCreateCourseMap_Always_ReturnsCourseMap(t *testing.T) {
 	rankings := []Ranking{
-		{"1234", "13499", 1},
-		{"1234", "13501", 2},
-		{"1234", "13502", 3},
-		{"1235", "13500", 2},
-		{"1236", "13499", 1},
-		{"1237", "13500", 1},
-		{"1237", "13499", 2},
+		{
+			CourseId:  "1234",
+			CitizenId: "13499",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1234",
+			CitizenId: "13501",
+			Rank:      2,
+		},
+		{
+			CourseId:  "1234",
+			CitizenId: "13502",
+			Rank:      3,
+		},
+		{
+			CourseId:  "1235",
+			CitizenId: "13500",
+			Rank:      2,
+		},
+		{
+			CourseId:  "1236",
+			CitizenId: "13499",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1237",
+			CitizenId: "13500",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1237",
+			CitizenId: "13499",
+			Rank:      2,
+		},
 	}
 	courses := []Course{
 		{"1234", "", 10, 1, 0},
@@ -111,13 +167,41 @@ func TestCreateCourseMap_Always_ReturnsCourseMap(t *testing.T) {
 
 func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 	rankings := []Ranking{
-		{"1234", "13499", 1},
-		{"1234", "13501", 2},
-		{"1234", "13502", 3},
-		{"1235", "13500", 2},
-		{"1236", "13499", 1},
-		{"1237", "13500", 1},
-		{"1237", "13499", 2},
+		{
+			CourseId:  "1234",
+			CitizenId: "13499",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1234",
+			CitizenId: "13501",
+			Rank:      2,
+		},
+		{
+			CourseId:  "1234",
+			CitizenId: "13502",
+			Rank:      3,
+		},
+		{
+			CourseId:  "1235",
+			CitizenId: "13500",
+			Rank:      2,
+		},
+		{
+			CourseId:  "1236",
+			CitizenId: "13499",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1237",
+			CitizenId: "13500",
+			Rank:      1,
+		},
+		{
+			CourseId:  "1237",
+			CitizenId: "13499",
+			Rank:      2,
+		},
 	}
 	courses := []Course{
 		{"1234", "", 10, 1, 0},
