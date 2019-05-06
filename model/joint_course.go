@@ -96,6 +96,9 @@ func (jointCourse *JointCourse) DecSpots() {
 }
 
 func (jointCourse *JointCourse) Apply(rankedStudent *RankedStudent) bool {
+	if jointCourse.limit == 0 {
+		return false
+	}
 	return jointCourse.strategy.Apply(rankedStudent)
 }
 
