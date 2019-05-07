@@ -46,7 +46,6 @@ type Ranking struct {
 	Round             string      `csv:"round"`
 	Rank              uint16      `csv:"ranking"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
-	ApplicationId     string      `csv:"application_id"`
 }
 
 type CourseInfo struct {
@@ -68,7 +67,6 @@ type StudentInfo struct {
 }
 
 type RankInfo struct {
-	ApplicationId     string
 	ApplicationDate   string
 	InterviewLocation string
 	InterviewDate     string
