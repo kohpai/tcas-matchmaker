@@ -86,7 +86,6 @@ func ExtractRankings(rankings []Ranking) (RankingInfoMap, CourseInfoMap, Student
 		}
 
 		rankInfoMap[courseId][citizenId] = RankInfo{
-			ApplicationId:     r.ApplicationId,
 			ApplicationDate:   r.ApplicationDate,
 			InterviewLocation: r.InterviewLocation,
 			InterviewDate:     r.InterviewDate,
@@ -181,7 +180,6 @@ func ToOutput(
 				LastName:          studentInfo.LastName,
 				PhoneNumber:       studentInfo.PhoneNumber,
 				Email:             studentInfo.Email,
-				ApplicationId:     rankInfo.ApplicationId,
 				ApplicationDate:   rankInfo.ApplicationDate,
 				InterviewLocation: rankInfo.InterviewLocation,
 				InterviewDate:     rankInfo.InterviewDate,
