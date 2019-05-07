@@ -1,6 +1,8 @@
 package model
 
-import "container/heap"
+import (
+	"container/heap"
+)
 
 type AllowSomeStrategy struct {
 	BaseStrategy
@@ -11,8 +13,8 @@ type AllowSomeStrategy struct {
 
 func (strategy *AllowSomeStrategy) countBeingRemovedReplicas() (uint16, uint16) {
 	jc := strategy.jointCourse
-	students := jc.Students().Students()
-	length, limit := uint16(len(students)), jc.Limit()
+	pq := jc.Students()
+	length, limit := uint16(pq.Len()), jc.Limit()
 	delta := length - limit
 	count := strategy.countEdgeReplicas()
 
@@ -60,11 +62,11 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 		strategy.leastReplicatedRank = lastRank
 	}
 
-	for ; count > 0; count-- {
+	for i := uint16(0); i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
 		rs.Student().ClearCourse()
 	}
-	for ; inc > 0; inc-- {
+	for i := uint16(0); i < inc; i++ {
 		jc.IncSpots()
 	}
 
