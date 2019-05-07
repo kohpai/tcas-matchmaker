@@ -29,11 +29,10 @@ type admitStatus struct {
 type Ranking struct {
 	UniversityId      string      `csv:"university_id"`
 	UniversityName    string      `csv:"university_name"`
-	CourseId          string      `csv:"course_id"`
 	FacultyName       string      `csv:"faculty_name"`
 	CourseName        string      `csv:"course_name"`
 	ProjectName       string      `csv:"project_name"`
-	ApplicationId     string      `csv:"application_id"`
+	CourseId          string      `csv:"course_id"`
 	CitizenId         string      `csv:"citizen_id"`
 	Title             string      `csv:"title"`
 	FirstName         string      `csv:"first_name"`
@@ -44,9 +43,10 @@ type Ranking struct {
 	InterviewLocation string      `csv:"interview_location"`
 	InterviewDate     string      `csv:"interview_date"`
 	InterviewTime     string      `csv:"interview_time"`
-	Rank              uint16      `csv:"ranking"`
 	Round             string      `csv:"round"`
+	Rank              uint16      `csv:"ranking"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
+	ApplicationId     string      `csv:"application_id"`
 }
 
 type CourseInfo struct {
