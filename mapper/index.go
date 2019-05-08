@@ -48,24 +48,6 @@ type Ranking struct {
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
 }
 
-type CourseInfo struct {
-	UniversityId   string
-	UniversityName string
-	CourseId       string
-	FacultyName    string
-	CourseName     string
-	ProjectName    string
-}
-
-type StudentInfo struct {
-	CitizenId   string
-	Title       string
-	FirstName   string
-	LastName    string
-	PhoneNumber string
-	Email       string
-}
-
 type RankInfo struct {
 	ApplicationDate   string
 	InterviewLocation string
@@ -73,6 +55,20 @@ type RankInfo struct {
 	InterviewTime     string
 	Rank              uint16
 	Round             string
+	// course
+	UniversityId   string
+	UniversityName string
+	CourseId       string
+	FacultyName    string
+	CourseName     string
+	ProjectName    string
+	// student
+	CitizenId   string
+	Title       string
+	FirstName   string
+	LastName    string
+	PhoneNumber string
+	Email       string
 }
 
 var once sync.Once

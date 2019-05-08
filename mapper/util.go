@@ -14,8 +14,6 @@ type StudentMap map[string]*model.Student         // citizen ID -> student
 
 type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
 type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
-type CourseInfoMap map[string]CourseInfo   // course ID -> course info
-type StudentInfoMap map[string]StudentInfo // citizen ID -> student info
 
 func createRankingMap(rankingInfoMap RankingInfoMap) RankingMap {
 	rankingMap := make(RankingMap)
@@ -50,36 +48,12 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	return jointCourseMap
 }
 
-func ExtractRankings(rankings []Ranking) (RankingInfoMap, CourseInfoMap, StudentInfoMap) {
+func ExtractRankings(rankings []Ranking) RankingInfoMap {
 	rankInfoMap := make(RankingInfoMap)
-	courseInfoMap := make(CourseInfoMap)
-	studentInfoMap := make(StudentInfoMap)
 
 	for _, r := range rankings {
 		courseId := r.CourseId
 		citizenId := r.CitizenId
-
-		if _, ok := courseInfoMap[courseId]; !ok {
-			courseInfoMap[courseId] = CourseInfo{
-				UniversityId:   r.UniversityId,
-				UniversityName: r.UniversityName,
-				CourseId:       courseId,
-				FacultyName:    r.FacultyName,
-				CourseName:     r.CourseName,
-				ProjectName:    r.ProjectName,
-			}
-		}
-
-		if _, ok := studentInfoMap[citizenId]; !ok {
-			studentInfoMap[citizenId] = StudentInfo{
-				CitizenId:   r.CitizenId,
-				Title:       r.Title,
-				FirstName:   r.FirstName,
-				LastName:    r.LastName,
-				PhoneNumber: r.PhoneNumber,
-				Email:       r.Email,
-			}
-		}
 
 		if _, ok := rankInfoMap[courseId]; !ok {
 			rankInfoMap[courseId] = make(RankInfoMap)
@@ -92,10 +66,24 @@ func ExtractRankings(rankings []Ranking) (RankingInfoMap, CourseInfoMap, Student
 			InterviewTime:     r.InterviewTime,
 			Rank:              r.Rank,
 			Round:             r.Round,
+			// course
+			UniversityId:   r.UniversityId,
+			UniversityName: r.UniversityName,
+			CourseId:       r.CourseId,
+			FacultyName:    r.FacultyName,
+			CourseName:     r.CourseName,
+			ProjectName:    r.ProjectName,
+			// student
+			CitizenId:   r.CitizenId,
+			Title:       r.Title,
+			FirstName:   r.FirstName,
+			LastName:    r.LastName,
+			PhoneNumber: r.PhoneNumber,
+			Email:       r.Email,
 		}
 	}
 
-	return rankInfoMap, courseInfoMap, studentInfoMap
+	return rankInfoMap
 }
 
 func CreateCourseMap(courses []Course, rankingInfoMap RankingInfoMap) CourseMap {
@@ -141,8 +129,6 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 
 func ToOutput(
 	students []*model.Student,
-	courseInfoMap CourseInfoMap,
-	studentInfoMap StudentInfoMap,
 	rankingInfoMap RankingInfoMap,
 ) []Ranking {
 	outputs := make([]Ranking, 0, len(students)*6)
@@ -164,22 +150,20 @@ func ToOutput(
 			}
 
 			courseId := course.Id()
-			courseInfo := courseInfoMap[courseId]
-			studentInfo := studentInfoMap[citizenId]
 			rankInfo := rankingInfoMap[courseId][citizenId]
 			output := Ranking{
-				UniversityId:      courseInfo.UniversityId,
-				UniversityName:    courseInfo.UniversityName,
-				CourseId:          courseId,
-				FacultyName:       courseInfo.FacultyName,
-				CourseName:        courseInfo.CourseName,
-				ProjectName:       courseInfo.ProjectName,
-				CitizenId:         citizenId,
-				Title:             studentInfo.Title,
-				FirstName:         studentInfo.FirstName,
-				LastName:          studentInfo.LastName,
-				PhoneNumber:       studentInfo.PhoneNumber,
-				Email:             studentInfo.Email,
+				UniversityId:      rankInfo.UniversityId,
+				UniversityName:    rankInfo.UniversityName,
+				CourseId:          rankInfo.CourseId,
+				FacultyName:       rankInfo.FacultyName,
+				CourseName:        rankInfo.CourseName,
+				ProjectName:       rankInfo.ProjectName,
+				CitizenId:         rankInfo.CitizenId,
+				Title:             rankInfo.Title,
+				FirstName:         rankInfo.FirstName,
+				LastName:          rankInfo.LastName,
+				PhoneNumber:       rankInfo.PhoneNumber,
+				Email:             rankInfo.Email,
 				ApplicationDate:   rankInfo.ApplicationDate,
 				InterviewLocation: rankInfo.InterviewLocation,
 				InterviewDate:     rankInfo.InterviewDate,
