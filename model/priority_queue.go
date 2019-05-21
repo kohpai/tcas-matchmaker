@@ -18,7 +18,7 @@ func (pq *PriorityQueue) Len() int { return len(pq.students) }
 func (pq *PriorityQueue) Less(i, j int) bool {
 	students := pq.students
 	// We want Pop to give us the highest, not lowest, priority so we use greater than here.
-	return students[i].rank >= students[j].rank
+	return students[i].rank <= students[j].rank
 }
 
 func (pq *PriorityQueue) Swap(i, j int) {
