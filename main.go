@@ -82,7 +82,7 @@ func action(c *cli.Context) error {
 
 	outputs := mapper.ToOutput(allStudents, rankingInfoMap)
 	if err := util.WriteCsvFile(c.String("output"), &outputs); err != nil {
-		return err
+		return errors.Wrap(err, "output")
 	}
 
 	return nil
