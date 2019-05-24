@@ -6,10 +6,10 @@ import (
 
 type Course struct {
 	Id        string `json:"course_id"`
-	JointId   string `json:"round_3_join_id"`
-	Limit     uint16 `json:"round_3_receive"`
-	Condition string `json:"round_3_condition"`
-	AddLimit  uint16 `json:"round_3_add_limit"`
+	JointId   string `json:"round_4_join_id"`
+	Limit     uint16 `json:"round_4_receive"`
+	Condition string `json:"round_4_condition"`
+	AddLimit  uint16 `json:"round_4_add_limit"`
 }
 
 type Student struct {
