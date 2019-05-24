@@ -35,7 +35,7 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	for _, c := range courses {
 		condition, err := strconv.Atoi(c.Condition)
 		if err != nil {
-			log.Fatal("condition cannot be parsed", err)
+			log.Fatal("condition cannot be parsed: ", err, c)
 		}
 		strategy := model.NewApplyStrategy(model.Condition(condition), c.AddLimit)
 		if c.JointId == "" {
