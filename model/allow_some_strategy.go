@@ -6,7 +6,7 @@ import (
 
 type AllowSomeStrategy struct {
 	BaseStrategy
-	leastReplicatedRank uint16
+	leastReplicatedRank float64
 	rankCount           RankCount
 	exceedLimit         uint16
 }

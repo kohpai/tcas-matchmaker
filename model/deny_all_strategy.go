@@ -4,7 +4,7 @@ import "container/heap"
 
 type DenyAllStrategy struct {
 	BaseStrategy
-	leastReplicatedRank uint16
+	leastReplicatedRank float64
 	rankCount           RankCount
 }
 

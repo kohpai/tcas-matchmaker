@@ -4,8 +4,8 @@ import (
 	"fmt"
 )
 
-type Ranking map[string]uint16
-type RankCount map[uint16]uint16
+type Ranking map[string]float64
+type RankCount map[float64]uint16
 
 type Course struct {
 	id          string
