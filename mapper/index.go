@@ -44,7 +44,7 @@ type Ranking struct {
 	InterviewDate     string      `csv:"interview_date"`
 	InterviewTime     string      `csv:"interview_time"`
 	Round             string      `csv:"round"`
-	Rank              uint16      `csv:"ranking"`
+	Rank              float64     `csv:"ranking"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
 }
 
@@ -53,7 +53,7 @@ type RankInfo struct {
 	InterviewLocation string
 	InterviewDate     string
 	InterviewTime     string
-	Rank              uint16
+	Rank              float64
 	Round             string
 	// course
 	UniversityId   string
