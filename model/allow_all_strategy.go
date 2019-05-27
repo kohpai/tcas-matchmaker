@@ -37,7 +37,7 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	case rank == lastRank:
 		heap.Push(pq, rankedStudent)
 		return true
-	case rank > lastRank:
+	case rank < lastRank:
 		return false
 	}
 
