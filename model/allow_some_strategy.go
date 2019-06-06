@@ -35,7 +35,7 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 
 	if !jc.IsFull() {
 		lrr := strategy.leastReplicatedRank
-		if lrr == 0 || rank > lrr {
+		if lrr == -1 || rank > lrr {
 			heap.Push(pq, rankedStudent)
 			jc.DecSpots()
 			return true
