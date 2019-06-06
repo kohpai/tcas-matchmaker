@@ -144,10 +144,6 @@ func ToOutput(
 			}
 
 			citizenId := student.CitizenId()
-			rank := course.Ranking()[citizenId]
-			if rank == 0 {
-				continue
-			}
 
 			courseId := course.Id()
 			rankInfo := rankingInfoMap[courseId][citizenId]
@@ -168,7 +164,7 @@ func ToOutput(
 				InterviewLocation: rankInfo.InterviewLocation,
 				InterviewDate:     rankInfo.InterviewDate,
 				InterviewTime:     rankInfo.InterviewTime,
-				Rank:              rank,
+				Rank:              course.Ranking()[citizenId],
 				Round:             rankInfo.Round,
 			}
 
