@@ -3,32 +3,33 @@ package model
 import (
 	"fmt"
 	"log"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/pq"
 )
 
 type JointCourse struct {
 	id             string
 	limit          int
 	availableSpots int
-	courses        []*Course
-	students       *PriorityQueue
-	strategy       ApplyStrategy
+	courses        []common.Course
+	students       *pq.PriorityQueue
+	strategy       common.ApplyStrategy
 }
 
 func NewJointCourse(
 	id string,
 	availableSpots int,
-	strategy ApplyStrategy,
+	strategy common.ApplyStrategy,
 ) *JointCourse {
-	courses := make([]*Course, 0)
+	courses := make([]common.Course, 0)
 
 	jointCourse := &JointCourse{
 		id,
 		availableSpots,
 		availableSpots,
 		courses,
-		&PriorityQueue{
-			[]*RankedStudent{},
-		},
+		pq.NewPriorityQueue([]*pq.RankedStudent{}),
 		strategy,
 	}
 
@@ -48,11 +49,11 @@ func (jointCourse *JointCourse) AvailableSpots() int {
 	return jointCourse.availableSpots
 }
 
-func (jointCourse *JointCourse) Courses() []*Course {
+func (jointCourse *JointCourse) Courses() []common.Course {
 	return jointCourse.courses
 }
 
-func (jointCourse *JointCourse) Students() *PriorityQueue {
+func (jointCourse *JointCourse) Students() *pq.PriorityQueue {
 	return jointCourse.students
 }
 
@@ -60,7 +61,7 @@ func (jointCourse *JointCourse) IsFull() bool {
 	return jointCourse.availableSpots == 0
 }
 
-func (jointCourse *JointCourse) RegisterCourse(course *Course) {
+func (jointCourse *JointCourse) RegisterCourse(course common.Course) {
 	jointCourse.courses = append(jointCourse.courses, course)
 }
 
@@ -92,7 +93,7 @@ func (jointCourse *JointCourse) DecSpots() {
 	}
 }
 
-func (jointCourse *JointCourse) Apply(rankedStudent *RankedStudent) bool {
+func (jointCourse *JointCourse) Apply(rankedStudent common.RankedStudent) bool {
 	return jointCourse.strategy.Apply(rankedStudent)
 }
 

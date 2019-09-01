@@ -1,4 +1,4 @@
-package model
+package pq
 
 import (
 	"fmt"
@@ -15,6 +15,20 @@ type RankedStudent struct {
 // A PriorityQueue implements heap.Interface and holds Items.
 type PriorityQueue struct {
 	students []*RankedStudent
+}
+
+func NewPriorityQueue(students []*RankedStudent) *PriorityQueue {
+	return &PriorityQueue{
+		students,
+	}
+}
+
+func NewRankedStudent(student common.Student, rank, index int) common.RankedStudent {
+	return &RankedStudent{
+		student,
+		rank,
+		index,
+	}
 }
 
 func (pq *PriorityQueue) Len() int { return len(pq.students) }
