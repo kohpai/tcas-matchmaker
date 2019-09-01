@@ -37,9 +37,9 @@ func (ch *ClearingHouse) Execute() {
 	statuses := st.ApplicationStatuses()
 	for _, student := range ch.students {
 		switch student.ApplicationStatus() {
-		case statuses.Accepted:
+		case statuses.Accepted():
 			ch.acceptedStudents = append(ch.acceptedStudents, student)
-		case statuses.Rejected:
+		case statuses.Rejected():
 			ch.rejectedStudents = append(ch.rejectedStudents, student)
 		}
 	}
@@ -51,7 +51,7 @@ func (ch *ClearingHouse) executePending() {
 	for isPending {
 		isPending = false
 		for _, student := range ch.students {
-			if student.ApplicationStatus() == statuses.Pending {
+			if student.ApplicationStatus() == statuses.Pending() {
 				isPending = true
 				student.Propose()
 			}
