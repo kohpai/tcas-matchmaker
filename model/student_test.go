@@ -14,7 +14,7 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 		t.Error("Citizen ID not matched", student)
 	}
 
-	if student.ApplicationStatus() != st.ApplicationStatuses().Pending {
+	if student.ApplicationStatus() != st.ApplicationStatuses().Pending() {
 		t.Error("Application status is not PENDING", student)
 	}
 
@@ -32,7 +32,7 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 }
 
 func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	course := model.NewCourse("1234", jointCourse, nil)
 	student := st.NewStudent("1349900696510")
@@ -47,7 +47,7 @@ func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 }
 
 func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	course := model.NewCourse("1234", jointCourse, nil)
 	student := st.NewStudent("1349900696510")

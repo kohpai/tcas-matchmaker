@@ -10,7 +10,7 @@ import (
 )
 
 func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 10, strategy)
 	course := model.NewCourse("1234", jointCourse, nil)
 
@@ -24,7 +24,7 @@ func TestNewCourse_Always_ReturnsCourse(t *testing.T) {
 }
 
 func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	course := model.NewCourse("1234", jointCourse, nil)
 
@@ -34,7 +34,7 @@ func TestIsFull_AvailableSpotsGreaterThanZero_ReturnsFalse(t *testing.T) {
 }
 
 func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	course := model.NewCourse("1234", jointCourse, nil)
 
@@ -44,7 +44,7 @@ func TestIsFull_AvailableSpotsIsReachingZero_ReturnsTrue(t *testing.T) {
 }
 
 func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 0, strategy)
 	course := model.NewCourse("1234", jointCourse, nil)
 
@@ -54,7 +54,7 @@ func TestIsFull_AvailableSpotsIsAlreadyZero_ReturnsTrue(t *testing.T) {
 }
 
 func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	ranking := common.Ranking{
 		"1349": 1,
@@ -69,7 +69,7 @@ func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 }
 
 func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	ranking := common.Ranking{
 		"1349": 2,
@@ -88,17 +88,17 @@ func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
 	}
 
 	statuses := st.ApplicationStatuses()
-	if ss[0].ApplicationStatus() != statuses.Pending {
+	if ss[0].ApplicationStatus() != statuses.Pending() {
 		t.Error("Student has incorrect status", ss[0])
 	}
 
-	if ss[1].ApplicationStatus() != statuses.Accepted {
+	if ss[1].ApplicationStatus() != statuses.Accepted() {
 		t.Error("Student has incorrect status", ss[1])
 	}
 }
 
 func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	ranking := common.Ranking{
 		"1349": 1,
@@ -117,17 +117,17 @@ func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
 	}
 
 	statuses := st.ApplicationStatuses()
-	if ss[0].ApplicationStatus() != statuses.Accepted {
+	if ss[0].ApplicationStatus() != statuses.Accepted() {
 		t.Error("Student has incorrect status", ss[0])
 	}
 
-	if ss[1].ApplicationStatus() != statuses.Pending {
+	if ss[1].ApplicationStatus() != statuses.Pending() {
 		t.Error("Student has incorrect status", ss[1])
 	}
 }
 
 func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 1, strategy)
 	ranking := common.Ranking{
 		"1349": 1,
@@ -143,7 +143,7 @@ func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 }
 
 func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 3, strategy)
 	ranking := common.Ranking{
 		"1351": 1,

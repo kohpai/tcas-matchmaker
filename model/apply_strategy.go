@@ -21,17 +21,17 @@ func NewApplyStrategy(condition Condition, exceedLimit int) ApplyStrategy {
 	conditions := Conditions()
 
 	switch condition {
-	case conditions.AllowAll:
+	case conditions.AllowAll():
 		return &AllowAllStrategy{
 			base,
 		}
-	case conditions.DenyAll:
+	case conditions.DenyAll():
 		return &DenyAllStrategy{
 			base,
 			0,
 			make(RankCount),
 		}
-	case conditions.AllowSome:
+	case conditions.AllowSome():
 		return &AllowSomeStrategy{
 			base,
 			0,

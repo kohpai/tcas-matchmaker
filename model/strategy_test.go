@@ -9,7 +9,7 @@ import (
 )
 
 func TestApply_AllowAll_AdmitAll(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 4, strategy)
 	ranking := common.Ranking{
 		"1352": 1,
@@ -40,7 +40,7 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 }
 
 func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 5, strategy)
 	ranking := common.Ranking{
 		"1352": 1,
@@ -102,7 +102,7 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 }
 
 func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().DenyAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().DenyAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 4, strategy)
 	ranking := common.Ranking{
 		"1354": 1,
@@ -137,7 +137,7 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 }
 
 func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().DenyAll, 0)
+	strategy := model.NewApplyStrategy(model.Conditions().DenyAll(), 0)
 	jointCourse := model.NewJointCourse("1234", 3, strategy)
 	ranking := common.Ranking{
 		"1354": 1,
@@ -164,7 +164,7 @@ func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 }
 
 func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowSome, 1)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowSome(), 1)
 	jointCourse := model.NewJointCourse("1234", 3, strategy)
 	ranking := common.Ranking{
 		"1354": 1,
@@ -191,7 +191,7 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 }
 
 func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
-	strategy := model.NewApplyStrategy(model.Conditions().AllowSome, 2)
+	strategy := model.NewApplyStrategy(model.Conditions().AllowSome(), 2)
 	jointCourse := model.NewJointCourse("1234", 3, strategy)
 	ranking := common.Ranking{
 		"1354": 1,
