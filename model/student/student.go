@@ -22,6 +22,7 @@ func NewStudent(citizenId string) *Student {
 	}
 }
 
+// Set the course to which the student is accepted
 func (student *Student) SetCourse(course common.Course) {
 	for i, c := range student.preferredCourses {
 		if c == course {
@@ -32,6 +33,7 @@ func (student *Student) SetCourse(course common.Course) {
 	student.applicationStatus = ApplicationStatuses().Accepted
 }
 
+// Student is back to not accepted and pending to be determined
 func (student *Student) ClearCourse() {
 	student.courseIndex = -1
 	student.applicationStatus = ApplicationStatuses().Pending
