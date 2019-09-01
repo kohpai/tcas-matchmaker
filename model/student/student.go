@@ -17,7 +17,7 @@ type Student struct {
 func NewStudent(citizenId string) *Student {
 	return &Student{
 		citizenId:         citizenId,
-		applicationStatus: ApplicationStatuses().Pending,
+		applicationStatus: ApplicationStatuses().Pending(),
 		courseIndex:       -1,
 	}
 }
@@ -30,13 +30,13 @@ func (student *Student) SetCourse(course common.Course) {
 			break
 		}
 	}
-	student.applicationStatus = ApplicationStatuses().Accepted
+	student.applicationStatus = ApplicationStatuses().Accepted()
 }
 
 // Student is back to not accepted and pending to be determined
 func (student *Student) ClearCourse() {
 	student.courseIndex = -1
-	student.applicationStatus = ApplicationStatuses().Pending
+	student.applicationStatus = ApplicationStatuses().Pending()
 }
 
 func (student *Student) CitizenId() string {
@@ -70,7 +70,7 @@ func (student *Student) SetPreferredCourse(priority int, course common.Course) e
 
 func (student *Student) Propose() ApplicationStatus {
 	statuses := ApplicationStatuses()
-	if student.applicationStatus != statuses.Pending {
+	if student.applicationStatus != statuses.Pending() {
 		return student.applicationStatus
 	}
 
@@ -86,7 +86,7 @@ func (student *Student) Propose() ApplicationStatus {
 	}
 
 	if !isAccepted {
-		student.applicationStatus = statuses.Rejected
+		student.applicationStatus = statuses.Rejected()
 	}
 
 	return student.applicationStatus

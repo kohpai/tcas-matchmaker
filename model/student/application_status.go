@@ -8,19 +8,31 @@ type ApplicationStatus string
 
 type applicationStatus struct {
 	once     sync.Once
-	Accepted ApplicationStatus
-	Rejected ApplicationStatus
-	Pending  ApplicationStatus
+	accepted ApplicationStatus
+	rejected ApplicationStatus
+	pending  ApplicationStatus
 }
 
 var _applicationStatus applicationStatus
 
 // TransactionTypes returns the types of a transaction
-func ApplicationStatuses() applicationStatus {
+func ApplicationStatuses() *applicationStatus {
 	_applicationStatus.once.Do(func() {
-		_applicationStatus.Accepted = "ACCEPTED"
-		_applicationStatus.Rejected = "REJECTED"
-		_applicationStatus.Pending = "PENDING"
+		_applicationStatus.accepted = "ACCEPTED"
+		_applicationStatus.rejected = "REJECTED"
+		_applicationStatus.pending = "PENDING"
 	})
-	return _applicationStatus
+	return &_applicationStatus
+}
+
+func (appStatus *applicationStatus) Accepted() ApplicationStatus {
+	return appStatus.accepted
+}
+
+func (appStatus *applicationStatus) Rejected() ApplicationStatus {
+	return appStatus.rejected
+}
+
+func (appStatus *applicationStatus) Pending() ApplicationStatus {
+	return appStatus.pending
 }
