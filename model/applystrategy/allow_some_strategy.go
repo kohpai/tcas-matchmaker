@@ -1,11 +1,16 @@
-package model
+package applystrategy
 
-import "container/heap"
+import (
+	"container/heap"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
+)
 
 type AllowSomeStrategy struct {
 	BaseStrategy
 	leastReplicatedRank int
-	rankCount           RankCount
+	rankCount           course.RankCount
 	exceedLimit         int
 }
 
@@ -26,7 +31,7 @@ func (strategy *AllowSomeStrategy) countBeingRemovedReplicas() (int, int) {
 	return 0, 0
 }
 
-func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
+func (strategy *AllowSomeStrategy) Apply(rankedStudent common.RankedStudent) bool {
 	jc := strategy.jointCourse
 	pq := jc.Students()
 	rank := rankedStudent.Rank()
@@ -45,7 +50,7 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return false
 	}
 
-	tmp := heap.Pop(pq).(*RankedStudent)
+	tmp := heap.Pop(pq).(common.RankedStudent)
 	heap.Push(pq, tmp)
 	lastRank := tmp.Rank()
 	if rank > lastRank {
@@ -61,7 +66,7 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	for ; count > 0; count-- {
-		rs := heap.Pop(pq).(*RankedStudent)
+		rs := heap.Pop(pq).(common.RankedStudent)
 		rs.Student().ClearCourse()
 	}
 	for ; inc > 0; inc-- {
