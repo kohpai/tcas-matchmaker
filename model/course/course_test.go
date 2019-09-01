@@ -1,4 +1,4 @@
-package model_test
+package course
 
 import (
 	"container/heap"

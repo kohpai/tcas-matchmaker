@@ -5,7 +5,7 @@ import (
 )
 
 type ApplyStrategy interface {
-	SetJointCourse(*JointCourse)
+	SetJointCourse(*jointcourse.JointCourse)
 	Apply(*RankedStudent) bool
 }
 
