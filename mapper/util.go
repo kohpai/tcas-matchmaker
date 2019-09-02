@@ -73,7 +73,7 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 
 	for _, s := range students {
 		citizenId := s.CitizenId
-		if studentMap[citizenId] == nil {
+		if _, ok := studentMap[citizenId]; !ok {
 			studentMap[citizenId] = st.NewStudent(citizenId)
 		}
 
