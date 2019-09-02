@@ -20,7 +20,7 @@ func createRankingMap(rankings []Ranking) RankingMap {
 
 	for _, r := range rankings {
 		courseId := r.CourseId
-		if rankingMap[courseId] == nil {
+		if _, ok := rankingMap[courseId]; !ok {
 			rankingMap[courseId] = make(common.Ranking)
 		}
 		rankingMap[courseId][r.CitizenId] = r.Rank
@@ -36,7 +36,7 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 		strategy := as.NewApplyStrategy(c.Condition, c.AddLimit)
 		if c.JointId == "" {
 			jointCourseMap[c.Id] = jc.NewJointCourse(c.Id, c.Limit, strategy)
-		} else if jointCourseMap[c.JointId] == nil {
+		} else if _, ok := jointCourseMap[c.JointId]; !ok {
 			jointCourseMap[c.JointId] = jc.NewJointCourse(c.JointId, c.Limit, strategy)
 		}
 	}
