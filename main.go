@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	ch "github.com/kohpai/tcas-3rd-round-resolver/model/clearinghouse"
 	"github.com/kohpai/tcas-3rd-round-resolver/util"
 	"github.com/urfave/cli"
 )
@@ -58,7 +58,7 @@ func action(c *cli.Context) error {
 		return err
 	}
 
-	clearingHouse := model.NewClearingHouse(
+	clearingHouse := ch.NewClearingHouse(
 		util.GetPendingStudents(
 			mapper.CreateStudentMap(
 				students,
