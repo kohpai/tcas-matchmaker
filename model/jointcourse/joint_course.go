@@ -13,7 +13,7 @@ type JointCourse struct {
 	limit          int
 	availableSpots int
 	courses        []common.Course
-	students       *pq.PriorityQueue
+	students       common.PriorityQueue
 	strategy       common.ApplyStrategy
 }
 

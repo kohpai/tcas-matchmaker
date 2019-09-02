@@ -3,15 +3,15 @@ package mapper
 import (
 	"sync"
 
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
 )
 
 type Course struct {
-	Id        string          `json:"course_id"`
-	JointId   string          `json:"round_3_join_id"`
-	Limit     int             `json:"round_3_receive"`
-	Condition model.Condition `json:"round_3_condition"`
-	AddLimit  int             `json:"round_3_add_limit"`
+	Id        string           `json:"course_id"`
+	JointId   string           `json:"round_3_join_id"`
+	Limit     int              `json:"round_3_receive"`
+	Condition course.Condition `json:"round_3_condition"`
+	AddLimit  int              `json:"round_3_add_limit"`
 }
 
 type Student struct {

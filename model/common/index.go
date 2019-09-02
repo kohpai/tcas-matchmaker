@@ -19,11 +19,26 @@ type JointCourse interface {
 	AvailableSpots() int
 	RegisterCourse(Course)
 	Apply(RankedStudent) bool
+	Students() PriorityQueue
+	Limit() int
+	IsFull() bool
+	DecSpots()
+	IncSpots()
+}
+
+type PriorityQueue interface {
+	Len() int
+	Less(i, j int) bool
+	Swap(i, j int)
+	Push(x interface{})
+	Pop() interface{}
+	Students() []RankedStudent
 }
 
 type RankedStudent interface {
 	Student() Student
 	Rank() int
+	SetIndex(int)
 }
 
 type ApplyStrategy interface {

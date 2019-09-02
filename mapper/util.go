@@ -3,15 +3,17 @@ package mapper
 import (
 	"log"
 
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	as "github.com/kohpai/tcas-3rd-round-resolver/model/applystrategy"
 	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
+	jc "github.com/kohpai/tcas-3rd-round-resolver/model/jointcourse"
 	st "github.com/kohpai/tcas-3rd-round-resolver/model/student"
 )
 
-type RankingMap map[string]common.Ranking         // course ID -> citizen ID -> rank
-type JointCourseMap map[string]*model.JointCourse // joint ID -> joint course
-type CourseMap map[string]*model.Course           // course ID -> course
-type StudentMap map[string]*st.Student            // citizen ID -> student
+type RankingMap map[string]common.Ranking      // course ID -> citizen ID -> rank
+type JointCourseMap map[string]*jc.JointCourse // joint ID -> joint course
+type CourseMap map[string]*course.Course       // course ID -> course
+type StudentMap map[string]*st.Student         // citizen ID -> student
 
 func createRankingMap(rankings []Ranking) RankingMap {
 	rankingMap := make(RankingMap)
@@ -31,11 +33,11 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
 
 	for _, c := range courses {
-		strategy := model.NewApplyStrategy(c.Condition, c.AddLimit)
+		strategy := as.NewApplyStrategy(c.Condition, c.AddLimit)
 		if c.JointId == "" {
-			jointCourseMap[c.Id] = model.NewJointCourse(c.Id, c.Limit, strategy)
+			jointCourseMap[c.Id] = jc.NewJointCourse(c.Id, c.Limit, strategy)
 		} else if jointCourseMap[c.JointId] == nil {
-			jointCourseMap[c.JointId] = model.NewJointCourse(c.JointId, c.Limit, strategy)
+			jointCourseMap[c.JointId] = jc.NewJointCourse(c.JointId, c.Limit, strategy)
 		}
 	}
 
@@ -48,14 +50,14 @@ func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
 	courseMap := make(CourseMap)
 
 	for _, c := range courses {
-		var jointCourse *model.JointCourse
+		var jointCourse *jc.JointCourse
 		if c.JointId == "" {
 			jointCourse = jointCourseMap[c.Id]
 		} else {
 			jointCourse = jointCourseMap[c.JointId]
 		}
 
-		courseMap[c.Id] = model.NewCourse(
+		courseMap[c.Id] = course.NewCourse(
 			c.Id,
 			jointCourse,
 			rankingMap[c.Id],

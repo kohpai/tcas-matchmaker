@@ -5,16 +5,15 @@ import (
 
 	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
 	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
-	jc "github.com/kohpai/tcas-3rd-round-resolver/model/jointcourse"
 )
 
 type ApplyStrategy interface {
-	SetJointCourse(*jc.JointCourse)
+	SetJointCourse(common.JointCourse)
 	Apply(common.RankedStudent) bool
 }
 
 type BaseStrategy struct {
-	jointCourse *jc.JointCourse
+	jointCourse common.JointCourse
 }
 
 func NewApplyStrategy(condition course.Condition, exceedLimit int) ApplyStrategy {
@@ -47,7 +46,7 @@ func NewApplyStrategy(condition course.Condition, exceedLimit int) ApplyStrategy
 	return &base
 }
 
-func (strategy *BaseStrategy) SetJointCourse(jc *jc.JointCourse) {
+func (strategy *BaseStrategy) SetJointCourse(jc common.JointCourse) {
 	strategy.jointCourse = jc
 }
 
