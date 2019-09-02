@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
-	"github.com/kohpai/tcas-3rd-round-resolver/model/pq"
+	rs "github.com/kohpai/tcas-3rd-round-resolver/model/rankedstudent"
 )
 
 type RankCount map[int]int
@@ -59,7 +59,7 @@ func (course *Course) Apply(student common.Student) bool {
 		return false
 	}
 
-	rankedStudent := pq.NewRankedStudent(student, rank, 0)
+	rankedStudent := rs.NewRankedStudent(student, rank, 0)
 
 	if !course.jointCourse.Apply(rankedStudent) {
 		return false

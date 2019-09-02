@@ -29,7 +29,7 @@ func NewJointCourse(
 		availableSpots,
 		availableSpots,
 		courses,
-		pq.NewPriorityQueue([]*pq.RankedStudent{}),
+		pq.NewPriorityQueue([]common.RankedStudent{}),
 		strategy,
 	}
 
@@ -53,7 +53,7 @@ func (jointCourse *JointCourse) Courses() []common.Course {
 	return jointCourse.courses
 }
 
-func (jointCourse *JointCourse) Students() *pq.PriorityQueue {
+func (jointCourse *JointCourse) Students() common.PriorityQueue {
 	return jointCourse.students
 }
 
