@@ -57,10 +57,11 @@ func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
 			jointCourse = jointCourseMap[c.JointId]
 		}
 
-		courseMap[c.Id] = course.NewCourse(
-			c.Id,
+		courseId := c.Id
+		courseMap[courseId] = course.NewCourse(
+			courseId,
 			jointCourse,
-			rankingMap[c.Id],
+			rankingMap[courseId],
 		)
 	}
 
