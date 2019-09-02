@@ -49,10 +49,8 @@ func (ch *ClearingHouse) executePending() {
 	statuses := st.ApplicationStatuses()
 	isPending := true
 	for isPending {
-		isPending = false
 		for _, student := range ch.students {
-			if student.ApplicationStatus() == statuses.Pending() {
-				isPending = true
+			if isPending = student.ApplicationStatus() == statuses.Pending(); isPending {
 				student.Propose()
 			}
 		}
