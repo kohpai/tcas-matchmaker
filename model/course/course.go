@@ -1,23 +1,25 @@
-package model
+package course
 
 import (
 	"fmt"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	rs "github.com/kohpai/tcas-3rd-round-resolver/model/rankedstudent"
 )
 
-type Ranking map[string]uint16
-type RankCount map[uint16]uint16
+type RankCount map[int]int
 
 type Course struct {
 	id          string
 	isFull      bool
-	ranking     Ranking
-	jointCourse *JointCourse
+	ranking     common.Ranking
+	jointCourse common.JointCourse
 }
 
 func NewCourse(
 	id string,
-	jointCourse *JointCourse,
-	ranking Ranking,
+	jointCourse common.JointCourse,
+	ranking common.Ranking,
 ) *Course {
 	isFull := jointCourse.AvailableSpots() == 0
 	course := &Course{
@@ -43,29 +45,25 @@ func (course *Course) SetIsFull(isFull bool) {
 	course.isFull = isFull
 }
 
-func (course *Course) JointCourse() *JointCourse {
+func (course *Course) JointCourse() common.JointCourse {
 	return course.jointCourse
 }
 
-func (course *Course) Ranking() Ranking {
+func (course *Course) Ranking() common.Ranking {
 	return course.ranking
 }
 
-func (course *Course) Apply(student *Student) bool {
+func (course *Course) Apply(student common.Student) bool {
 	if course.jointCourse.Limit() == 0 {
 		return false
 	}
 
-	rank := course.ranking[student.CitizenId()]
-	if rank == 0 {
+	rank, ok := course.ranking[student.CitizenId()]
+	if !ok {
 		return false
 	}
 
-	rankedStudent := &RankedStudent{
-		student,
-		rank,
-		0,
-	}
+	rankedStudent := rs.NewRankedStudent(student, rank, 0)
 
 	if !course.jointCourse.Apply(rankedStudent) {
 		return false

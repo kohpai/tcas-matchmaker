@@ -2,15 +2,18 @@ package mapper
 
 import (
 	"log"
-	"strconv"
 
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	as "github.com/kohpai/tcas-3rd-round-resolver/model/applystrategy"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
+	jc "github.com/kohpai/tcas-3rd-round-resolver/model/jointcourse"
+	st "github.com/kohpai/tcas-3rd-round-resolver/model/student"
 )
 
-type RankingMap map[string]model.Ranking          // course ID -> citizen ID -> rank
-type JointCourseMap map[string]*model.JointCourse // joint ID -> joint course
-type CourseMap map[string]*model.Course           // course ID -> course
-type StudentMap map[string]*model.Student         // citizen ID -> student
+type RankingMap map[string]common.Ranking      // course ID -> citizen ID -> rank
+type JointCourseMap map[string]*jc.JointCourse // joint ID -> joint course
+type CourseMap map[string]*course.Course       // course ID -> course
+type StudentMap map[string]*st.Student         // citizen ID -> student
 
 type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
 type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
@@ -19,7 +22,7 @@ func createRankingMap(rankingInfoMap RankingInfoMap) RankingMap {
 	rankingMap := make(RankingMap)
 
 	for courseId, rankInfoMap := range rankingInfoMap {
-		ranking := make(model.Ranking)
+		ranking := make(common.Ranking)
 		for citizenId, rankInfo := range rankInfoMap {
 			ranking[citizenId] = rankInfo.Rank
 		}
@@ -33,15 +36,15 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
 
 	for _, c := range courses {
-		condition, err := strconv.Atoi(c.Condition)
-		if err != nil {
-			log.Fatal("condition cannot be parsed", err)
-		}
-		strategy := model.NewApplyStrategy(model.Condition(condition), c.AddLimit)
+		// condition, err := strconv.Atoi(c.Condition)
+		// if err != nil {
+		// 	log.Fatal("condition cannot be parsed", err)
+		// }
+		strategy := as.NewApplyStrategy(c.Condition, c.AddLimit)
 		if c.JointId == "" {
-			jointCourseMap[c.Id] = model.NewJointCourse(c.Id, c.Limit, strategy)
-		} else if jointCourseMap[c.JointId] == nil {
-			jointCourseMap[c.JointId] = model.NewJointCourse(c.JointId, c.Limit, strategy)
+			jointCourseMap[c.Id] = jc.NewJointCourse(c.Id, c.Limit, strategy)
+		} else if _, ok := jointCourseMap[c.JointId]; !ok {
+			jointCourseMap[c.JointId] = jc.NewJointCourse(c.JointId, c.Limit, strategy)
 		}
 	}
 
@@ -92,7 +95,7 @@ func CreateCourseMap(courses []Course, rankingInfoMap RankingInfoMap) CourseMap 
 	courseMap := make(CourseMap)
 
 	for _, c := range courses {
-		var jointCourse *model.JointCourse
+		var jointCourse *jc.JointCourse
 		if c.JointId == "" {
 			jointCourse = jointCourseMap[c.Id]
 		} else {
@@ -100,10 +103,10 @@ func CreateCourseMap(courses []Course, rankingInfoMap RankingInfoMap) CourseMap 
 		}
 
 		courseId := c.Id
-		courseMap[courseId] = model.NewCourse(
+		courseMap[courseId] = course.NewCourse(
 			courseId,
 			jointCourse,
-			rankingMap[c.Id],
+			rankingMap[courseId],
 		)
 	}
 
@@ -115,8 +118,8 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 
 	for _, s := range students {
 		citizenId := s.CitizenId
-		if studentMap[citizenId] == nil {
-			studentMap[citizenId] = model.NewStudent(citizenId)
+		if _, ok := studentMap[citizenId]; !ok {
+			studentMap[citizenId] = st.NewStudent(citizenId)
 		}
 
 		if err := studentMap[citizenId].SetPreferredCourse(s.Priority, courseMap[s.CourseId]); err != nil {
@@ -127,25 +130,22 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	return studentMap
 }
 
-func ToOutput(
-	students []*model.Student,
-	rankingInfoMap RankingInfoMap,
-) []Ranking {
+func ToOutput(students []*st.Student, rankingInfoMap RankingInfoMap) []Ranking {
 	outputs := make([]Ranking, 0, len(students)*6)
 
 	for _, student := range students {
 		courseIndex := student.CourseIndex()
 
 		for i := 0; i < 6; i++ {
-			course, _ := student.PreferredCourse(uint8(i) + 1)
+			course, _ := student.PreferredCourse(i + 1)
 
 			if course == nil {
 				continue
 			}
 
 			citizenId := student.CitizenId()
-			rank := course.Ranking()[citizenId]
-			if rank == 0 {
+			rank, ok := course.Ranking()[citizenId]
+			if !ok {
 				continue
 			}
 

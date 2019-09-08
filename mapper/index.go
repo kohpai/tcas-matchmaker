@@ -2,20 +2,22 @@ package mapper
 
 import (
 	"sync"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
 )
 
 type Course struct {
-	Id        string `json:"course_id"`
-	JointId   string `json:"round_3_join_id"`
-	Limit     uint16 `json:"round_3_receive"`
-	Condition string `json:"round_3_condition"`
-	AddLimit  uint16 `json:"round_3_add_limit"`
+	Id        string           `json:"course_id"`
+	JointId   string           `json:"round_3_join_id"`
+	Limit     int              `json:"round_3_receive"`
+	Condition course.Condition `json:"round_3_condition"`
+	AddLimit  int              `json:"round_3_add_limit"`
 }
 
 type Student struct {
 	CitizenId string `json:"citizen_id"`
 	CourseId  string `json:"course_id"`
-	Priority  uint8  `json:"priority"`
+	Priority  int    `json:"priority"`
 }
 
 type AdmitStatus int8
@@ -44,7 +46,7 @@ type Ranking struct {
 	InterviewDate     string      `csv:"interview_date"`
 	InterviewTime     string      `csv:"interview_time"`
 	Round             string      `csv:"round"`
-	Rank              uint16      `csv:"ranking"`
+	Rank              int         `csv:"ranking"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
 }
 
@@ -53,7 +55,7 @@ type RankInfo struct {
 	InterviewLocation string
 	InterviewDate     string
 	InterviewTime     string
-	Rank              uint16
+	Rank              int
 	Round             string
 	// course
 	UniversityId   string

@@ -8,7 +8,7 @@ import (
 
 	"github.com/gocarina/gocsv"
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/student"
 )
 
 func ReadStudents(filename string) ([]mapper.Student, error) {
@@ -88,8 +88,8 @@ func WriteCsvFile(filename string, data interface{}) error {
 	return nil
 }
 
-func GetPendingStudents(studentMap mapper.StudentMap) []*model.Student {
-	pendingStudents := make([]*model.Student, len(studentMap))
+func GetPendingStudents(studentMap mapper.StudentMap) []*student.Student {
+	pendingStudents := make([]*student.Student, len(studentMap))
 
 	i := 0
 	for _, student := range studentMap {

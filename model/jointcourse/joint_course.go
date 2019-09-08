@@ -1,29 +1,30 @@
-package model
+package jointcourse
 
 import (
 	"container/heap"
 	"fmt"
 	"log"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/pq"
 )
 
 type JointCourse struct {
 	id             string
-	limit          uint16
-	availableSpots uint16
-	courses        []*Course
-	students       *PriorityQueue
-	strategy       ApplyStrategy
+	limit          int
+	availableSpots int
+	courses        []common.Course
+	students       common.PriorityQueue
+	strategy       common.ApplyStrategy
 }
 
 func NewJointCourse(
 	id string,
-	availableSpots uint16,
-	strategy ApplyStrategy,
+	availableSpots int,
+	strategy common.ApplyStrategy,
 ) *JointCourse {
-	courses := make([]*Course, 0)
-	queue := &PriorityQueue{
-		[]*RankedStudent{},
-	}
+	courses := make([]common.Course, 0)
+	queue := pq.NewPriorityQueue([]common.RankedStudent{})
 	heap.Init(queue)
 
 	jointCourse := &JointCourse{
@@ -43,19 +44,19 @@ func (jointCourse *JointCourse) Id() string {
 	return jointCourse.id
 }
 
-func (jointCourse *JointCourse) Limit() uint16 {
+func (jointCourse *JointCourse) Limit() int {
 	return jointCourse.limit
 }
 
-func (jointCourse *JointCourse) AvailableSpots() uint16 {
+func (jointCourse *JointCourse) AvailableSpots() int {
 	return jointCourse.availableSpots
 }
 
-func (jointCourse *JointCourse) Courses() []*Course {
+func (jointCourse *JointCourse) Courses() []common.Course {
 	return jointCourse.courses
 }
 
-func (jointCourse *JointCourse) Students() *PriorityQueue {
+func (jointCourse *JointCourse) Students() common.PriorityQueue {
 	return jointCourse.students
 }
 
@@ -63,7 +64,7 @@ func (jointCourse *JointCourse) IsFull() bool {
 	return jointCourse.availableSpots == 0
 }
 
-func (jointCourse *JointCourse) RegisterCourse(course *Course) {
+func (jointCourse *JointCourse) RegisterCourse(course common.Course) {
 	jointCourse.courses = append(jointCourse.courses, course)
 }
 
@@ -95,7 +96,7 @@ func (jointCourse *JointCourse) DecSpots() {
 	}
 }
 
-func (jointCourse *JointCourse) Apply(rankedStudent *RankedStudent) bool {
+func (jointCourse *JointCourse) Apply(rankedStudent common.RankedStudent) bool {
 	if jointCourse.limit == 0 {
 		return false
 	}

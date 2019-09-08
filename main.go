@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	ch "github.com/kohpai/tcas-3rd-round-resolver/model/clearinghouse"
 	"github.com/kohpai/tcas-3rd-round-resolver/util"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
@@ -59,7 +59,7 @@ func action(c *cli.Context) error {
 	}
 
 	rankingInfoMap := mapper.ExtractRankings(rankings)
-	clearingHouse := model.NewClearingHouse(
+	clearingHouse := ch.NewClearingHouse(
 		util.GetPendingStudents(
 			mapper.CreateStudentMap(
 				students,
@@ -82,7 +82,7 @@ func action(c *cli.Context) error {
 
 	outputs := mapper.ToOutput(allStudents, rankingInfoMap)
 	if err := util.WriteCsvFile(c.String("output"), &outputs); err != nil {
-		return err
+		return errors.Wrap(err, "output")
 	}
 
 	return nil

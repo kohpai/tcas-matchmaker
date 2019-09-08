@@ -1,9 +1,9 @@
-package model
+package jointcourse
 
 import "testing"
 
 func TestNewJointCourse_Always_ReturnsJointCourse(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
+	strategy := NewApplyStrategy(Conditions().AllowAll(), 0)
 	jointCourse := NewJointCourse("1234", 100, strategy)
 
 	if jointCourse.Id() != "1234" {
@@ -20,7 +20,7 @@ func TestNewJointCourse_Always_ReturnsJointCourse(t *testing.T) {
 }
 
 func TestDecSpots_AvailableSpotsGreaterThanZero_DecreasesByOne(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
+	strategy := NewApplyStrategy(Conditions().AllowAll(), 0)
 	jointCourse := NewJointCourse("1234", 100, strategy)
 
 	if jointCourse.DecSpots(); jointCourse.AvailableSpots() != 99 {
@@ -29,7 +29,7 @@ func TestDecSpots_AvailableSpotsGreaterThanZero_DecreasesByOne(t *testing.T) {
 }
 
 func TestDecSpots_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
+	strategy := NewApplyStrategy(Conditions().AllowAll(), 0)
 	jointCourse := NewJointCourse("1234", 0, strategy)
 
 	if jointCourse.DecSpots(); jointCourse.AvailableSpots() != 0 {
@@ -38,7 +38,7 @@ func TestDecSpots_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
 }
 
 func TestRegisterCourse_ByDefault_RegistersCourse(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
+	strategy := NewApplyStrategy(Conditions().AllowAll(), 0)
 	jointCourse := NewJointCourse("1234", 10, strategy)
 	courses := []*Course{
 		NewCourse("1234", jointCourse, nil),

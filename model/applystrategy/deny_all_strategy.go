@@ -1,18 +1,23 @@
-package model
+package applystrategy
 
-import "container/heap"
+import (
+	"container/heap"
+
+	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
+	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
+)
 
 type DenyAllStrategy struct {
 	BaseStrategy
-	leastReplicatedRank uint16
-	rankCount           RankCount
+	leastReplicatedRank int
+	rankCount           course.RankCount
 }
 
-func (strategy *DenyAllStrategy) countBeingRemovedReplicas() uint16 {
+func (strategy *DenyAllStrategy) countBeingRemovedReplicas() int {
 	return strategy.countEdgeReplicas()
 }
 
-func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
+func (strategy *DenyAllStrategy) Apply(rankedStudent common.RankedStudent) bool {
 	jc := strategy.jointCourse
 	pq := jc.Students()
 	rank := rankedStudent.Rank()
@@ -31,7 +36,7 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return false
 	}
 
-	tmp := heap.Pop(pq).(*RankedStudent)
+	tmp := heap.Pop(pq).(common.RankedStudent)
 	heap.Push(pq, tmp)
 	lastRank := tmp.Rank()
 	if rank > lastRank {
@@ -42,11 +47,11 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	count := strategy.countBeingRemovedReplicas()
 	strategy.rankCount[lastRank], strategy.leastReplicatedRank = count, lastRank
 	if count > 0 {
-		rs := heap.Pop(pq).(*RankedStudent)
+		rs := heap.Pop(pq).(common.RankedStudent)
 		rs.Student().ClearCourse()
 	}
-	for i := uint16(1); i < count; i++ {
-		rs := heap.Pop(pq).(*RankedStudent)
+	for i := 1; i < count; i++ {
+		rs := heap.Pop(pq).(common.RankedStudent)
 		rs.Student().ClearCourse()
 		jc.IncSpots()
 	}
