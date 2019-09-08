@@ -58,8 +58,8 @@ func (course *Course) Apply(student common.Student) bool {
 		return false
 	}
 
-	rank := course.ranking[student.CitizenId()]
-	if rank == 0 {
+	rank, ok := course.ranking[student.CitizenId()]
+	if !ok {
 		return false
 	}
 

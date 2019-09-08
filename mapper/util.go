@@ -144,8 +144,8 @@ func ToOutput(students []*st.Student, rankingInfoMap RankingInfoMap) []Ranking {
 			}
 
 			citizenId := student.CitizenId()
-			rank := course.Ranking()[citizenId]
-			if rank == 0 {
+			rank, ok := course.Ranking()[citizenId]
+			if !ok {
 				continue
 			}
 
