@@ -4,6 +4,7 @@ import (
 	"log"
 	"strconv"
 
+	as "github.com/kohpai/tcas-3rd-round-resolver/model/applystrategy"
 	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
 	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
 	jc "github.com/kohpai/tcas-3rd-round-resolver/model/jointcourse"
@@ -40,7 +41,7 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 		if err != nil {
 			log.Fatal("condition cannot be parsed", err)
 		}
-		strategy := model.NewApplyStrategy(course.Condition(condition), c.AddLimit)
+		strategy := as.NewApplyStrategy(course.Condition(condition), c.AddLimit)
 		if c.JointId == "" {
 			jointCourseMap[c.Id] = jc.NewJointCourse(c.Id, c.Limit, strategy)
 		} else if _, ok := jointCourseMap[c.JointId]; !ok {

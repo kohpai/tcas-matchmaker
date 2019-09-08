@@ -50,7 +50,7 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent common.RankedStudent) bool 
 		rs := heap.Pop(pq).(common.RankedStudent)
 		rs.Student().ClearCourse()
 	}
-	for i := uint16(1); i < count; i++ {
+	for i := 1; i < count; i++ {
 		rs := heap.Pop(pq).(common.RankedStudent)
 		rs.Student().ClearCourse()
 		jc.IncSpots()

@@ -7,9 +7,9 @@ import (
 type Course struct {
 	Id        string `json:"course_id"`
 	JointId   string `json:"round_3_join_id"`
-	Limit     uint16 `json:"round_3_receive"`
+	Limit     int    `json:"round_3_receive"`
 	Condition string `json:"round_3_condition"`
-	AddLimit  uint16 `json:"round_3_add_limit"`
+	AddLimit  int    `json:"round_3_add_limit"`
 }
 
 type Student struct {
@@ -44,7 +44,7 @@ type Ranking struct {
 	InterviewDate     string      `csv:"interview_date"`
 	InterviewTime     string      `csv:"interview_time"`
 	Round             string      `csv:"round"`
-	Rank              uint16      `csv:"ranking"`
+	Rank              int         `csv:"ranking"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
 }
 
@@ -53,7 +53,7 @@ type RankInfo struct {
 	InterviewLocation string
 	InterviewDate     string
 	InterviewTime     string
-	Rank              uint16
+	Rank              int
 	Round             string
 	// course
 	UniversityId   string
