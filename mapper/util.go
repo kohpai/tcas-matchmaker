@@ -2,8 +2,8 @@ package mapper
 
 import (
 	"log"
+	"strconv"
 
-	as "github.com/kohpai/tcas-3rd-round-resolver/model/applystrategy"
 	"github.com/kohpai/tcas-3rd-round-resolver/model/common"
 	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
 	jc "github.com/kohpai/tcas-3rd-round-resolver/model/jointcourse"
@@ -15,15 +15,18 @@ type JointCourseMap map[string]*jc.JointCourse // joint ID -> joint course
 type CourseMap map[string]*course.Course       // course ID -> course
 type StudentMap map[string]*st.Student         // citizen ID -> student
 
-func createRankingMap(rankings []Ranking) RankingMap {
+type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
+type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
+
+func createRankingMap(rankingInfoMap RankingInfoMap) RankingMap {
 	rankingMap := make(RankingMap)
 
-	for _, r := range rankings {
-		courseId := r.CourseId
-		if _, ok := rankingMap[courseId]; !ok {
-			rankingMap[courseId] = make(common.Ranking)
+	for courseId, rankInfoMap := range rankingInfoMap {
+		ranking := make(common.Ranking)
+		for citizenId, rankInfo := range rankInfoMap {
+			ranking[citizenId] = rankInfo.Rank
 		}
-		rankingMap[courseId][r.CitizenId] = r.Rank
+		rankingMap[courseId] = ranking
 	}
 
 	return rankingMap
@@ -33,7 +36,11 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
 
 	for _, c := range courses {
-		strategy := as.NewApplyStrategy(c.Condition, c.AddLimit)
+		condition, err := strconv.Atoi(c.Condition)
+		if err != nil {
+			log.Fatal("condition cannot be parsed", err)
+		}
+		strategy := model.NewApplyStrategy(course.Condition(condition), c.AddLimit)
 		if c.JointId == "" {
 			jointCourseMap[c.Id] = jc.NewJointCourse(c.Id, c.Limit, strategy)
 		} else if _, ok := jointCourseMap[c.JointId]; !ok {
@@ -44,9 +51,47 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	return jointCourseMap
 }
 
-func CreateCourseMap(courses []Course, rankings []Ranking) CourseMap {
+func ExtractRankings(rankings []Ranking) RankingInfoMap {
+	rankInfoMap := make(RankingInfoMap)
+
+	for _, r := range rankings {
+		courseId := r.CourseId
+		citizenId := r.CitizenId
+
+		if _, ok := rankInfoMap[courseId]; !ok {
+			rankInfoMap[courseId] = make(RankInfoMap)
+		}
+
+		rankInfoMap[courseId][citizenId] = RankInfo{
+			ApplicationDate:   r.ApplicationDate,
+			InterviewLocation: r.InterviewLocation,
+			InterviewDate:     r.InterviewDate,
+			InterviewTime:     r.InterviewTime,
+			Rank:              r.Rank,
+			Round:             r.Round,
+			// course
+			UniversityId:   r.UniversityId,
+			UniversityName: r.UniversityName,
+			CourseId:       r.CourseId,
+			FacultyName:    r.FacultyName,
+			CourseName:     r.CourseName,
+			ProjectName:    r.ProjectName,
+			// student
+			CitizenId:   r.CitizenId,
+			Title:       r.Title,
+			FirstName:   r.FirstName,
+			LastName:    r.LastName,
+			PhoneNumber: r.PhoneNumber,
+			Email:       r.Email,
+		}
+	}
+
+	return rankInfoMap
+}
+
+func CreateCourseMap(courses []Course, rankingInfoMap RankingInfoMap) CourseMap {
 	jointCourseMap := createJointCourseMap(courses)
-	rankingMap := createRankingMap(rankings)
+	rankingMap := createRankingMap(rankingInfoMap)
 	courseMap := make(CourseMap)
 
 	for _, c := range courses {
@@ -85,8 +130,8 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 	return studentMap
 }
 
-func ToOutput(students []*st.Student) []Output {
-	outputs := make([]Output, 0)
+func ToOutput(students []*st.Student, rankingInfoMap RankingInfoMap) []Ranking {
+	outputs := make([]Ranking, 0, len(students)*6)
 
 	for _, student := range students {
 		courseIndex := student.CourseIndex()
@@ -104,10 +149,27 @@ func ToOutput(students []*st.Student) []Output {
 				continue
 			}
 
-			output := Output{
-				CourseId:  course.Id(),
-				CitizenId: citizenId,
-				Ranking:   rank,
+			courseId := course.Id()
+			rankInfo := rankingInfoMap[courseId][citizenId]
+			output := Ranking{
+				UniversityId:      rankInfo.UniversityId,
+				UniversityName:    rankInfo.UniversityName,
+				CourseId:          rankInfo.CourseId,
+				FacultyName:       rankInfo.FacultyName,
+				CourseName:        rankInfo.CourseName,
+				ProjectName:       rankInfo.ProjectName,
+				CitizenId:         rankInfo.CitizenId,
+				Title:             rankInfo.Title,
+				FirstName:         rankInfo.FirstName,
+				LastName:          rankInfo.LastName,
+				PhoneNumber:       rankInfo.PhoneNumber,
+				Email:             rankInfo.Email,
+				ApplicationDate:   rankInfo.ApplicationDate,
+				InterviewLocation: rankInfo.InterviewLocation,
+				InterviewDate:     rankInfo.InterviewDate,
+				InterviewTime:     rankInfo.InterviewTime,
+				Rank:              rank,
+				Round:             rankInfo.Round,
 			}
 
 			statuses := AdmitStatuses()

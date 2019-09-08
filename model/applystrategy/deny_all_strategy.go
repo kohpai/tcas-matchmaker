@@ -46,13 +46,15 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent common.RankedStudent) bool 
 	heap.Push(pq, rankedStudent)
 	count := strategy.countBeingRemovedReplicas()
 	strategy.rankCount[lastRank], strategy.leastReplicatedRank = count, lastRank
-	for ; count > 0; count-- {
+	if count > 0 {
+		rs := heap.Pop(pq).(common.RankedStudent)
+		rs.Student().ClearCourse()
+	}
+	for i := uint16(1); i < count; i++ {
 		rs := heap.Pop(pq).(common.RankedStudent)
 		rs.Student().ClearCourse()
 		jc.IncSpots()
 	}
-
-	jc.DecSpots()
 
 	return rank < lastRank
 }

@@ -16,8 +16,8 @@ type AllowSomeStrategy struct {
 
 func (strategy *AllowSomeStrategy) countBeingRemovedReplicas() (int, int) {
 	jc := strategy.jointCourse
-	students := jc.Students().Students()
-	length, limit := len(students), jc.Limit()
+	pq := jc.Students()
+	length, limit := uint16(pq.Len()), jc.Limit()
 	delta := length - limit
 	count := strategy.countEdgeReplicas()
 
@@ -65,11 +65,11 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent common.RankedStudent) boo
 		strategy.leastReplicatedRank = lastRank
 	}
 
-	for ; count > 0; count-- {
+	for i := uint16(0); i < count; i++ {
 		rs := heap.Pop(pq).(common.RankedStudent)
 		rs.Student().ClearCourse()
 	}
-	for ; inc > 0; inc-- {
+	for i := uint16(0); i < inc; i++ {
 		jc.IncSpots()
 	}
 

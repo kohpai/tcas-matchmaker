@@ -1,13 +1,12 @@
 package main
 
 import (
-	"errors"
 	"log"
 	"os"
 
 	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
-	ch "github.com/kohpai/tcas-3rd-round-resolver/model/clearinghouse"
 	"github.com/kohpai/tcas-3rd-round-resolver/util"
+	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
 
@@ -47,24 +46,25 @@ func main() {
 func action(c *cli.Context) error {
 	students, err := util.ReadStudents(c.String("students"))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "students")
 	}
 	courses, err := util.ReadCourses(c.String("courses"))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "courses")
 	}
 	rankings, err := util.ReadRankings(c.String("rankings"))
 	if err != nil {
-		return err
+		return errors.Wrap(err, "rankings")
 	}
 
-	clearingHouse := ch.NewClearingHouse(
+	rankingInfoMap := mapper.ExtractRankings(rankings)
+	clearingHouse := model.NewClearingHouse(
 		util.GetPendingStudents(
 			mapper.CreateStudentMap(
 				students,
 				mapper.CreateCourseMap(
 					courses,
-					rankings,
+					rankingInfoMap,
 				),
 			),
 		),
@@ -79,7 +79,7 @@ func action(c *cli.Context) error {
 		return errors.New("some students are missing")
 	}
 
-	outputs := mapper.ToOutput(allStudents)
+	outputs := mapper.ToOutput(allStudents, rankingInfoMap)
 	if err := util.WriteCsvFile(c.String("output"), &outputs); err != nil {
 		return err
 	}

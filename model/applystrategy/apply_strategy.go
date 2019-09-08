@@ -74,9 +74,13 @@ func (strategy *BaseStrategy) countEdgeReplicas() int {
 	count, rank := 0, students[0].Rank()
 	for ; students[count].Rank() == rank; students = append(students, heap.Pop(pq).(common.RankedStudent)) {
 		count++
+		if pq.Len() < 1 {
+			break
+		}
 	}
-	for i := 0; i <= count; i++ {
-		heap.Push(pq, students[i])
+	for _, rs := range students {
+		heap.Push(pq, rs)
 	}
+
 	return count
 }

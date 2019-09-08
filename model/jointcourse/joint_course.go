@@ -1,6 +1,7 @@
 package jointcourse
 
 import (
+	"container/heap"
 	"fmt"
 	"log"
 
@@ -23,13 +24,15 @@ func NewJointCourse(
 	strategy common.ApplyStrategy,
 ) *JointCourse {
 	courses := make([]common.Course, 0)
+	queue := pq.NewPriorityQueue([]common.RankedStudent{})
+	heap.Init(queue)
 
 	jointCourse := &JointCourse{
 		id,
 		availableSpots,
 		availableSpots,
 		courses,
-		pq.NewPriorityQueue([]common.RankedStudent{}),
+		queue,
 		strategy,
 	}
 
@@ -94,6 +97,9 @@ func (jointCourse *JointCourse) DecSpots() {
 }
 
 func (jointCourse *JointCourse) Apply(rankedStudent common.RankedStudent) bool {
+	if jointCourse.limit == 0 {
+		return false
+	}
 	return jointCourse.strategy.Apply(rankedStudent)
 }
 

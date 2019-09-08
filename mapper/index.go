@@ -2,28 +2,20 @@ package mapper
 
 import (
 	"sync"
-
-	"github.com/kohpai/tcas-3rd-round-resolver/model/course"
 )
 
 type Course struct {
-	Id        string           `json:"course_id"`
-	JointId   string           `json:"round_3_join_id"`
-	Limit     int              `json:"round_3_receive"`
-	Condition course.Condition `json:"round_3_condition"`
-	AddLimit  int              `json:"round_3_add_limit"`
+	Id        string `json:"course_id"`
+	JointId   string `json:"round_3_join_id"`
+	Limit     uint16 `json:"round_3_receive"`
+	Condition string `json:"round_3_condition"`
+	AddLimit  uint16 `json:"round_3_add_limit"`
 }
 
 type Student struct {
 	CitizenId string `json:"citizen_id"`
 	CourseId  string `json:"course_id"`
 	Priority  int    `json:"priority"`
-}
-
-type Ranking struct {
-	CourseId  string `csv:"course_id"`
-	CitizenId string `csv:"citizen_id"`
-	Rank      int    `csv:"ranking"`
 }
 
 type AdmitStatus int8
@@ -34,14 +26,13 @@ type admitStatus struct {
 	Late     AdmitStatus
 }
 
-type Output struct {
+type Ranking struct {
 	UniversityId      string      `csv:"university_id"`
 	UniversityName    string      `csv:"university_name"`
-	CourseId          string      `csv:"course_id"`
 	FacultyName       string      `csv:"faculty_name"`
 	CourseName        string      `csv:"course_name"`
 	ProjectName       string      `csv:"project_name"`
-	ApplicationId     string      `csv:"application_id"`
+	CourseId          string      `csv:"course_id"`
 	CitizenId         string      `csv:"citizen_id"`
 	Title             string      `csv:"title"`
 	FirstName         string      `csv:"first_name"`
@@ -52,9 +43,32 @@ type Output struct {
 	InterviewLocation string      `csv:"interview_location"`
 	InterviewDate     string      `csv:"interview_date"`
 	InterviewTime     string      `csv:"interview_time"`
-	Ranking           int         `csv:"ranking"`
 	Round             string      `csv:"round"`
+	Rank              uint16      `csv:"ranking"`
 	AdmitStatus       AdmitStatus `csv:"admit_status"`
+}
+
+type RankInfo struct {
+	ApplicationDate   string
+	InterviewLocation string
+	InterviewDate     string
+	InterviewTime     string
+	Rank              uint16
+	Round             string
+	// course
+	UniversityId   string
+	UniversityName string
+	CourseId       string
+	FacultyName    string
+	CourseName     string
+	ProjectName    string
+	// student
+	CitizenId   string
+	Title       string
+	FirstName   string
+	LastName    string
+	PhoneNumber string
+	Email       string
 }
 
 var once sync.Once
