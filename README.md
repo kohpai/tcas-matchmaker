@@ -27,3 +27,8 @@ $ ./resolver --help
 ```
 $ ./resolver --students data/TC01/con1_student_enroll.json --courses data/TC01/all_course.json --rankings data/TC01/con1_course_accept.csv --output output.csv
 ```
+
+## Design Patterns Used in the Project
+
+1. Strategy
+2. Observer
