@@ -98,13 +98,6 @@
    "round_3_add_limit": 3
  },
  {
-   "course_id": "C0043",
-   "round_3_join_id": "",
-   "round_3_receive": 5,
-   "round_3_condition": 3,
-   "round_3_add_limit": 3
- },
- {
    "course_id": "C0015",
    "round_3_join_id": "A1",
    "round_3_receive": 5,
@@ -296,6 +289,13 @@
  {
    "course_id": "C0042",
    "round_3_join_id": "A14",
+   "round_3_receive": 5,
+   "round_3_condition": 3,
+   "round_3_add_limit": 3
+ },
+ {
+   "course_id": "C0043",
+   "round_3_join_id": "",
    "round_3_receive": 5,
    "round_3_condition": 3,
    "round_3_add_limit": 3
