@@ -43,7 +43,7 @@ func TestCreateRankingMap_Always_ReturnRankingMap(t *testing.T) {
 		},
 	}
 
-	rankingInfoMap, _, _ := ExtractRankings(rankings)
+	rankingInfoMap := ExtractRankings(rankings)
 	rankingMap := createRankingMap(rankingInfoMap)
 
 	if rank := rankingMap["1234"]["13499"]; rank != 1 {
@@ -130,7 +130,7 @@ func TestCreateCourseMap_Always_ReturnsCourseMap(t *testing.T) {
 			Rank:      2,
 		},
 	}
-	rankingInfoMap, _, _ := ExtractRankings(rankings)
+	rankingInfoMap := ExtractRankings(rankings)
 
 	courses := []Course{
 		{"1234", "", 10, "1", 0},
@@ -218,7 +218,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 		{"13500", "1237", 3},
 	}
 
-	rankingInfoMap, _, _ := ExtractRankings(rankings)
+	rankingInfoMap := ExtractRankings(rankings)
 	courseMap := CreateCourseMap(courses, rankingInfoMap)
 	studentMap := CreateStudentMap(students, courseMap)
 
