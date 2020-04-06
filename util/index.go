@@ -7,8 +7,8 @@ import (
 	"os"
 
 	"github.com/gocarina/gocsv"
-	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-matchmaker/mapper"
+	"github.com/kohpai/tcas-matchmaker/model"
 )
 
 func ReadStudents(filename string) ([]mapper.Student, error) {

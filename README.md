@@ -1,4 +1,4 @@
-# tcas-3rd-round-resolver
+# tcas-matchmaker
 
 ## Prerequisites
 
@@ -8,8 +8,8 @@
 ## Installation
 
 ```
-$ git clone https://github.com/kohpai/tcas-3rd-round-resolver
-$ cd tcas-3rd-round-resolver/
+$ git clone https://github.com/kohpai/tcas-matchmaker
+$ cd tcas-matchmaker/
 $ dep ensure -v
 $ go build -o resolver
 ```

@@ -4,7 +4,7 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
+	"github.com/kohpai/tcas-matchmaker/model"
 )
 
 type RankingMap map[string]model.Ranking          // course ID -> citizen ID -> rank

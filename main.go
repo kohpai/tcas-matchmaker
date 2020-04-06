@@ -4,9 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/kohpai/tcas-3rd-round-resolver/mapper"
-	"github.com/kohpai/tcas-3rd-round-resolver/model"
-	"github.com/kohpai/tcas-3rd-round-resolver/util"
+	"github.com/kohpai/tcas-matchmaker/mapper"
+	"github.com/kohpai/tcas-matchmaker/model"
+	"github.com/kohpai/tcas-matchmaker/util"
 	"github.com/pkg/errors"
 	"github.com/urfave/cli"
 )
