@@ -23,7 +23,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "courses",
-			Value: "courses.csv/round.csv",
+			Value: "courses.csv/rounds.csv",
 			Usage: "a file to input all courses in the system",
 		},
 		cli.StringFlag{
