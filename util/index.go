@@ -1,9 +1,7 @@
 package util
 
 import (
-	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"os"
 
 	"github.com/gocarina/gocsv"
@@ -11,51 +9,22 @@ import (
 	"github.com/kohpai/tcas-matchmaker/model"
 )
 
-func ReadStudents(filename string) ([]mapper.Student, error) {
-	var students []mapper.Student
-	err := readJsonFile(filename, &students)
+func ReadApps(filename string) ([]mapper.Application, error) {
+	var apps []mapper.Application
+	err := readCsvFile(filename, &apps)
 	if err != nil {
 		return nil, err
 	}
-	return students, nil
+	return apps, nil
 }
 
 func ReadCourses(filename string) ([]mapper.Course, error) {
 	var courses []mapper.Course
-	err := readJsonFile(filename, &courses)
+	err := readCsvFile(filename, &courses)
 	if err != nil {
 		return nil, err
 	}
 	return courses, nil
-}
-
-func ReadRankings(filename string) ([]mapper.Ranking, error) {
-	var rankings []mapper.Ranking
-	err := readCsvFile(filename, &rankings)
-	if err != nil {
-		return nil, err
-	}
-	return rankings, nil
-}
-
-func readJsonFile(filename string, data interface{}) error {
-	jsonFile, err := os.Open(filename)
-	if err != nil {
-		return errors.New("cannot read JSON file: " + err.Error())
-	}
-
-	defer jsonFile.Close()
-
-	bytes, err := ioutil.ReadAll(jsonFile)
-	if err != nil {
-		return errors.New("cannot read bytes: " + err.Error())
-	}
-
-	if err = json.Unmarshal(bytes, data); err != nil {
-		return errors.New("cannot unmarshal: " + err.Error())
-	}
-
-	return nil
 }
 
 func readCsvFile(filename string, data interface{}) error {

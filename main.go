@@ -17,19 +17,14 @@ func main() {
 	app.Usage = "resolve for admitted students"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name:  "students",
-			Value: "students.json",
-			Usage: "a file to input as student-course enrollment",
+			Name:  "applications",
+			Value: "apps.csv/universities.csv",
+			Usage: "a file to input enrollment applications",
 		},
 		cli.StringFlag{
 			Name:  "courses",
-			Value: "courses.json",
+			Value: "courses.csv/round.csv",
 			Usage: "a file to input all courses in the system",
-		},
-		cli.StringFlag{
-			Name:  "rankings",
-			Value: "ranking.csv",
-			Usage: "a file to input as ranking for students in each course",
 		},
 		cli.StringFlag{
 			Name:  "output",
@@ -45,28 +40,26 @@ func main() {
 }
 
 func action(c *cli.Context) error {
-	students, err := util.ReadStudents(c.String("students"))
+	apps, err := util.ReadApps(c.String("applications"))
 	if err != nil {
-		return errors.Wrap(err, "students")
+		return errors.Wrap(err, "applications")
 	}
 	courses, err := util.ReadCourses(c.String("courses"))
 	if err != nil {
 		return errors.Wrap(err, "courses")
 	}
-	rankings, err := util.ReadRankings(c.String("rankings"))
-	if err != nil {
-		return errors.Wrap(err, "rankings")
-	}
 
-	rankingInfoMap := mapper.ExtractRankings(rankings)
+	rankingMap := mapper.ExtractRankings(apps)
+	courseMap := mapper.CreateCourseMap(
+		courses,
+		rankingMap,
+	)
+
 	clearingHouse := model.NewClearingHouse(
 		util.GetPendingStudents(
 			mapper.CreateStudentMap(
-				students,
-				mapper.CreateCourseMap(
-					courses,
-					rankingInfoMap,
-				),
+				apps,
+				courseMap,
 			),
 		),
 	)
@@ -80,7 +73,7 @@ func action(c *cli.Context) error {
 		return errors.New("some students are missing")
 	}
 
-	outputs := mapper.ToOutput(allStudents, rankingInfoMap)
+	outputs := mapper.ToOutput(allStudents, courseMap)
 	if err := util.WriteCsvFile(c.String("output"), &outputs); err != nil {
 		return err
 	}
