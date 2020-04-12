@@ -9,6 +9,7 @@ type Student struct {
 	citizenId         string
 	applicationStatus ApplicationStatus
 	preferredCourses  [6]*Course
+	appIds            [6]string
 	courseIndex       int
 }
 
@@ -51,16 +52,25 @@ func (student *Student) PreferredCourse(priority uint8) (*Course, error) {
 	return student.preferredCourses[priority-1], nil
 }
 
+func (student *Student) AppId(priority uint8) (string, error) {
+	if priority < 1 || 6 < priority {
+		return "", errors.New("priority out of range")
+	}
+
+	return student.appIds[priority-1], nil
+}
+
 func (student *Student) CourseIndex() int {
 	return student.courseIndex
 }
 
-func (student *Student) SetPreferredCourse(priority uint8, course *Course) error {
+func (student *Student) SetPreferredCourse(priority uint8, course *Course, appId string) error {
 	if priority < 1 || 6 < priority {
 		return errors.New("priority out of range")
 	}
 
 	student.preferredCourses[priority-1] = course
+	student.appIds[priority-1] = appId
 	return nil
 }
 

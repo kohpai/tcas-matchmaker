@@ -12,8 +12,8 @@ type JointCourseMap map[string]*model.JointCourse // joint ID -> joint course
 type CourseMap map[string]*model.Course           // course ID -> course
 type StudentMap map[string]*model.Student         // citizen ID -> student
 
-type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
-type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
+// type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
+// type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
 
 func createRankingMap(rankingInfoMap RankingInfoMap) RankingMap {
 	rankingMap := make(RankingMap)
@@ -33,93 +33,76 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
 
 	for _, c := range courses {
-		condition, err := strconv.Atoi(c.Condition)
-		if err != nil {
-			log.Fatal("condition cannot be parsed", err)
+		condition := c.ExceedAllowedAmount[0:1]
+		exceedAllowed := 0
+		if condition == "C" {
+			var err error
+			exceedAllowed, err = strconv.Atoi(c.ExceedAllowedAmount[1:])
+			if err != nil {
+				log.Fatal("exceed allowed amount cannot be parsed", err)
+			}
 		}
-		strategy := model.NewApplyStrategy(model.Condition(condition), c.AddLimit)
+		strategy := model.NewApplyStrategy(model.Condition(condition), uint16(exceedAllowed))
 		if c.JointId == "" {
-			jointCourseMap[c.Id] = model.NewJointCourse(c.Id, c.Limit, strategy)
-		} else if jointCourseMap[c.JointId] == nil {
-			jointCourseMap[c.JointId] = model.NewJointCourse(c.JointId, c.Limit, strategy)
+			jointCourseMap[c.CourseId] = model.NewJointCourse(c.CourseId, c.ReceiveAmount, strategy)
+		} else if _, ok := jointCourseMap[c.JointId]; !ok {
+			jointCourseMap[c.JointId] = model.NewJointCourse(c.UniversityId+c.JointId, c.ReceiveAmount, strategy)
 		}
 	}
 
 	return jointCourseMap
 }
 
-func ExtractRankings(rankings []Ranking) RankingInfoMap {
-	rankInfoMap := make(RankingInfoMap)
+func ExtractRankings(rankings []Application) RankingMap {
+	rankingMap := make(RankingMap)
 
 	for _, r := range rankings {
 		courseId := r.CourseId
 		citizenId := r.CitizenId
 
-		if _, ok := rankInfoMap[courseId]; !ok {
-			rankInfoMap[courseId] = make(RankInfoMap)
+		if _, ok := rankingMap[courseId]; !ok {
+			rankingMap[courseId] = make(model.Ranking)
 		}
 
-		rankInfoMap[courseId][citizenId] = RankInfo{
-			ApplicationDate:   r.ApplicationDate,
-			InterviewLocation: r.InterviewLocation,
-			InterviewDate:     r.InterviewDate,
-			InterviewTime:     r.InterviewTime,
-			Rank:              r.Rank,
-			Round:             r.Round,
-			// course
-			UniversityId:   r.UniversityId,
-			UniversityName: r.UniversityName,
-			CourseId:       r.CourseId,
-			FacultyName:    r.FacultyName,
-			CourseName:     r.CourseName,
-			ProjectName:    r.ProjectName,
-			// student
-			CitizenId:   r.CitizenId,
-			Title:       r.Title,
-			FirstName:   r.FirstName,
-			LastName:    r.LastName,
-			PhoneNumber: r.PhoneNumber,
-			Email:       r.Email,
-		}
+		rankingMap[courseId][citizenId] = r.Ranking
 	}
 
-	return rankInfoMap
+	return rankingMap
 }
 
-func CreateCourseMap(courses []Course, rankingInfoMap RankingInfoMap) CourseMap {
+func CreateCourseMap(courses []Course, rankingMap RankingMap) CourseMap {
 	jointCourseMap := createJointCourseMap(courses)
-	rankingMap := createRankingMap(rankingInfoMap)
 	courseMap := make(CourseMap)
 
 	for _, c := range courses {
 		var jointCourse *model.JointCourse
 		if c.JointId == "" {
-			jointCourse = jointCourseMap[c.Id]
+			jointCourse = jointCourseMap[c.CourseId]
 		} else {
-			jointCourse = jointCourseMap[c.JointId]
+			jointCourse = jointCourseMap[c.UniversityId+c.JointId]
 		}
 
-		courseId := c.Id
+		courseId := c.CourseId
 		courseMap[courseId] = model.NewCourse(
 			courseId,
 			jointCourse,
-			rankingMap[c.Id],
+			rankingMap[c.CourseId],
 		)
 	}
 
 	return courseMap
 }
 
-func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
+func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMap {
 	studentMap := make(StudentMap)
 
-	for _, s := range students {
-		citizenId := s.CitizenId
-		if studentMap[citizenId] == nil {
+	for _, a := range applications {
+		citizenId := a.CitizenId
+		if _, ok := studentMap[citizenId]; !ok {
 			studentMap[citizenId] = model.NewStudent(citizenId)
 		}
 
-		if err := studentMap[citizenId].SetPreferredCourse(s.Priority, courseMap[s.CourseId]); err != nil {
+		if err := studentMap[citizenId].SetPreferredCourse(a.Priority, courseMap[a.CourseId]); err != nil {
 			log.Fatal("could not set preferred course", err)
 		}
 	}
@@ -129,9 +112,9 @@ func CreateStudentMap(students []Student, courseMap CourseMap) StudentMap {
 
 func ToOutput(
 	students []*model.Student,
-	rankingInfoMap RankingInfoMap,
-) []Ranking {
-	outputs := make([]Ranking, 0, len(students)*6)
+	courseMap CourseMap,
+) []Application {
+	outputs := make([]Application, 0, len(students)*6)
 
 	for _, student := range students {
 		courseIndex := student.CourseIndex()
@@ -149,37 +132,27 @@ func ToOutput(
 				continue
 			}
 
+			appId, _ := student.AppId(uint8(i) + 1)
 			courseId := course.Id()
-			rankInfo := rankingInfoMap[courseId][citizenId]
-			output := Ranking{
-				UniversityId:      rankInfo.UniversityId,
-				UniversityName:    rankInfo.UniversityName,
-				CourseId:          rankInfo.CourseId,
-				FacultyName:       rankInfo.FacultyName,
-				CourseName:        rankInfo.CourseName,
-				ProjectName:       rankInfo.ProjectName,
-				CitizenId:         rankInfo.CitizenId,
-				Title:             rankInfo.Title,
-				FirstName:         rankInfo.FirstName,
-				LastName:          rankInfo.LastName,
-				PhoneNumber:       rankInfo.PhoneNumber,
-				Email:             rankInfo.Email,
-				ApplicationDate:   rankInfo.ApplicationDate,
-				InterviewLocation: rankInfo.InterviewLocation,
-				InterviewDate:     rankInfo.InterviewDate,
-				InterviewTime:     rankInfo.InterviewTime,
-				Rank:              rank,
-				Round:             rankInfo.Round,
+			output := Application{
+				ApplicationId: appId,
+				CitizenId:     citizenId,
+				// Gender:           0,
+				// SchoolProgram:    0,
+				// FormalApplicable: 0,
+				CourseId: courseId,
+				Priority: uint8(i),
+				Ranking:  rank,
 			}
 
 			statuses := AdmitStatuses()
 			switch {
 			case i < courseIndex || courseIndex == -1:
-				output.AdmitStatus = statuses.Full
+				output.Status = statuses.Full
 			case i == courseIndex:
-				output.AdmitStatus = statuses.Admitted
+				output.Status = statuses.Admitted
 			case i > courseIndex:
-				output.AdmitStatus = statuses.Late
+				output.Status = statuses.Late
 			}
 
 			outputs = append(outputs, output)

@@ -4,20 +4,6 @@ import (
 	"sync"
 )
 
-type Course struct {
-	Id        string `json:"course_id"`
-	JointId   string `json:"round_3_join_id"`
-	Limit     uint16 `json:"round_3_receive"`
-	Condition string `json:"round_3_condition"`
-	AddLimit  uint16 `json:"round_3_add_limit"`
-}
-
-type Student struct {
-	CitizenId string `json:"citizen_id"`
-	CourseId  string `json:"course_id"`
-	Priority  uint8  `json:"priority"`
-}
-
 type AdmitStatus int8
 
 type admitStatus struct {
@@ -26,49 +12,32 @@ type admitStatus struct {
 	Late     AdmitStatus
 }
 
-type Ranking struct {
-	UniversityId      string      `csv:"university_id"`
-	UniversityName    string      `csv:"university_name"`
-	FacultyName       string      `csv:"faculty_name"`
-	CourseName        string      `csv:"course_name"`
-	ProjectName       string      `csv:"project_name"`
-	CourseId          string      `csv:"course_id"`
-	CitizenId         string      `csv:"citizen_id"`
-	Title             string      `csv:"title"`
-	FirstName         string      `csv:"first_name"`
-	LastName          string      `csv:"last_name"`
-	PhoneNumber       string      `csv:"phone_number"`
-	Email             string      `csv:"email"`
-	ApplicationDate   string      `csv:"application_date"`
-	InterviewLocation string      `csv:"interview_location"`
-	InterviewDate     string      `csv:"interview_date"`
-	InterviewTime     string      `csv:"interview_time"`
-	Round             string      `csv:"round"`
-	Rank              uint16      `csv:"ranking"`
-	AdmitStatus       AdmitStatus `csv:"admit_status"`
+type Application struct {
+	ApplicationId    string      `csv:id`
+	CitizenId        string      `csv:"citizen_id"`
+	Gender           uint8       `csv:gender`
+	SchoolProgram    uint8       `csv:school_program`
+	FormalApplicable uint8       `csv:formal_niets`
+	CourseId         string      `csv:round_id`
+	Priority         uint8       `csv:priority`
+	Ranking          uint16      `csv:ranking`
+	Status           AdmitStatus `csv:status`
 }
 
-type RankInfo struct {
-	ApplicationDate   string
-	InterviewLocation string
-	InterviewDate     string
-	InterviewTime     string
-	Rank              uint16
-	Round             string
-	// course
-	UniversityId   string
-	UniversityName string
-	CourseId       string
-	FacultyName    string
-	CourseName     string
-	ProjectName    string
-	// student
-	CitizenId   string
-	Title       string
-	FirstName   string
-	LastName    string
-	PhoneNumber string
-	Email       string
+type Course struct {
+	CourseId            string `csv:"_id"`
+	UniversityId        string `csv:"university_id"`
+	JointId             string `csv:"join_id"`
+	ReceiveAmount       uint16 `csv:"receive_student_number"`
+	ExceedAllowedAmount string `csv:"receive_add_limit"`
+	// Gender based
+	MaleReceiveAmount   uint16 `csv:"gender_male_number"`
+	FemaleReceiveAmount uint16 `csv:"gender_female_number"`
+	// Program based
+	FormalReceiveAmount    uint16 `csv:"receive_student_number_formal"`
+	InterReceiveAmount     uint16 `csv:"receive_student_number_international"`
+	VocatReceiveAmount     uint16 `csv:"receive_student_number_vocational"`
+	NonformalReceiveAmount uint16 `csv:"receive_student_number_nonformal"`
 }
 
 var once sync.Once
