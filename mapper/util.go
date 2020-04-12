@@ -88,7 +88,7 @@ func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMa
 			studentMap[citizenId] = model.NewStudent(citizenId)
 		}
 
-		if err := studentMap[citizenId].SetPreferredCourse(a.Priority, courseMap[a.CourseId]); err != nil {
+		if err := studentMap[citizenId].SetPreferredCourse(a.Priority, courseMap[a.CourseId], a.ApplicationId); err != nil {
 			log.Fatal("could not set preferred course", err)
 		}
 	}
