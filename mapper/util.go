@@ -32,7 +32,8 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 		if c.JointId == "" {
 			jointCourseMap[c.CourseId] = model.NewJointCourse(c.CourseId, c.ReceiveAmount, strategy)
 		} else if _, ok := jointCourseMap[c.JointId]; !ok {
-			jointCourseMap[c.JointId] = model.NewJointCourse(c.UniversityId+c.JointId, c.ReceiveAmount, strategy)
+			uniqueJointId := c.UniversityId + c.JointId
+			jointCourseMap[uniqueJointId] = model.NewJointCourse(uniqueJointId, c.ReceiveAmount, strategy)
 		}
 	}
 
