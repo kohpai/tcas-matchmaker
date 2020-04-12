@@ -15,20 +15,6 @@ type StudentMap map[string]*model.Student         // citizen ID -> student
 // type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
 // type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
 
-func createRankingMap(rankingInfoMap RankingInfoMap) RankingMap {
-	rankingMap := make(RankingMap)
-
-	for courseId, rankInfoMap := range rankingInfoMap {
-		ranking := make(model.Ranking)
-		for citizenId, rankInfo := range rankInfoMap {
-			ranking[citizenId] = rankInfo.Rank
-		}
-		rankingMap[courseId] = ranking
-	}
-
-	return rankingMap
-}
-
 func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
 
