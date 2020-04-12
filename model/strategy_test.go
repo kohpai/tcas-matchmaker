@@ -67,7 +67,7 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 }
 
 func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
-	strategy := NewApplyStrategy(0, 0)
+	strategy := NewApplyStrategy("", 0)
 	jointCourse := NewJointCourse("1234", 3, strategy)
 	ranking := Ranking{
 		"1352": 1,

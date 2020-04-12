@@ -32,7 +32,7 @@ func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
 
-	if err := student.SetPreferredCourse(2, course); err != nil {
+	if err := student.SetPreferredCourse(2, course, ""); err != nil {
 		t.Error("Cannot set preferred course", err)
 	}
 
@@ -47,7 +47,7 @@ func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
 	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
 
-	if err := student.SetPreferredCourse(7, course); err == nil {
+	if err := student.SetPreferredCourse(7, course, ""); err == nil {
 		t.Error("Set preferred course without error")
 	}
 
