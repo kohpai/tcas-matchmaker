@@ -14,15 +14,15 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 	}
 
 	for i := 1; i < 7; i++ {
-		course, err := student.PreferredCourse(uint8(i))
-		if course != nil || err != nil {
-			t.Error("Preferred Courses is not empty", student, err)
+		app, err := student.Application(uint8(i))
+		if app != nil || err != nil {
+			t.Error("Preferred application is not empty", student, err)
 			break
 		}
 	}
 
-	if student.CourseIndex() != -1 {
-		t.Error("course index is not -1", student)
+	if student.AppIndex() != -1 {
+		t.Error("app index is not -1", student)
 	}
 }
 
@@ -32,11 +32,11 @@ func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
 
-	if err := student.SetPreferredCourse(2, course, ""); err != nil {
-		t.Error("Cannot set preferred course", err)
+	if err := student.SetPreferredApp(2, course, ""); err != nil {
+		t.Error("Cannot set preferred app", err)
 	}
 
-	if c, err := student.PreferredCourse(2); c != course || err != nil {
+	if app, err := student.Application(2); app.Course() != course || err != nil {
 		t.Error("Course does not matched", student, err)
 	}
 }
@@ -47,14 +47,14 @@ func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
 	course := NewCourse("1234", jointCourse, nil)
 	student := NewStudent("1349900696510")
 
-	if err := student.SetPreferredCourse(7, course, ""); err == nil {
-		t.Error("Set preferred course without error")
+	if err := student.SetPreferredApp(7, course, ""); err == nil {
+		t.Error("Set preferred app without error")
 	}
 
 	for i := 1; i < 7; i++ {
-		course, err := student.PreferredCourse(uint8(i))
-		if course != nil || err != nil {
-			t.Error("Preferred Courses is not empty", student, err)
+		app, err := student.Application(uint8(i))
+		if app != nil || err != nil {
+			t.Error("Application is not empty", student, err)
 			break
 		}
 	}
