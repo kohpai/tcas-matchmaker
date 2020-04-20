@@ -3,35 +3,74 @@ package model
 import (
 	"container/heap"
 	"fmt"
-	"log"
 )
 
 type JointCourse struct {
-	id             string
-	limit          uint16
-	availableSpots uint16
-	courses        []*Course
-	students       *PriorityQueue
-	strategy       ApplyStrategy
+	id        string
+	courses   []*Course
+	main      *PriorityQueue
+	male      *PriorityQueue
+	female    *PriorityQueue
+	formal    *PriorityQueue
+	inter     *PriorityQueue
+	vocat     *PriorityQueue
+	nonFormal *PriorityQueue
+	strategy  ApplyStrategy
 }
 
 func NewJointCourse(
 	id string,
-	availableSpots uint16,
+	availableSpots *AvailableSpots,
 	strategy ApplyStrategy,
 ) *JointCourse {
 	courses := make([]*Course, 0)
-	queue := &PriorityQueue{
-		[]*RankedStudent{},
+	var main *PriorityQueue
+	var male *PriorityQueue
+	var female *PriorityQueue
+	var formal *PriorityQueue
+	var inter *PriorityQueue
+	var vocat *PriorityQueue
+	var nonFormal *PriorityQueue
+
+	if num := availableSpots.main; num != 0 {
+		main = &PriorityQueue{num, num, []*RankedStudent{}}
+		heap.Init(main)
 	}
-	heap.Init(queue)
+	if num := availableSpots.male; num != 0 {
+		male = &PriorityQueue{num, num, []*RankedStudent{}}
+		heap.Init(male)
+	}
+	if num := availableSpots.female; num != 0 {
+		female = &PriorityQueue{num, num, []*RankedStudent{}}
+		heap.Init(female)
+	}
+	if num := availableSpots.formal; num != 0 {
+		formal = &PriorityQueue{num, num, []*RankedStudent{}}
+		heap.Init(formal)
+	}
+	if num := availableSpots.inter; num != 0 {
+		inter = &PriorityQueue{num, num, []*RankedStudent{}}
+		heap.Init(inter)
+	}
+	if num := availableSpots.vocat; num != 0 {
+		vocat = &PriorityQueue{num, num, []*RankedStudent{}}
+		heap.Init(vocat)
+	}
+	if num := availableSpots.nonFormal; num != 0 {
+		nonFormal = &PriorityQueue{num, num, []*RankedStudent{}}
+		heap.Init(nonFormal)
+	}
 
 	jointCourse := &JointCourse{
 		id,
-		availableSpots,
-		availableSpots,
 		courses,
-		queue,
+		main,
+		male,
+		female,
+		formal,
+		inter,
+		vocat,
+		nonFormal,
 		strategy,
 	}
 
@@ -43,50 +82,20 @@ func (jointCourse *JointCourse) Id() string {
 	return jointCourse.id
 }
 
-func (jointCourse *JointCourse) Limit() uint16 {
-	return jointCourse.limit
-}
-
-func (jointCourse *JointCourse) AvailableSpots() uint16 {
-	return jointCourse.availableSpots
-}
-
 func (jointCourse *JointCourse) Courses() []*Course {
 	return jointCourse.courses
 }
 
 func (jointCourse *JointCourse) Students() *PriorityQueue {
-	return jointCourse.students
-}
-
-func (jointCourse *JointCourse) IsFull() bool {
-	return jointCourse.availableSpots == 0
+	return jointCourse.main
 }
 
 func (jointCourse *JointCourse) RegisterCourse(course *Course) {
 	jointCourse.courses = append(jointCourse.courses, course)
 }
 
-func (jointCourse *JointCourse) IncSpots() {
-	// @ASSERTION, this shouldn't happen
-	if jointCourse.availableSpots >= jointCourse.limit {
-		log.Println("available spots is more than limit")
-		return
-	}
-
-	jointCourse.availableSpots += 1
-}
-
-func (jointCourse *JointCourse) DecSpots() {
-	if jointCourse.availableSpots == 0 {
-		return
-	}
-
-	jointCourse.availableSpots -= 1
-}
-
 func (jointCourse *JointCourse) Apply(rankedStudent *RankedStudent) bool {
-	if jointCourse.limit == 0 {
+	if jointCourse.main.Limit() == 0 {
 		return false
 	}
 	return jointCourse.strategy.Apply(rankedStudent)
@@ -94,9 +103,8 @@ func (jointCourse *JointCourse) Apply(rankedStudent *RankedStudent) bool {
 
 func (jointCourse *JointCourse) String() string {
 	return fmt.Sprintf(
-		"{id: %s, availabelSpots: %d, courses: %v}",
+		"{id: %s, courses: %v}",
 		jointCourse.id,
-		jointCourse.availableSpots,
 		jointCourse.courses,
 	)
 }

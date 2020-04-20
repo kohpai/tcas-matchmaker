@@ -41,10 +41,6 @@ func (course *Course) Ranking() Ranking {
 }
 
 func (course *Course) Apply(student *Student) bool {
-	if course.jointCourse.Limit() == 0 {
-		return false
-	}
-
 	rank := course.ranking[student.CitizenId()]
 	if rank == 0 {
 		return false

@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+)
 
 type RankedStudent struct {
 	student *Student
@@ -10,7 +13,9 @@ type RankedStudent struct {
 
 // A PriorityQueue implements heap.Interface and holds Items.
 type PriorityQueue struct {
-	students []*RankedStudent
+	limit          uint16
+	availableSpots uint16
+	students       []*RankedStudent
 }
 
 func (pq *PriorityQueue) Len() int { return len(pq.students) }
@@ -47,6 +52,36 @@ func (pq *PriorityQueue) Pop() interface{} {
 
 func (pq *PriorityQueue) Students() []*RankedStudent {
 	return pq.students
+}
+
+func (pq *PriorityQueue) IsFull() bool {
+	return pq.availableSpots == 0
+}
+
+func (pq *PriorityQueue) Limit() uint16 {
+	return pq.limit
+}
+
+func (pq *PriorityQueue) AvailableSpots() uint16 {
+	return pq.availableSpots
+}
+
+func (pq *PriorityQueue) IncSpots() {
+	// @ASSERTION, this shouldn't happen
+	if pq.availableSpots >= pq.limit {
+		log.Println("available spots is more than limit")
+		return
+	}
+
+	pq.availableSpots += 1
+}
+
+func (pq *PriorityQueue) DecSpots() {
+	if pq.availableSpots == 0 {
+		return
+	}
+
+	pq.availableSpots -= 1
 }
 
 func (rs *RankedStudent) Student() *Student {

@@ -6,7 +6,7 @@ import (
 
 func TestApply_AllowAll_AdmitAll(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 4, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(4, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
 		"1352": 1,
 		"1351": 1,
@@ -17,13 +17,14 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
+	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+		NewStudent("1347", genders.Male),
+		NewStudent("1348", genders.Male),
+		NewStudent("1349", genders.Male),
+		NewStudent("1350", genders.Male),
+		NewStudent("1351", genders.Male),
+		NewStudent("1352", genders.Male),
 	}
 
 	for _, s := range ss {
@@ -37,7 +38,7 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 
 func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 5, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(5, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
 		"1352": 1,
 		"1351": 2,
@@ -48,13 +49,14 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
+	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+		NewStudent("1347", genders.Male),
+		NewStudent("1348", genders.Male),
+		NewStudent("1349", genders.Male),
+		NewStudent("1350", genders.Male),
+		NewStudent("1351", genders.Male),
+		NewStudent("1352", genders.Male),
 	}
 
 	for _, s := range ss {
@@ -68,7 +70,7 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 
 func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy("", 0)
-	jointCourse := NewJointCourse("1234", 3, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
 		"1352": 1,
 		"1351": 1,
@@ -79,13 +81,14 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
+	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
+		NewStudent("1347", genders.Male),
+		NewStudent("1348", genders.Male),
+		NewStudent("1349", genders.Male),
+		NewStudent("1350", genders.Male),
+		NewStudent("1351", genders.Male),
+		NewStudent("1352", genders.Male),
 	}
 
 	for _, s := range ss {
@@ -99,7 +102,7 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 
 func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().DenyAll, 0)
-	jointCourse := NewJointCourse("1234", 4, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(4, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
 		"1354": 1,
 		"1353": 1,
@@ -112,15 +115,16 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
+	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347"),
-		NewStudent("1348"),
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+		NewStudent("1347", genders.Male),
+		NewStudent("1348", genders.Male),
+		NewStudent("1349", genders.Male),
+		NewStudent("1350", genders.Male),
+		NewStudent("1351", genders.Male),
+		NewStudent("1352", genders.Male),
+		NewStudent("1353", genders.Male),
+		NewStudent("1354", genders.Male),
 	}
 
 	for _, s := range ss {
@@ -134,7 +138,7 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 
 func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().DenyAll, 0)
-	jointCourse := NewJointCourse("1234", 3, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
 		"1354": 1,
 		"1353": 2,
@@ -143,11 +147,12 @@ func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
+	genders := Genders()
 	ss := []*Student{
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+		NewStudent("1351", genders.Male),
+		NewStudent("1352", genders.Male),
+		NewStudent("1353", genders.Male),
+		NewStudent("1354", genders.Male),
 	}
 
 	for _, s := range ss {
@@ -161,7 +166,7 @@ func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 
 func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowSome, 1)
-	jointCourse := NewJointCourse("1234", 3, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
 		"1354": 1,
 		"1353": 2,
@@ -170,11 +175,12 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
+	genders := Genders()
 	ss := []*Student{
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+		NewStudent("1351", genders.Male),
+		NewStudent("1352", genders.Male),
+		NewStudent("1353", genders.Male),
+		NewStudent("1354", genders.Male),
 	}
 
 	for _, s := range ss {
@@ -188,7 +194,7 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 
 func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowSome, 2)
-	jointCourse := NewJointCourse("1234", 3, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
 		"1354": 1,
 		"1353": 1,
@@ -199,13 +205,14 @@ func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
+	genders := Genders()
 	ss := []*Student{
-		NewStudent("1349"),
-		NewStudent("1350"),
-		NewStudent("1351"),
-		NewStudent("1352"),
-		NewStudent("1353"),
-		NewStudent("1354"),
+		NewStudent("1349", genders.Male),
+		NewStudent("1350", genders.Male),
+		NewStudent("1351", genders.Male),
+		NewStudent("1352", genders.Male),
+		NewStudent("1353", genders.Male),
+		NewStudent("1354", genders.Male),
 	}
 
 	for _, s := range ss {

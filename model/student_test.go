@@ -3,7 +3,7 @@ package model
 import "testing"
 
 func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
-	student := NewStudent("1349900696510")
+	student := NewStudent("1349900696510", Genders().Male)
 
 	if student.CitizenId() != "1349900696510" {
 		t.Error("Citizen ID not matched", student)
@@ -28,9 +28,9 @@ func TestNewStudent_Always_ReturnsStudent(t *testing.T) {
 
 func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(1, 0, 0, 0, 0, 0, 0), strategy)
 	course := NewCourse("1234", jointCourse, nil)
-	student := NewStudent("1349900696510")
+	student := NewStudent("1349900696510", Genders().Male)
 
 	if err := student.SetPreferredApp(2, course, ""); err != nil {
 		t.Error("Cannot set preferred app", err)
@@ -43,9 +43,9 @@ func TestSetPreferredCourse_PriorityWithinOneToSix_ReturnsNil(t *testing.T) {
 
 func TestSetPreferredCourse_PriorityOutOfRange_ReturnsError(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 1, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(1, 0, 0, 0, 0, 0, 0), strategy)
 	course := NewCourse("1234", jointCourse, nil)
-	student := NewStudent("1349900696510")
+	student := NewStudent("1349900696510", Genders().Male)
 
 	if err := student.SetPreferredApp(7, course, ""); err == nil {
 		t.Error("Set preferred app without error")

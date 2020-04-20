@@ -7,6 +7,7 @@ import (
 
 type Student struct {
 	citizenId         string
+	gender            Gender
 	applicationStatus ApplicationStatus
 	apps              [6]*Application
 	preferredCourses  [6]*Course
@@ -14,9 +15,10 @@ type Student struct {
 	appIndex          int
 }
 
-func NewStudent(citizenId string) *Student {
+func NewStudent(citizenId string, gender Gender) *Student {
 	return &Student{
 		citizenId:         citizenId,
+		gender:            gender,
 		applicationStatus: ApplicationStatuses().Pending,
 		appIndex:          -1,
 	}
@@ -55,6 +57,10 @@ func (student *Student) Application(priority uint8) (*Application, error) {
 
 func (student *Student) AppIndex() int {
 	return student.appIndex
+}
+
+func (student *Student) Gender() Gender {
+	return student.gender
 }
 
 func (student *Student) SetPreferredApp(priority uint8, course *Course, appId string) error {

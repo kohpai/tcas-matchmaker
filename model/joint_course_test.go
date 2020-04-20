@@ -4,13 +4,13 @@ import "testing"
 
 func TestNewJointCourse_Always_ReturnsJointCourse(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 100, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(100, 0, 0, 0, 0, 0, 0), strategy)
 
 	if jointCourse.Id() != "1234" {
 		t.Error("Joint course ID not matched", jointCourse)
 	}
 
-	if jointCourse.AvailableSpots() != 100 {
+	if jointCourse.Students().AvailableSpots() != 100 {
 		t.Error("Joint course available spots is incorrect", jointCourse)
 	}
 
@@ -19,27 +19,9 @@ func TestNewJointCourse_Always_ReturnsJointCourse(t *testing.T) {
 	}
 }
 
-func TestDecSpots_AvailableSpotsGreaterThanZero_DecreasesByOne(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 100, strategy)
-
-	if jointCourse.DecSpots(); jointCourse.AvailableSpots() != 99 {
-		t.Error("Joint course available spots is incorrect", jointCourse)
-	}
-}
-
-func TestDecSpots_AvailableSpotsIsZero_ReturnsFalse(t *testing.T) {
-	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 0, strategy)
-
-	if jointCourse.DecSpots(); jointCourse.AvailableSpots() != 0 {
-		t.Error("Joint course available spots is incorrect", jointCourse)
-	}
-}
-
 func TestRegisterCourse_ByDefault_RegistersCourse(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
-	jointCourse := NewJointCourse("1234", 10, strategy)
+	jointCourse := NewJointCourse("1234", NewAvailableSpots(10, 0, 0, 0, 0, 0, 0), strategy)
 	courses := []*Course{
 		NewCourse("1234", jointCourse, nil),
 		NewCourse("1235", jointCourse, nil),

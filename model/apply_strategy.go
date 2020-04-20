@@ -51,9 +51,9 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 	jc := strategy.jointCourse
 	pq := jc.Students()
 
-	if !jc.IsFull() {
+	if !pq.IsFull() {
 		heap.Push(pq, rankedStudent)
-		jc.DecSpots()
+		pq.DecSpots()
 		return true
 	}
 
