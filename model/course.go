@@ -9,7 +9,6 @@ type RankCount map[uint16]uint16
 
 type Course struct {
 	id          string
-	isFull      bool
 	ranking     Ranking
 	jointCourse *JointCourse
 }
@@ -19,10 +18,8 @@ func NewCourse(
 	jointCourse *JointCourse,
 	ranking Ranking,
 ) *Course {
-	isFull := jointCourse.AvailableSpots() == 0
 	course := &Course{
 		id,
-		isFull,
 		ranking,
 		jointCourse,
 	}
@@ -33,14 +30,6 @@ func NewCourse(
 
 func (course *Course) Id() string {
 	return course.id
-}
-
-func (course *Course) IsFull() bool {
-	return course.isFull
-}
-
-func (course *Course) SetIsFull(isFull bool) {
-	course.isFull = isFull
 }
 
 func (course *Course) JointCourse() *JointCourse {
@@ -77,9 +66,8 @@ func (course *Course) Apply(student *Student) bool {
 
 func (course *Course) String() string {
 	return fmt.Sprintf(
-		"{id: %v, isFull: %v, ranking: %v}",
+		"{id: %v, ranking: %v}",
 		course.id,
-		course.isFull,
 		course.ranking,
 	)
 }

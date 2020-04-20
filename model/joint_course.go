@@ -75,10 +75,6 @@ func (jointCourse *JointCourse) IncSpots() {
 	}
 
 	jointCourse.availableSpots += 1
-
-	for _, course := range jointCourse.courses {
-		course.SetIsFull(false)
-	}
 }
 
 func (jointCourse *JointCourse) DecSpots() {
@@ -87,12 +83,6 @@ func (jointCourse *JointCourse) DecSpots() {
 	}
 
 	jointCourse.availableSpots -= 1
-
-	if jointCourse.availableSpots == 0 {
-		for _, course := range jointCourse.courses {
-			course.SetIsFull(true)
-		}
-	}
 }
 
 func (jointCourse *JointCourse) Apply(rankedStudent *RankedStudent) bool {
