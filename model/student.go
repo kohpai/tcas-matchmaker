@@ -8,23 +8,24 @@ import (
 type Student struct {
 	citizenId         string
 	applicationStatus ApplicationStatus
+	apps              [6]*Application
 	preferredCourses  [6]*Course
 	appIds            [6]string
-	courseIndex       int
+	appIndex          int
 }
 
 func NewStudent(citizenId string) *Student {
 	return &Student{
 		citizenId:         citizenId,
 		applicationStatus: ApplicationStatuses().Pending,
-		courseIndex:       -1,
+		appIndex:          -1,
 	}
 }
 
 func (student *Student) SetCourse(course *Course) {
-	for i, c := range student.preferredCourses {
-		if c == course {
-			student.courseIndex = i
+	for i, a := range student.apps {
+		if a != nil && a.Course() == course {
+			student.appIndex = i
 			break
 		}
 	}
@@ -32,7 +33,7 @@ func (student *Student) SetCourse(course *Course) {
 }
 
 func (student *Student) ClearCourse() {
-	student.courseIndex = -1
+	student.appIndex = -1
 	student.applicationStatus = ApplicationStatuses().Pending
 }
 
@@ -44,33 +45,29 @@ func (student *Student) ApplicationStatus() ApplicationStatus {
 	return student.applicationStatus
 }
 
-func (student *Student) PreferredCourse(priority uint8) (*Course, error) {
+func (student *Student) Application(priority uint8) (*Application, error) {
 	if priority < 1 || 6 < priority {
 		return nil, errors.New("priority out of range")
 	}
 
-	return student.preferredCourses[priority-1], nil
+	return student.apps[priority-1], nil
 }
 
-func (student *Student) AppId(priority uint8) (string, error) {
-	if priority < 1 || 6 < priority {
-		return "", errors.New("priority out of range")
-	}
-
-	return student.appIds[priority-1], nil
+func (student *Student) AppIndex() int {
+	return student.appIndex
 }
 
-func (student *Student) CourseIndex() int {
-	return student.courseIndex
-}
-
-func (student *Student) SetPreferredCourse(priority uint8, course *Course, appId string) error {
+func (student *Student) SetPreferredApp(priority uint8, course *Course, appId string) error {
 	if priority < 1 || 6 < priority {
 		return errors.New("priority out of range")
 	}
 
-	student.preferredCourses[priority-1] = course
-	student.appIds[priority-1] = appId
+	app := &Application{
+		course: course,
+		id:     appId,
+	}
+
+	student.apps[priority-1] = app
 	return nil
 }
 
@@ -81,12 +78,12 @@ func (student *Student) Propose() ApplicationStatus {
 	}
 
 	isAccepted := false
-	for _, course := range student.preferredCourses {
-		if course == nil {
+	for _, app := range student.apps {
+		if app == nil {
 			continue
 		}
 
-		if isAccepted = course.Apply(student); isAccepted {
+		if isAccepted = app.Course().Apply(student); isAccepted {
 			break
 		}
 	}
