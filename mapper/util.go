@@ -89,7 +89,7 @@ func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMa
 			studentMap[citizenId] = model.NewStudent(citizenId)
 		}
 
-		if err := studentMap[citizenId].SetPreferredCourse(a.Priority, courseMap[a.CourseId], a.ApplicationId); err != nil {
+		if err := studentMap[citizenId].SetPreferredApp(a.Priority, courseMap[a.CourseId], a.ApplicationId); err != nil {
 			log.Fatal("could not set preferred course", err)
 		}
 	}
@@ -104,30 +104,30 @@ func ToOutput(
 	outputs := make([]Application, 0, len(students)*6)
 
 	for _, student := range students {
-		courseIndex := student.CourseIndex()
+		courseIndex := student.AppIndex()
 
 		for i := 0; i < 6; i++ {
-			course, _ := student.PreferredCourse(uint8(i) + 1)
+			appPriority := uint8(i) + 1
+			app, _ := student.Application(appPriority)
 
-			if course == nil {
+			if app == nil {
 				continue
 			}
 
 			citizenId := student.CitizenId()
+			course := app.Course()
 			rank := course.Ranking()[citizenId]
 			if rank == 0 {
 				continue
 			}
 
-			appId, _ := student.AppId(uint8(i) + 1)
-			courseId := course.Id()
 			output := Application{
-				ApplicationId: appId,
+				ApplicationId: app.Id(),
 				CitizenId:     citizenId,
 				// Gender:           0,
 				// SchoolProgram:    0,
 				// FormalApplicable: 0,
-				CourseId: courseId,
+				CourseId: course.Id(),
 				Priority: uint8(i),
 				Ranking:  rank,
 			}

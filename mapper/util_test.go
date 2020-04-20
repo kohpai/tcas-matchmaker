@@ -296,15 +296,15 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 	studentMap := CreateStudentMap(apps, courseMap)
 
 	student1, student2 := studentMap["13499"], studentMap["13500"]
-	if course, err := student1.PreferredCourse(1); err != nil || course.Id() != "1234" {
-		t.Error("Course is incorrect", course)
+	if app, err := student1.Application(1); err != nil || app.Course().Id() != "1234" {
+		t.Error("Course is incorrect", app.Course())
 	}
 
-	if course, err := student1.PreferredCourse(2); err != nil || course.Id() != "1236" {
-		t.Error("Course is incorrect", course)
+	if app, err := student1.Application(2); err != nil || app.Course().Id() != "1236" {
+		t.Error("Course is incorrect", app.Course())
 	}
 
-	if course, err := student2.PreferredCourse(3); err != nil || course.Id() != "1237" {
-		t.Error("Course is incorrect", course)
+	if app, err := student2.Application(3); err != nil || app.Course().Id() != "1237" {
+		t.Error("Course is incorrect", app.Course())
 	}
 }
