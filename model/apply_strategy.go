@@ -2,7 +2,6 @@ package model
 
 import (
 	"container/heap"
-	"log"
 )
 
 type ApplyStrategy interface {
@@ -319,10 +318,5 @@ func (strategy *BaseStrategy) findAndRemoveFromList(pq *PriorityQueue, students 
 
 	for _, student := range beingRemovedStudents {
 		heap.Remove(pq, student.index)
-	}
-
-	// @ASSERTION, this shouldn't happen
-	if len(beingRemovedStudents) != len(students) {
-		log.Println("Couldn't find all students to be removed")
 	}
 }
