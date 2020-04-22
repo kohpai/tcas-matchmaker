@@ -213,7 +213,7 @@ func (strategy *BaseStrategy) applyDenyAll(
 		studentsBeingRemoved = append(studentsBeingRemoved, student)
 		pq.IncSpots()
 	}
-	strategy.findAndRemoveFromList(strategy.jointCourse.Students(), studentsBeingRemoved)
+	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	if lrr := metadata.leastReplicatedRank; lrr < 1 || lastRank < lrr {
 		metadata.leastReplicatedRank = lastRank
@@ -266,9 +266,41 @@ func (strategy *BaseStrategy) applyAllowAll(
 		student.ClearCourse()
 		studentsBeingRemoved = append(studentsBeingRemoved, student)
 	}
-	strategy.findAndRemoveFromList(strategy.jointCourse.Students(), studentsBeingRemoved)
+	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	return true
+}
+
+func (strategy *BaseStrategy) findAndRemoveFromOthers(pq *PriorityQueue, students []*Student) {
+	jc := strategy.jointCourse
+
+	if q := jc.Students(); q != nil && pq != q {
+		strategy.findAndRemoveFromList(q, students)
+	}
+
+	if q := jc.MaleQ(); q != nil && pq != q {
+		strategy.findAndRemoveFromList(q, students)
+	}
+
+	if q := jc.FemaleQ(); q != nil && pq != q {
+		strategy.findAndRemoveFromList(q, students)
+	}
+
+	if q := jc.FormalQ(); q != nil && pq != q {
+		strategy.findAndRemoveFromList(q, students)
+	}
+
+	if q := jc.InterQ(); q != nil && pq != q {
+		strategy.findAndRemoveFromList(q, students)
+	}
+
+	if q := jc.VocatQ(); q != nil && pq != q {
+		strategy.findAndRemoveFromList(q, students)
+	}
+
+	if q := jc.NonFormalQ(); q != nil && pq != q {
+		strategy.findAndRemoveFromList(q, students)
+	}
 }
 
 func (strategy *BaseStrategy) findAndRemoveFromList(pq *PriorityQueue, students []*Student) {
