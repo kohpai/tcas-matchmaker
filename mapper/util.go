@@ -150,14 +150,14 @@ func ToOutput(
 			}
 
 			output := Application{
-				ApplicationId: app.Id(),
-				CitizenId:     citizenId,
-				// Gender:           0,
-				// SchoolProgram:    0,
-				// FormalApplicable: 0,
-				CourseId: course.Id(),
-				Priority: uint8(i),
-				Ranking:  rank,
+				ApplicationId:    app.Id(),
+				CitizenId:        citizenId,
+				Gender:           uint8(student.Gender()),
+				SchoolProgram:    uint8(student.Program()),
+				FormalApplicable: 1,
+				CourseId:         course.Id(),
+				Priority:         appPriority,
+				Ranking:          rank,
 			}
 
 			statuses := AdmitStatuses()
