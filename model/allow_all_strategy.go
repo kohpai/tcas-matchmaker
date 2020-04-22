@@ -6,7 +6,7 @@ type AllowAllStrategy struct {
 	BaseStrategy
 }
 
-func (strategy *AllowAllStrategy) countBeingRemovedReplicas(pq *PriorityQueue) int {
+func (strategy *BaseStrategy) countBeingRemovedReplicas(pq *PriorityQueue) int {
 	students := pq.Students()
 	length, limit := len(students), int(pq.Limit())
 	count := strategy.countEdgeReplicas(pq)

@@ -134,9 +134,11 @@ func (strategy *BaseStrategy) countEdgeReplicas(pq *PriorityQueue) int {
 
 func (strategy *BaseStrategy) applySublist(rankedStudent *RankedStudent) bool {
 	jc := strategy.jointCourse
+	student := rankedStudent.Student()
 
 	genders := Genders()
-	gender := rankedStudent.Student().Gender()
+	gender := student.Gender()
+
 	if pq := jc.MaleQ(); pq != nil && gender == genders.Male {
 		if !strategy.applyDenyAll(pq, strategy.maleMetadata, rankedStudent) {
 			return false
@@ -149,26 +151,29 @@ func (strategy *BaseStrategy) applySublist(rankedStudent *RankedStudent) bool {
 		}
 	}
 
-	if pq := jc.FormalQ(); pq != nil {
-		if !strategy.applyDenyAll(pq, strategy.formalMetadata, rankedStudent) {
+	programs := Programs()
+	program := student.Program()
+
+	if pq := jc.FormalQ(); pq != nil && program == programs.Formal {
+		if !strategy.applyAllowAll(pq, strategy.formalMetadata, rankedStudent) {
 			return false
 		}
 	}
 
-	if pq := jc.InterQ(); pq != nil {
-		if !strategy.applyDenyAll(pq, strategy.interMetadata, rankedStudent) {
+	if pq := jc.InterQ(); pq != nil && program == programs.Inter {
+		if !strategy.applyAllowAll(pq, strategy.interMetadata, rankedStudent) {
 			return false
 		}
 	}
 
-	if pq := jc.VocatQ(); pq != nil {
-		if !strategy.applyDenyAll(pq, strategy.vocatMetadata, rankedStudent) {
+	if pq := jc.VocatQ(); pq != nil && program == programs.Vocat {
+		if !strategy.applyAllowAll(pq, strategy.vocatMetadata, rankedStudent) {
 			return false
 		}
 	}
 
-	if pq := jc.NonFormalQ(); pq != nil {
-		if !strategy.applyDenyAll(pq, strategy.nonFormalMetadata, rankedStudent) {
+	if pq := jc.NonFormalQ(); pq != nil && program == programs.NonFormal {
+		if !strategy.applyAllowAll(pq, strategy.nonFormalMetadata, rankedStudent) {
 			return false
 		}
 	}
@@ -181,12 +186,12 @@ func (strategy *BaseStrategy) applyDenyAll(
 	metadata *Metadata,
 	rankedStudent *RankedStudent,
 ) bool {
+	rank := rankedStudent.Rank()
 	copiedRs := &RankedStudent{
 		rankedStudent.Student(),
-		rankedStudent.Rank(),
+		rank,
 		0,
 	}
-	rank := copiedRs.Rank()
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
@@ -227,6 +232,50 @@ func (strategy *BaseStrategy) applyDenyAll(
 	}
 
 	return rank < lastRank
+}
+
+func (strategy *BaseStrategy) applyAllowAll(
+	pq *PriorityQueue,
+	metadata *Metadata,
+	rankedStudent *RankedStudent,
+) bool {
+	rank := rankedStudent.Rank()
+	copiedRs := &RankedStudent{
+		rankedStudent.Student(),
+		rank,
+		0,
+	}
+
+	if !pq.IsFull() {
+		heap.Push(pq, copiedRs)
+		pq.DecSpots()
+		return true
+	}
+
+	tmp := heap.Pop(pq).(*RankedStudent)
+	heap.Push(pq, tmp)
+	lastRank := tmp.Rank()
+
+	switch {
+	case rank == lastRank:
+		heap.Push(pq, copiedRs)
+		return true
+	case rank > lastRank:
+		return false
+	}
+
+	heap.Push(pq, copiedRs)
+	count := strategy.countBeingRemovedReplicas(pq)
+	studentsBeingRemoved := make([]*Student, 0)
+	for ; count > 0; count-- {
+		rs := heap.Pop(pq).(*RankedStudent)
+		student := rs.Student()
+		student.ClearCourse()
+		studentsBeingRemoved = append(studentsBeingRemoved, student)
+	}
+	strategy.findAndRemoveFromList(strategy.jointCourse.Students(), studentsBeingRemoved)
+
+	return true
 }
 
 func (strategy *BaseStrategy) findAndRemoveFromList(pq *PriorityQueue, students []*Student) {

@@ -304,24 +304,24 @@ func TestApply_FormalJustInPlace_AdmitAllReplicas(t *testing.T) {
 	availableSpots := NewAvailableSpots(6, 0, 0, 3, 0, 0, 0)
 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
 	ranking := Ranking{
-		"1352": 1,
-		"1351": 1,
-		"1350": 3,
-		"1349": 3,
-		"1348": 2,
 		"1347": 2,
+		"1348": 2,
+		"1349": 3,
+		"1350": 3,
+		"1351": 1,
+		"1352": 1,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Female, programs.Vocat),
-		NewStudent("1348", genders.Female, programs.Vocat),
+		NewStudent("1347", genders.Female, programs.Formal),
+		NewStudent("1348", genders.Female, programs.Formal),
 		NewStudent("1349", genders.Female, programs.Formal),
 		NewStudent("1350", genders.Female, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
+		NewStudent("1351", genders.Male, programs.Vocat),
+		NewStudent("1352", genders.Male, programs.Vocat),
 	}
 
 	for _, s := range ss {
@@ -333,17 +333,17 @@ func TestApply_FormalJustInPlace_AdmitAllReplicas(t *testing.T) {
 	}
 }
 
-func TestApply_FormalExceeds_RejectReplicas(t *testing.T) {
+func TestApply_VocatExceeds_RejectReplicas(t *testing.T) {
 	strategy := NewApplyStrategy("", 0)
-	availableSpots := NewAvailableSpots(6, 0, 0, 2, 0, 0, 0)
+	availableSpots := NewAvailableSpots(6, 0, 0, 0, 0, 2, 0)
 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
 	ranking := Ranking{
-		"1352": 1,
+		"1347": 3,
+		"1348": 3,
+		"1349": 2,
+		"1350": 2,
 		"1351": 1,
-		"1350": 3,
-		"1349": 3,
-		"1348": 2,
-		"1347": 2,
+		"1352": 1,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -352,8 +352,8 @@ func TestApply_FormalExceeds_RejectReplicas(t *testing.T) {
 	ss := []*Student{
 		NewStudent("1347", genders.Female, programs.Vocat),
 		NewStudent("1348", genders.Female, programs.Vocat),
-		NewStudent("1349", genders.Female, programs.Formal),
-		NewStudent("1350", genders.Female, programs.Formal),
+		NewStudent("1349", genders.Female, programs.Vocat),
+		NewStudent("1350", genders.Female, programs.Vocat),
 		NewStudent("1351", genders.Male, programs.Formal),
 		NewStudent("1352", genders.Male, programs.Formal),
 	}

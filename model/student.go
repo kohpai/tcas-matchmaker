@@ -65,6 +65,10 @@ func (student *Student) Gender() Gender {
 	return student.gender
 }
 
+func (student *Student) Program() Program {
+	return student.program
+}
+
 func (student *Student) SetPreferredApp(priority uint8, course *Course, appId string) error {
 	if priority < 1 || 6 < priority {
 		return errors.New("priority out of range")
