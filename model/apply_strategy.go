@@ -215,7 +215,7 @@ func (strategy *BaseStrategy) applyDenyAll(
 		studentsBeingRemoved = append(studentsBeingRemoved, student)
 		pq.IncSpots()
 	}
-	strategy.findAndRemoveFromMainList(studentsBeingRemoved)
+	strategy.findAndRemoveFromList(strategy.jointCourse.Students(), studentsBeingRemoved)
 
 	if lrr := metadata.leastReplicatedRank; lrr < 1 || lastRank < lrr {
 		metadata.leastReplicatedRank = lastRank
@@ -229,9 +229,8 @@ func (strategy *BaseStrategy) applyDenyAll(
 	return rank < lastRank
 }
 
-func (strategy *BaseStrategy) findAndRemoveFromMainList(students []*Student) {
+func (strategy *BaseStrategy) findAndRemoveFromList(pq *PriorityQueue, students []*Student) {
 	beingRemovedStudents := make([]*RankedStudent, 0)
-	pq := strategy.jointCourse.Students()
 	mainList := pq.Students()
 	for i := 0; i < len(students); i++ {
 		for j := 0; j < len(mainList); j++ {
