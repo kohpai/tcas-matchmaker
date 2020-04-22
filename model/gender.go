@@ -4,7 +4,7 @@ import (
 	"sync"
 )
 
-type Gender string
+type Gender uint8
 
 type gender struct {
 	once   sync.Once
@@ -16,8 +16,8 @@ var _gender gender
 
 func Genders() gender {
 	_gender.once.Do(func() {
-		_gender.Male = "MALE"
-		_gender.Female = "FEMALE"
+		_gender.Male = 1
+		_gender.Female = 2
 	})
 	return _gender
 }

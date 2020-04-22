@@ -56,36 +56,6 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 	return jointCourseMap
 }
 
-func mapGender(g uint8) model.Gender {
-	genders := model.Genders()
-	switch g {
-	case 1:
-		return genders.Male
-	case 2:
-		return genders.Female
-	}
-
-	log.Fatal("wrong gender value")
-	return ""
-}
-
-func mapProgram(p uint8) model.Program {
-	programs := model.Programs()
-	switch p {
-	case 1:
-		return programs.Formal
-	case 2:
-		return programs.Inter
-	case 3:
-		return programs.Vocat
-	case 4:
-		return programs.NonFormal
-	}
-
-	log.Fatal("wrong program value")
-	return ""
-}
-
 func ExtractRankings(rankings []Application) RankingMap {
 	rankingMap := make(RankingMap)
 
@@ -132,10 +102,18 @@ func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMa
 	for _, a := range applications {
 		citizenId := a.CitizenId
 		if _, ok := studentMap[citizenId]; !ok {
+			gender := a.Gender
+			if gender < 1 || 2 < gender {
+				log.Fatal("wrong gender value")
+			}
+			program := a.SchoolProgram
+			if program < 1 || 4 < program {
+				log.Fatal("wrong program value")
+			}
 			studentMap[citizenId] = model.NewStudent(
 				citizenId,
-				mapGender(a.Gender),
-				mapProgram(a.SchoolProgram),
+				model.Gender(gender),
+				model.Program(a.SchoolProgram),
 			)
 		}
 
