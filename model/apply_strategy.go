@@ -139,43 +139,36 @@ func (strategy *BaseStrategy) applySublist(rankedStudent *RankedStudent) bool {
 	genders := Genders()
 	gender := student.Gender()
 
-	if pq := jc.MaleQ(); pq != nil && gender == genders.Male {
-		if !strategy.applyDenyAll(pq, strategy.maleMetadata, rankedStudent) {
-			return false
-		}
+	var pq *PriorityQueue
+	var metadata *Metadata
+
+	switch gender {
+	case genders.Male:
+		pq, metadata = jc.MaleQ(), strategy.maleMetadata
+	case genders.Female:
+		pq, metadata = jc.FemaleQ(), strategy.femaleMetadata
 	}
 
-	if pq := jc.FemaleQ(); pq != nil && gender == genders.Female {
-		if !strategy.applyDenyAll(pq, strategy.femaleMetadata, rankedStudent) {
-			return false
-		}
+	if pq != nil && !strategy.applyDenyAll(pq, metadata, rankedStudent) {
+		return false
 	}
 
 	programs := Programs()
 	program := student.Program()
 
-	if pq := jc.FormalQ(); pq != nil && program == programs.Formal {
-		if !strategy.applyAllowAll(pq, strategy.formalMetadata, rankedStudent) {
-			return false
-		}
+	switch program {
+	case programs.Formal:
+		pq, metadata = jc.FormalQ(), strategy.formalMetadata
+	case programs.Inter:
+		pq, metadata = jc.InterQ(), strategy.interMetadata
+	case programs.Vocat:
+		pq, metadata = jc.VocatQ(), strategy.vocatMetadata
+	case programs.NonFormal:
+		pq, metadata = jc.NonFormalQ(), strategy.nonFormalMetadata
 	}
 
-	if pq := jc.InterQ(); pq != nil && program == programs.Inter {
-		if !strategy.applyAllowAll(pq, strategy.interMetadata, rankedStudent) {
-			return false
-		}
-	}
-
-	if pq := jc.VocatQ(); pq != nil && program == programs.Vocat {
-		if !strategy.applyAllowAll(pq, strategy.vocatMetadata, rankedStudent) {
-			return false
-		}
-	}
-
-	if pq := jc.NonFormalQ(); pq != nil && program == programs.NonFormal {
-		if !strategy.applyAllowAll(pq, strategy.nonFormalMetadata, rankedStudent) {
-			return false
-		}
+	if pq != nil && !strategy.applyAllowAll(pq, metadata, rankedStudent) {
+		return false
 	}
 
 	return true
