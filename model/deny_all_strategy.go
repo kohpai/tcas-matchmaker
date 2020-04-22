@@ -5,7 +5,6 @@ import "container/heap"
 type DenyAllStrategy struct {
 	BaseStrategy
 	leastReplicatedRank uint16
-	rankCount           RankCount
 }
 
 func (strategy *DenyAllStrategy) countBeingRemovedReplicas() uint16 {
@@ -25,9 +24,6 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 			return true
 		}
 
-		if rank == lrr {
-			strategy.rankCount[rank] += 1
-		}
 		return false
 	}
 

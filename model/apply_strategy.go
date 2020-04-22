@@ -29,13 +29,11 @@ func NewApplyStrategy(condition Condition, exceedLimit uint16) ApplyStrategy {
 		return &DenyAllStrategy{
 			base,
 			0,
-			make(RankCount),
 		}
 	case conditions.AllowSome:
 		return &AllowSomeStrategy{
 			base,
 			0,
-			make(RankCount),
 			exceedLimit,
 		}
 	}

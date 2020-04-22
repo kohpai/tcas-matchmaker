@@ -7,7 +7,6 @@ import (
 type AllowSomeStrategy struct {
 	BaseStrategy
 	leastReplicatedRank uint16
-	rankCount           RankCount
 	exceedLimit         uint16
 }
 
@@ -41,9 +40,6 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 			return true
 		}
 
-		if rank == lrr {
-			strategy.rankCount[rank] += 1
-		}
 		return false
 	}
 
@@ -58,7 +54,6 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	count, inc := strategy.countBeingRemovedReplicas()
 
 	if count > 0 {
-		strategy.rankCount[lastRank] = count
 		strategy.leastReplicatedRank = lastRank
 	}
 
