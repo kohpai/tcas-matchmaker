@@ -22,6 +22,10 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	pq := jc.Students()
 
 	if !pq.IsFull() {
+		// rejected, admitted, or nothing
+		if !strategy.applySublist(rankedStudent) {
+			return false
+		}
 		heap.Push(pq, rankedStudent)
 		pq.DecSpots()
 		return true
@@ -43,10 +47,14 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	heap.Push(pq, rankedStudent)
 	count := strategy.countBeingRemovedReplicas(pq)
 
+	studentsBeingRemoved := make([]*Student, 0)
 	for ; count > 0; count-- {
 		rs := heap.Pop(pq).(*RankedStudent)
-		rs.Student().ClearCourse()
+		student := rs.Student()
+		student.ClearCourse()
+		studentsBeingRemoved = append(studentsBeingRemoved, student)
 	}
+	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	return true
 }
