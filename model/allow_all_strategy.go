@@ -37,9 +37,16 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 
 	switch {
 	case rank == lastRank:
+		if !strategy.applySublist(rankedStudent) {
+			return false
+		}
 		heap.Push(pq, rankedStudent)
 		return true
 	case rank > lastRank:
+		return false
+	}
+
+	if !strategy.applySublist(rankedStudent) {
 		return false
 	}
 

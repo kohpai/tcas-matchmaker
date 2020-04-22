@@ -13,8 +13,12 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
+		// rejected, admitted, or nothing
+		if !strategy.applySublist(rankedStudent) {
+			return false
+		}
 		lrr := strategy.leastReplicatedRank
-		if lrr == 0 || rank < lrr {
+		if lrr < 1 || rank < lrr {
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -43,9 +47,10 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		strategy.leastReplicatedRank = lastRank
 	}
 
-	if rank < lastRank {
+	if rank < lastRank && strategy.applySublist(rankedStudent) {
 		heap.Push(pq, rankedStudent)
+		return true
 	}
 
-	return rank < lastRank
+	return false
 }

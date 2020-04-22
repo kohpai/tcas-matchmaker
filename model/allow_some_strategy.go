@@ -28,8 +28,12 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
+		// rejected, admitted, or nothing
+		if !strategy.applySublist(rankedStudent) {
+			return false
+		}
 		lrr := strategy.leastReplicatedRank
-		if lrr == 0 || rank < lrr {
+		if lrr < 1 || rank < lrr {
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -60,5 +64,10 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
-	return rank < lastRank || count < 1
+	admitted := rank < lastRank || count < 1
+	if admitted && !strategy.applySublist(rankedStudent) {
+		heap.Remove(pq, rankedStudent.index)
+		return false
+	}
+	return admitted
 }
