@@ -56,11 +56,5 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 		rs.Student().ClearCourse()
 	}
 
-	if rank < lastRank {
-		return true
-	}
-	if count > 0 {
-		return false
-	}
-	return true
+	return rank < lastRank || count < 1
 }
