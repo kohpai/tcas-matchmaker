@@ -8,6 +8,7 @@ import (
 type Student struct {
 	citizenId         string
 	gender            Gender
+	program           Program
 	applicationStatus ApplicationStatus
 	apps              [6]*Application
 	preferredCourses  [6]*Course
@@ -15,10 +16,11 @@ type Student struct {
 	appIndex          int
 }
 
-func NewStudent(citizenId string, gender Gender) *Student {
+func NewStudent(citizenId string, gender Gender, program Program) *Student {
 	return &Student{
 		citizenId:         citizenId,
 		gender:            gender,
+		program:           program,
 		applicationStatus: ApplicationStatuses().Pending,
 		appIndex:          -1,
 	}
