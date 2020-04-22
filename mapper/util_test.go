@@ -102,15 +102,15 @@ func TestCreateJointCourseMap_Always_ReturnsJointCourseMap(t *testing.T) {
 
 	jointCourseMap := createJointCourseMap(courses)
 
-	if jc := jointCourseMap["1234"]; jc.AvailableSpots() != 10 {
+	if jc := jointCourseMap["1234"]; jc.Students().AvailableSpots() != 10 {
 		t.Error("Available spots is incorrect", jc)
 	}
 
-	if jc := jointCourseMap["1235"]; jc.AvailableSpots() != 11 {
+	if jc := jointCourseMap["1235"]; jc.Students().AvailableSpots() != 11 {
 		t.Error("Available spots is incorrect", jc)
 	}
 
-	if jc := jointCourseMap["4322123"]; jc.AvailableSpots() != 12 {
+	if jc := jointCourseMap["4322123"]; jc.Students().AvailableSpots() != 12 {
 		t.Error("Available spots is incorrect", jc)
 	}
 }
@@ -188,19 +188,19 @@ func TestCreateCourseMap_Always_ReturnsCourseMap(t *testing.T) {
 
 	courseMap := CreateCourseMap(courses, rankingMap)
 
-	if course := courseMap["1234"]; course.JointCourse().AvailableSpots() != 10 {
+	if course := courseMap["1234"]; course.JointCourse().Students().AvailableSpots() != 10 {
 		t.Error("Available spots is incorrect", course)
 	}
 
-	if course := courseMap["1235"]; course.JointCourse().AvailableSpots() != 11 {
+	if course := courseMap["1235"]; course.JointCourse().Students().AvailableSpots() != 11 {
 		t.Error("Available spots is incorrect", course)
 	}
 
-	if course := courseMap["1236"]; course.JointCourse().AvailableSpots() != 12 {
+	if course := courseMap["1236"]; course.JointCourse().Students().AvailableSpots() != 12 {
 		t.Error("Available spots is incorrect", course)
 	}
 
-	if course := courseMap["1237"]; course.JointCourse().AvailableSpots() != 12 {
+	if course := courseMap["1237"]; course.JointCourse().Students().AvailableSpots() != 12 {
 		t.Error("Available spots is incorrect", course)
 	}
 
@@ -222,42 +222,49 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CitizenId: "13499",
 			Priority:  1,
 			Ranking:   1,
+			Gender:    1,
 		},
 		{
 			CourseId:  "1234",
 			CitizenId: "13501",
 			Priority:  1,
 			Ranking:   2,
+			Gender:    1,
 		},
 		{
 			CourseId:  "1234",
 			CitizenId: "13502",
 			Priority:  1,
 			Ranking:   3,
+			Gender:    1,
 		},
 		{
 			CourseId:  "1235",
 			CitizenId: "13500",
 			Priority:  1,
 			Ranking:   2,
+			Gender:    1,
 		},
 		{
 			CourseId:  "1236",
 			CitizenId: "13499",
 			Priority:  2,
 			Ranking:   1,
+			Gender:    1,
 		},
 		{
 			CourseId:  "1237",
 			CitizenId: "13500",
 			Priority:  3,
 			Ranking:   1,
+			Gender:    1,
 		},
 		{
 			CourseId:  "1237",
 			CitizenId: "13499",
 			Priority:  4,
 			Ranking:   2,
+			Gender:    1,
 		},
 	}
 	courses := []Course{

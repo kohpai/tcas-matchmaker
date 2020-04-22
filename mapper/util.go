@@ -29,11 +29,27 @@ func createJointCourseMap(courses []Course) JointCourseMap {
 			}
 		}
 		strategy := model.NewApplyStrategy(model.Condition(condition), uint16(exceedAllowed))
+		var jointId string
 		if c.JointId == "" {
-			jointCourseMap[c.CourseId] = model.NewJointCourse(c.CourseId, c.ReceiveAmount, strategy)
+			jointId = c.CourseId
 		} else if _, ok := jointCourseMap[c.JointId]; !ok {
-			uniqueJointId := c.UniversityId + c.JointId
-			jointCourseMap[uniqueJointId] = model.NewJointCourse(uniqueJointId, c.ReceiveAmount, strategy)
+			jointId = c.UniversityId + c.JointId
+		}
+
+		if jointId != "" {
+			jointCourseMap[jointId] = model.NewJointCourse(
+				jointId,
+				model.NewAvailableSpots(
+					c.ReceiveAmount,
+					c.MaleReceiveAmount,
+					c.FemaleReceiveAmount,
+					c.FormalReceiveAmount,
+					c.InterReceiveAmount,
+					c.VocatReceiveAmount,
+					c.NonformalReceiveAmount,
+				),
+				strategy,
+			)
 		}
 	}
 
@@ -86,7 +102,16 @@ func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMa
 	for _, a := range applications {
 		citizenId := a.CitizenId
 		if _, ok := studentMap[citizenId]; !ok {
-			studentMap[citizenId] = model.NewStudent(citizenId)
+			genders := model.Genders()
+			var gender model.Gender
+			if a.Gender == 1 {
+				gender = genders.Male
+			} else if a.Gender == 2 {
+				gender = genders.Female
+			} else {
+				log.Fatal("wrong gender value")
+			}
+			studentMap[citizenId] = model.NewStudent(citizenId, gender)
 		}
 
 		if err := studentMap[citizenId].SetPreferredApp(a.Priority, courseMap[a.CourseId], a.ApplicationId); err != nil {
