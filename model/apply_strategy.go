@@ -307,16 +307,16 @@ func (strategy *BaseStrategy) findAndRemoveFromOthers(pq *PriorityQueue, student
 func (strategy *BaseStrategy) findAndRemoveFromList(pq *PriorityQueue, students []*Student) {
 	beingRemovedStudents := make([]*RankedStudent, 0)
 	mainList := pq.Students()
-	for i := 0; i < len(students); i++ {
-		for j := 0; j < len(mainList); j++ {
-			if students[i] == mainList[j].Student() {
-				beingRemovedStudents = append(beingRemovedStudents, mainList[j])
-				pq.IncSpots()
+	for _, student := range students {
+		for _, rs := range mainList {
+			if student == rs.Student() {
+				beingRemovedStudents = append(beingRemovedStudents, rs)
 			}
 		}
 	}
 
 	for _, student := range beingRemovedStudents {
 		heap.Remove(pq, student.index)
+		pq.IncSpots()
 	}
 }
