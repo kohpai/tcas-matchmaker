@@ -90,6 +90,30 @@ func (jointCourse *JointCourse) Students() *PriorityQueue {
 	return jointCourse.main
 }
 
+func (jointCourse *JointCourse) MaleQ() *PriorityQueue {
+	return jointCourse.male
+}
+
+func (jointCourse *JointCourse) FemaleQ() *PriorityQueue {
+	return jointCourse.female
+}
+
+func (jointCourse *JointCourse) FormalQ() *PriorityQueue {
+	return jointCourse.formal
+}
+
+func (jointCourse *JointCourse) InterQ() *PriorityQueue {
+	return jointCourse.inter
+}
+
+func (jointCourse *JointCourse) VocatQ() *PriorityQueue {
+	return jointCourse.vocat
+}
+
+func (jointCourse *JointCourse) NonFormalQ() *PriorityQueue {
+	return jointCourse.nonFormal
+}
+
 func (jointCourse *JointCourse) RegisterCourse(course *Course) {
 	jointCourse.courses = append(jointCourse.courses, course)
 }

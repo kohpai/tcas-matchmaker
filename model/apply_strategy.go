@@ -2,6 +2,7 @@ package model
 
 import (
 	"container/heap"
+	"log"
 )
 
 type ApplyStrategy interface {
@@ -9,12 +10,28 @@ type ApplyStrategy interface {
 	Apply(*RankedStudent) bool
 }
 
+type Metadata struct {
+	leastReplicatedRank uint16
+}
+
 type BaseStrategy struct {
-	jointCourse *JointCourse
+	maleMetadata      *Metadata
+	femaleMetadata    *Metadata
+	formalMetadata    *Metadata
+	interMetadata     *Metadata
+	vocatMetadata     *Metadata
+	nonFormalMetadata *Metadata
+	jointCourse       *JointCourse
 }
 
 func NewApplyStrategy(condition Condition, exceedLimit uint16) ApplyStrategy {
 	base := BaseStrategy{
+		nil,
+		nil,
+		nil,
+		nil,
+		nil,
+		nil,
 		nil,
 	}
 
@@ -43,6 +60,30 @@ func NewApplyStrategy(condition Condition, exceedLimit uint16) ApplyStrategy {
 
 func (strategy *BaseStrategy) SetJointCourse(jc *JointCourse) {
 	strategy.jointCourse = jc
+
+	if jc.MaleQ() != nil {
+		strategy.maleMetadata = &Metadata{0}
+	}
+
+	if jc.FemaleQ() != nil {
+		strategy.femaleMetadata = &Metadata{0}
+	}
+
+	if jc.FormalQ() != nil {
+		strategy.formalMetadata = &Metadata{0}
+	}
+
+	if jc.InterQ() != nil {
+		strategy.interMetadata = &Metadata{0}
+	}
+
+	if jc.VocatQ() != nil {
+		strategy.vocatMetadata = &Metadata{0}
+	}
+
+	if jc.NonFormalQ() != nil {
+		strategy.nonFormalMetadata = &Metadata{0}
+	}
 }
 
 func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
@@ -50,6 +91,10 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 	pq := jc.Students()
 
 	if !pq.IsFull() {
+		// rejected, admitted, or nothing
+		if !strategy.applySublist(rankedStudent) {
+			return false
+		}
 		heap.Push(pq, rankedStudent)
 		pq.DecSpots()
 		return true
@@ -85,4 +130,124 @@ func (strategy *BaseStrategy) countEdgeReplicas(pq *PriorityQueue) int {
 	}
 
 	return len(students)
+}
+
+func (strategy *BaseStrategy) applySublist(rankedStudent *RankedStudent) bool {
+	jc := strategy.jointCourse
+
+	genders := Genders()
+	gender := rankedStudent.Student().Gender()
+	if pq := jc.MaleQ(); pq != nil && gender == genders.Male {
+		if !strategy.applyDenyAll(pq, strategy.maleMetadata, rankedStudent) {
+			return false
+		}
+	}
+
+	if pq := jc.FemaleQ(); pq != nil && gender == genders.Female {
+		if !strategy.applyDenyAll(pq, strategy.femaleMetadata, rankedStudent) {
+			return false
+		}
+	}
+
+	if pq := jc.FormalQ(); pq != nil {
+		if !strategy.applyDenyAll(pq, strategy.formalMetadata, rankedStudent) {
+			return false
+		}
+	}
+
+	if pq := jc.InterQ(); pq != nil {
+		if !strategy.applyDenyAll(pq, strategy.interMetadata, rankedStudent) {
+			return false
+		}
+	}
+
+	if pq := jc.VocatQ(); pq != nil {
+		if !strategy.applyDenyAll(pq, strategy.vocatMetadata, rankedStudent) {
+			return false
+		}
+	}
+
+	if pq := jc.NonFormalQ(); pq != nil {
+		if !strategy.applyDenyAll(pq, strategy.nonFormalMetadata, rankedStudent) {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (strategy *BaseStrategy) applyDenyAll(
+	pq *PriorityQueue,
+	metadata *Metadata,
+	rankedStudent *RankedStudent,
+) bool {
+	copiedRs := &RankedStudent{
+		rankedStudent.Student(),
+		rankedStudent.Rank(),
+		0,
+	}
+	rank := copiedRs.Rank()
+
+	if !pq.IsFull() {
+		lrr := metadata.leastReplicatedRank
+		if lrr < 1 || rank < lrr {
+			heap.Push(pq, copiedRs)
+			pq.DecSpots()
+			return true
+		}
+
+		return false
+	}
+
+	tmp := heap.Pop(pq).(*RankedStudent)
+	heap.Push(pq, tmp)
+	lastRank := tmp.Rank()
+	if rank > lastRank {
+		return false
+	}
+
+	studentsBeingRemoved := make([]*Student, 0)
+	count := strategy.countEdgeReplicas(pq)
+	for i := 0; i < count; i++ {
+		rs := heap.Pop(pq).(*RankedStudent)
+		student := rs.Student()
+		student.ClearCourse()
+		studentsBeingRemoved = append(studentsBeingRemoved, student)
+		pq.IncSpots()
+	}
+	strategy.findAndRemoveFromMainList(studentsBeingRemoved)
+
+	if lrr := metadata.leastReplicatedRank; lrr < 1 || lastRank < lrr {
+		metadata.leastReplicatedRank = lastRank
+	}
+
+	if rank < lastRank {
+		heap.Push(pq, copiedRs)
+		pq.DecSpots()
+	}
+
+	return rank < lastRank
+}
+
+func (strategy *BaseStrategy) findAndRemoveFromMainList(students []*Student) {
+	beingRemovedStudents := make([]*RankedStudent, 0)
+	pq := strategy.jointCourse.Students()
+	mainList := pq.Students()
+	for i := 0; i < len(students); i++ {
+		for j := 0; j < len(mainList); j++ {
+			if students[i] == mainList[j].Student() {
+				beingRemovedStudents = append(beingRemovedStudents, mainList[j])
+				pq.IncSpots()
+			}
+		}
+	}
+
+	for _, student := range beingRemovedStudents {
+		heap.Remove(pq, student.index)
+	}
+
+	// @ASSERTION, this shouldn't happen
+	if len(beingRemovedStudents) != len(students) {
+		log.Println("Couldn't find all students to be removed")
+	}
 }
