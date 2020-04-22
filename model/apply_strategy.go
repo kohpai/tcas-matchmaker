@@ -102,7 +102,9 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 
 	heap.Push(pq, rankedStudent)
 	rs := heap.Pop(pq).(*RankedStudent)
-	rs.Student().ClearCourse()
+	student := rs.Student()
+	student.ClearCourse()
+	strategy.findAndRemoveFromOthers(pq, []*Student{student})
 	return rankedStudent != rs
 }
 
