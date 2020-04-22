@@ -30,10 +30,14 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	count := strategy.countEdgeReplicas(pq)
+	studentsBeingRemoved := make([]*Student, 0)
 	for i := 0; i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
-		rs.Student().ClearCourse()
+		student := rs.Student()
+		student.ClearCourse()
+		studentsBeingRemoved = append(studentsBeingRemoved, student)
 	}
+	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	if lrr := strategy.leastReplicatedRank; lrr < 1 || lastRank < lrr {
 		strategy.leastReplicatedRank = lastRank

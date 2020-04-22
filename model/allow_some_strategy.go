@@ -51,10 +51,14 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 		strategy.leastReplicatedRank = lastRank
 	}
 
+	studentsBeingRemoved := make([]*Student, 0)
 	for i := 0; i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
-		rs.Student().ClearCourse()
+		student := rs.Student()
+		student.ClearCourse()
+		studentsBeingRemoved = append(studentsBeingRemoved, student)
 	}
+	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	return rank < lastRank || count < 1
 }
