@@ -61,21 +61,28 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 	return rankedStudent != rs
 }
 
-func (strategy *BaseStrategy) countEdgeReplicas() uint16 {
-	pq := strategy.jointCourse.Students()
-	students := []*RankedStudent{
-		heap.Pop(pq).(*RankedStudent),
+func (strategy *BaseStrategy) countEdgeReplicas(pq *PriorityQueue) int {
+	lastStudent := heap.Pop(pq).(*RankedStudent)
+	if pq.Len() < 1 {
+		heap.Push(pq, lastStudent)
+		return 1
 	}
-	count, rank := uint16(0), students[0].Rank()
-	for ; students[count].Rank() == rank; students = append(students, heap.Pop(pq).(*RankedStudent)) {
-		count++
+
+	nextStudent := heap.Pop(pq).(*RankedStudent)
+	students := []*RankedStudent{lastStudent}
+	for ; lastStudent.Rank() == nextStudent.Rank(); nextStudent = heap.Pop(pq).(*RankedStudent) {
+		students = append(students, nextStudent)
 		if pq.Len() < 1 {
 			break
 		}
 	}
+
 	for _, rs := range students {
 		heap.Push(pq, rs)
 	}
+	if students[len(students)-1] != nextStudent {
+		heap.Push(pq, nextStudent)
+	}
 
-	return count
+	return len(students)
 }

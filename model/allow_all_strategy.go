@@ -6,12 +6,10 @@ type AllowAllStrategy struct {
 	BaseStrategy
 }
 
-func (strategy *AllowAllStrategy) countBeingRemovedReplicas() uint16 {
-	jc := strategy.jointCourse
-	pq := jc.Students()
+func (strategy *AllowAllStrategy) countBeingRemovedReplicas(pq *PriorityQueue) int {
 	students := pq.Students()
-	length, limit := uint16(len(students)), pq.Limit()
-	count := strategy.countEdgeReplicas()
+	length, limit := len(students), int(pq.Limit())
+	count := strategy.countEdgeReplicas(pq)
 
 	if delta := length - limit; count <= delta {
 		return count
@@ -43,7 +41,7 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	heap.Push(pq, rankedStudent)
-	count := strategy.countBeingRemovedReplicas()
+	count := strategy.countBeingRemovedReplicas(pq)
 
 	for ; count > 0; count-- {
 		rs := heap.Pop(pq).(*RankedStudent)

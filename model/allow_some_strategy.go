@@ -10,15 +10,13 @@ type AllowSomeStrategy struct {
 	exceedLimit         uint16
 }
 
-func (strategy *AllowSomeStrategy) countBeingRemovedReplicas() (uint16, uint16) {
-	jc := strategy.jointCourse
-	pq := jc.Students()
-	length, limit := uint16(pq.Len()), pq.Limit()
+func (strategy *AllowSomeStrategy) countBeingRemovedReplicas(pq *PriorityQueue) (int, int) {
+	length, limit := pq.Len(), int(pq.Limit())
 	delta := length - limit
-	count := strategy.countEdgeReplicas()
+	count := strategy.countEdgeReplicas(pq)
 
 	switch {
-	case delta > strategy.exceedLimit:
+	case delta > int(strategy.exceedLimit):
 		return count, count - delta
 	case count <= delta:
 		return count, 0
@@ -51,17 +49,17 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	heap.Push(pq, rankedStudent)
-	count, inc := strategy.countBeingRemovedReplicas()
+	count, inc := strategy.countBeingRemovedReplicas(pq)
 
 	if count > 0 {
 		strategy.leastReplicatedRank = lastRank
 	}
 
-	for i := uint16(0); i < count; i++ {
+	for i := 0; i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
 		rs.Student().ClearCourse()
 	}
-	for i := uint16(0); i < inc; i++ {
+	for i := 0; i < inc; i++ {
 		pq.IncSpots()
 	}
 

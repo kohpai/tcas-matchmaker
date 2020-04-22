@@ -7,10 +7,6 @@ type DenyAllStrategy struct {
 	leastReplicatedRank uint16
 }
 
-func (strategy *DenyAllStrategy) countBeingRemovedReplicas() uint16 {
-	return strategy.countEdgeReplicas()
-}
-
 func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	jc := strategy.jointCourse
 	pq := jc.Students()
@@ -34,17 +30,24 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		return false
 	}
 
-	heap.Push(pq, rankedStudent)
-	count := strategy.countBeingRemovedReplicas()
-	strategy.rankCount[lastRank], strategy.leastReplicatedRank = count, lastRank
-	if count > 0 {
+	studentsBeingRemoved := make([]*Student, 0)
+	count := strategy.countEdgeReplicas(pq)
+	for i := 0; i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
-		rs.Student().ClearCourse()
-	}
-	for i := uint16(1); i < count; i++ {
-		rs := heap.Pop(pq).(*RankedStudent)
-		rs.Student().ClearCourse()
+		student := rs.Student()
+		student.ClearCourse()
+		studentsBeingRemoved = append(studentsBeingRemoved, student)
 		pq.IncSpots()
+	}
+	strategy.findAndRemoveFromMainList(studentsBeingRemoved)
+
+	if lrr := strategy.leastReplicatedRank; lrr < 1 || lastRank < lrr {
+		strategy.leastReplicatedRank = lastRank
+	}
+
+	if rank < lastRank {
+		heap.Push(pq, rankedStudent)
+		pq.DecSpots()
 	}
 
 	return rank < lastRank
