@@ -27,7 +27,6 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 			return false
 		}
 		heap.Push(pq, rankedStudent)
-		pq.DecSpots()
 		return true
 	}
 

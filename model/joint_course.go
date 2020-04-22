@@ -33,31 +33,31 @@ func NewJointCourse(
 	var nonFormal *PriorityQueue
 
 	if num := availableSpots.main; num != 0 {
-		main = &PriorityQueue{num, num, []*RankedStudent{}}
+		main = &PriorityQueue{num, []*RankedStudent{}}
 		heap.Init(main)
 	}
 	if num := availableSpots.male; num != 0 {
-		male = &PriorityQueue{num, num, []*RankedStudent{}}
+		male = &PriorityQueue{num, []*RankedStudent{}}
 		heap.Init(male)
 	}
 	if num := availableSpots.female; num != 0 {
-		female = &PriorityQueue{num, num, []*RankedStudent{}}
+		female = &PriorityQueue{num, []*RankedStudent{}}
 		heap.Init(female)
 	}
 	if num := availableSpots.formal; num != 0 {
-		formal = &PriorityQueue{num, num, []*RankedStudent{}}
+		formal = &PriorityQueue{num, []*RankedStudent{}}
 		heap.Init(formal)
 	}
 	if num := availableSpots.inter; num != 0 {
-		inter = &PriorityQueue{num, num, []*RankedStudent{}}
+		inter = &PriorityQueue{num, []*RankedStudent{}}
 		heap.Init(inter)
 	}
 	if num := availableSpots.vocat; num != 0 {
-		vocat = &PriorityQueue{num, num, []*RankedStudent{}}
+		vocat = &PriorityQueue{num, []*RankedStudent{}}
 		heap.Init(vocat)
 	}
 	if num := availableSpots.nonFormal; num != 0 {
-		nonFormal = &PriorityQueue{num, num, []*RankedStudent{}}
+		nonFormal = &PriorityQueue{num, []*RankedStudent{}}
 		heap.Init(nonFormal)
 	}
 

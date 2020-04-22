@@ -95,7 +95,6 @@ func (strategy *BaseStrategy) Apply(rankedStudent *RankedStudent) bool {
 			return false
 		}
 		heap.Push(pq, rankedStudent)
-		pq.DecSpots()
 		return true
 	}
 
@@ -191,7 +190,6 @@ func (strategy *BaseStrategy) applyDenyAll(
 		lrr := metadata.leastReplicatedRank
 		if lrr < 1 || rank < lrr {
 			heap.Push(pq, copiedRs)
-			pq.DecSpots()
 			return true
 		}
 
@@ -212,7 +210,6 @@ func (strategy *BaseStrategy) applyDenyAll(
 		student := rs.Student()
 		student.ClearCourse()
 		studentsBeingRemoved = append(studentsBeingRemoved, student)
-		pq.IncSpots()
 	}
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
@@ -222,7 +219,6 @@ func (strategy *BaseStrategy) applyDenyAll(
 
 	if rank < lastRank {
 		heap.Push(pq, copiedRs)
-		pq.DecSpots()
 	}
 
 	return rank < lastRank
@@ -242,7 +238,6 @@ func (strategy *BaseStrategy) applyAllowAll(
 
 	if !pq.IsFull() {
 		heap.Push(pq, copiedRs)
-		pq.DecSpots()
 		return true
 	}
 
@@ -317,6 +312,5 @@ func (strategy *BaseStrategy) findAndRemoveFromList(pq *PriorityQueue, students 
 
 	for _, student := range beingRemovedStudents {
 		heap.Remove(pq, student.index)
-		pq.IncSpots()
 	}
 }

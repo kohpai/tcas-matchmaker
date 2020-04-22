@@ -10,19 +10,16 @@ type AllowSomeStrategy struct {
 	exceedLimit         uint16
 }
 
-func (strategy *AllowSomeStrategy) countBeingRemovedReplicas(pq *PriorityQueue) (int, int) {
+func (strategy *AllowSomeStrategy) countBeingRemovedReplicas(pq *PriorityQueue) int {
 	length, limit := pq.Len(), int(pq.Limit())
 	delta := length - limit
 	count := strategy.countEdgeReplicas(pq)
 
-	switch {
-	case delta > int(strategy.exceedLimit):
-		return count, count - delta
-	case count <= delta:
-		return count, 0
+	if delta > int(strategy.exceedLimit) || count <= delta {
+		return count
 	}
 
-	return 0, 0
+	return 0
 }
 
 func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
@@ -34,7 +31,6 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 		lrr := strategy.leastReplicatedRank
 		if lrr == 0 || rank < lrr {
 			heap.Push(pq, rankedStudent)
-			pq.DecSpots()
 			return true
 		}
 
@@ -49,7 +45,7 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	heap.Push(pq, rankedStudent)
-	count, inc := strategy.countBeingRemovedReplicas(pq)
+	count := strategy.countBeingRemovedReplicas(pq)
 
 	if count > 0 {
 		strategy.leastReplicatedRank = lastRank
@@ -58,9 +54,6 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	for i := 0; i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
 		rs.Student().ClearCourse()
-	}
-	for i := 0; i < inc; i++ {
-		pq.IncSpots()
 	}
 
 	if rank < lastRank {

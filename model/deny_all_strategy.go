@@ -16,7 +16,6 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 		lrr := strategy.leastReplicatedRank
 		if lrr == 0 || rank < lrr {
 			heap.Push(pq, rankedStudent)
-			pq.DecSpots()
 			return true
 		}
 
@@ -34,7 +33,6 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	for i := 0; i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
 		rs.Student().ClearCourse()
-		pq.IncSpots()
 	}
 
 	if lrr := strategy.leastReplicatedRank; lrr < 1 || lastRank < lrr {
@@ -43,7 +41,6 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 
 	if rank < lastRank {
 		heap.Push(pq, rankedStudent)
-		pq.DecSpots()
 	}
 
 	return rank < lastRank
