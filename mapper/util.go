@@ -110,10 +110,15 @@ func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMa
 			if program < 1 || 4 < program {
 				log.Fatal("wrong program value")
 			}
+			formalApplicable := a.FormalApplicable
+			if formalApplicable > 1 {
+				log.Fatal("wrong formal_niets value")
+			}
 			studentMap[citizenId] = model.NewStudent(
 				citizenId,
 				model.Gender(gender),
 				model.Program(a.SchoolProgram),
+				formalApplicable == 1,
 			)
 		}
 
