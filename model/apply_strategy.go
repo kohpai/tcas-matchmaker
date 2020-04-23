@@ -173,7 +173,7 @@ func (strategy *BaseStrategy) applySublist(rankedStudent *RankedStudent) bool {
 
 	if program != programs.Formal && student.FormalApplicable() {
 		pq, metadata = jc.FormalQ(), strategy.formalMetadata
-		if !strategy.applyAllowAll(pq, metadata, rankedStudent) {
+		if pq != nil && !strategy.applyAllowAll(pq, metadata, rankedStudent) {
 			return false
 		}
 	}
