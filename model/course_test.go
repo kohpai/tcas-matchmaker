@@ -27,7 +27,7 @@ func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	s := NewStudent("1349", Genders().Male, Programs().Formal)
+	s := NewStudent("1349", Genders().Male, Programs().Formal, false)
 
 	if !course.Apply(s) {
 		t.Error("Apply returns false", course)
@@ -44,8 +44,8 @@ func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
 	course := NewCourse("1234", jointCourse, ranking)
 
 	ss := []*Student{
-		NewStudent("1349", Genders().Male, Programs().Formal),
-		NewStudent("1350", Genders().Male, Programs().Formal),
+		NewStudent("1349", Genders().Male, Programs().Formal, false),
+		NewStudent("1350", Genders().Male, Programs().Formal, false),
 	}
 
 	course.Apply(ss[0])
@@ -73,8 +73,8 @@ func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
 	course := NewCourse("1234", jointCourse, ranking)
 
 	ss := []*Student{
-		NewStudent("1349", Genders().Male, Programs().Formal),
-		NewStudent("1350", Genders().Male, Programs().Formal),
+		NewStudent("1349", Genders().Male, Programs().Formal, false),
+		NewStudent("1350", Genders().Male, Programs().Formal, false),
 	}
 
 	course.Apply(ss[0])
@@ -100,7 +100,7 @@ func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
-	s := NewStudent("1349", Genders().Male, Programs().Formal)
+	s := NewStudent("1349", Genders().Male, Programs().Formal, false)
 	course.Apply(s)
 
 	if !course.JointCourse().Students().IsFull() {
@@ -119,9 +119,9 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 	course := NewCourse("1234", jointCourse, ranking)
 
 	ss := []*Student{
-		NewStudent("1349", Genders().Male, Programs().Formal),
-		NewStudent("1350", Genders().Male, Programs().Formal),
-		NewStudent("1351", Genders().Male, Programs().Formal),
+		NewStudent("1349", Genders().Male, Programs().Formal, false),
+		NewStudent("1350", Genders().Male, Programs().Formal, false),
+		NewStudent("1351", Genders().Male, Programs().Formal, false),
 	}
 
 	for _, s := range ss {

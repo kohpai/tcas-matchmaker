@@ -20,12 +20,12 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Male, programs.Formal),
-		NewStudent("1348", genders.Male, programs.Formal),
-		NewStudent("1349", genders.Male, programs.Formal),
-		NewStudent("1350", genders.Male, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
+		NewStudent("1347", genders.Male, programs.Formal, false),
+		NewStudent("1348", genders.Male, programs.Formal, false),
+		NewStudent("1349", genders.Male, programs.Formal, false),
+		NewStudent("1350", genders.Male, programs.Formal, false),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -53,12 +53,12 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Male, programs.Formal),
-		NewStudent("1348", genders.Male, programs.Formal),
-		NewStudent("1349", genders.Male, programs.Formal),
-		NewStudent("1350", genders.Male, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
+		NewStudent("1347", genders.Male, programs.Formal, false),
+		NewStudent("1348", genders.Male, programs.Formal, false),
+		NewStudent("1349", genders.Male, programs.Formal, false),
+		NewStudent("1350", genders.Male, programs.Formal, false),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -86,12 +86,12 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Male, programs.Formal),
-		NewStudent("1348", genders.Male, programs.Formal),
-		NewStudent("1349", genders.Male, programs.Formal),
-		NewStudent("1350", genders.Male, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
+		NewStudent("1347", genders.Male, programs.Formal, false),
+		NewStudent("1348", genders.Male, programs.Formal, false),
+		NewStudent("1349", genders.Male, programs.Formal, false),
+		NewStudent("1350", genders.Male, programs.Formal, false),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -121,14 +121,14 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Male, programs.Formal),
-		NewStudent("1348", genders.Male, programs.Formal),
-		NewStudent("1349", genders.Male, programs.Formal),
-		NewStudent("1350", genders.Male, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
-		NewStudent("1353", genders.Male, programs.Formal),
-		NewStudent("1354", genders.Male, programs.Formal),
+		NewStudent("1347", genders.Male, programs.Formal, false),
+		NewStudent("1348", genders.Male, programs.Formal, false),
+		NewStudent("1349", genders.Male, programs.Formal, false),
+		NewStudent("1350", genders.Male, programs.Formal, false),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
+		NewStudent("1353", genders.Male, programs.Formal, false),
+		NewStudent("1354", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -154,10 +154,10 @@ func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
-		NewStudent("1353", genders.Male, programs.Formal),
-		NewStudent("1354", genders.Male, programs.Formal),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
+		NewStudent("1353", genders.Male, programs.Formal, false),
+		NewStudent("1354", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -183,10 +183,10 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
-		NewStudent("1353", genders.Male, programs.Formal),
-		NewStudent("1354", genders.Male, programs.Formal),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
+		NewStudent("1353", genders.Male, programs.Formal, false),
+		NewStudent("1354", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -214,12 +214,12 @@ func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1349", genders.Male, programs.Formal),
-		NewStudent("1350", genders.Male, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
-		NewStudent("1353", genders.Male, programs.Formal),
-		NewStudent("1354", genders.Male, programs.Formal),
+		NewStudent("1349", genders.Male, programs.Formal, false),
+		NewStudent("1350", genders.Male, programs.Formal, false),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
+		NewStudent("1353", genders.Male, programs.Formal, false),
+		NewStudent("1354", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -248,12 +248,12 @@ func TestApply_Male_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Male, programs.Formal),
-		NewStudent("1348", genders.Male, programs.Formal),
-		NewStudent("1349", genders.Male, programs.Formal),
-		NewStudent("1350", genders.Male, programs.Formal),
-		NewStudent("1351", genders.Female, programs.Formal),
-		NewStudent("1352", genders.Female, programs.Formal),
+		NewStudent("1347", genders.Male, programs.Formal, false),
+		NewStudent("1348", genders.Male, programs.Formal, false),
+		NewStudent("1349", genders.Male, programs.Formal, false),
+		NewStudent("1350", genders.Male, programs.Formal, false),
+		NewStudent("1351", genders.Female, programs.Formal, false),
+		NewStudent("1352", genders.Female, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -282,12 +282,12 @@ func TestApply_Female_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Female, programs.Formal),
-		NewStudent("1348", genders.Female, programs.Formal),
-		NewStudent("1349", genders.Female, programs.Formal),
-		NewStudent("1350", genders.Female, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
+		NewStudent("1347", genders.Female, programs.Formal, false),
+		NewStudent("1348", genders.Female, programs.Formal, false),
+		NewStudent("1349", genders.Female, programs.Formal, false),
+		NewStudent("1350", genders.Female, programs.Formal, false),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
 	}
 
 	for _, s := range ss {
@@ -316,12 +316,12 @@ func TestApply_FormalJustInPlace_AdmitAllReplicas(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Female, programs.Formal),
-		NewStudent("1348", genders.Female, programs.Formal),
-		NewStudent("1349", genders.Female, programs.Formal),
-		NewStudent("1350", genders.Female, programs.Formal),
-		NewStudent("1351", genders.Male, programs.Vocat),
-		NewStudent("1352", genders.Male, programs.Vocat),
+		NewStudent("1347", genders.Female, programs.Formal, false),
+		NewStudent("1348", genders.Female, programs.Formal, false),
+		NewStudent("1349", genders.Female, programs.Formal, false),
+		NewStudent("1350", genders.Female, programs.Formal, false),
+		NewStudent("1351", genders.Male, programs.Vocat, false),
+		NewStudent("1352", genders.Male, programs.Vocat, false),
 	}
 
 	for _, s := range ss {
@@ -350,12 +350,46 @@ func TestApply_VocatExceeds_RejectReplicas(t *testing.T) {
 	programs := Programs()
 	genders := Genders()
 	ss := []*Student{
-		NewStudent("1347", genders.Female, programs.Vocat),
-		NewStudent("1348", genders.Female, programs.Vocat),
-		NewStudent("1349", genders.Female, programs.Vocat),
-		NewStudent("1350", genders.Female, programs.Vocat),
-		NewStudent("1351", genders.Male, programs.Formal),
-		NewStudent("1352", genders.Male, programs.Formal),
+		NewStudent("1347", genders.Female, programs.Vocat, false),
+		NewStudent("1348", genders.Female, programs.Vocat, false),
+		NewStudent("1349", genders.Female, programs.Vocat, false),
+		NewStudent("1350", genders.Female, programs.Vocat, false),
+		NewStudent("1351", genders.Male, programs.Formal, false),
+		NewStudent("1352", genders.Male, programs.Formal, false),
+	}
+
+	for _, s := range ss {
+		course.Apply(s)
+	}
+
+	if pq := jointCourse.Students(); pq.Len() != 4 {
+		t.Error("Wrong number of students", pq.Students())
+	}
+}
+
+func TestApply_FormalExceedsAsVocat_RejectReplicas(t *testing.T) {
+	strategy := NewApplyStrategy("", 0)
+	availableSpots := NewAvailableSpots(6, 0, 0, 2, 0, 0, 0)
+	jointCourse := NewJointCourse("1234", availableSpots, strategy)
+	ranking := Ranking{
+		"1347": 3,
+		"1348": 3,
+		"1349": 2,
+		"1350": 2,
+		"1351": 1,
+		"1352": 1,
+	}
+	course := NewCourse("1234", jointCourse, ranking)
+
+	programs := Programs()
+	genders := Genders()
+	ss := []*Student{
+		NewStudent("1347", genders.Female, programs.Vocat, true),
+		NewStudent("1348", genders.Female, programs.Vocat, true),
+		NewStudent("1349", genders.Female, programs.Vocat, true),
+		NewStudent("1350", genders.Female, programs.Vocat, true),
+		NewStudent("1351", genders.Male, programs.Vocat, false),
+		NewStudent("1352", genders.Male, programs.Vocat, false),
 	}
 
 	for _, s := range ss {

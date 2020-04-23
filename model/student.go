@@ -7,22 +7,29 @@ import (
 
 type Student struct {
 	citizenId         string
+	formalApplicable  bool
+	appIndex          int
 	gender            Gender
 	program           Program
 	applicationStatus ApplicationStatus
 	apps              [6]*Application
 	preferredCourses  [6]*Course
 	appIds            [6]string
-	appIndex          int
 }
 
-func NewStudent(citizenId string, gender Gender, program Program) *Student {
+func NewStudent(
+	citizenId string,
+	gender Gender,
+	program Program,
+	formalApplicable bool,
+) *Student {
 	return &Student{
 		citizenId:         citizenId,
 		gender:            gender,
 		program:           program,
 		applicationStatus: ApplicationStatuses().Pending,
 		appIndex:          -1,
+		formalApplicable:  formalApplicable,
 	}
 }
 
@@ -63,6 +70,10 @@ func (student *Student) AppIndex() int {
 
 func (student *Student) Gender() Gender {
 	return student.gender
+}
+
+func (student *Student) FormalApplicable() bool {
+	return student.formalApplicable
 }
 
 func (student *Student) Program() Program {
