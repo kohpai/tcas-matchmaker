@@ -154,12 +154,17 @@ func ToOutput(
 				continue
 			}
 
+			var formalApplicable uint8 = 0
+			if student.FormalApplicable() {
+				formalApplicable = 1
+			}
+
 			output := Application{
 				ApplicationId:    app.Id(),
 				CitizenId:        citizenId,
 				Gender:           uint8(student.Gender()),
 				SchoolProgram:    uint8(student.Program()),
-				FormalApplicable: 1,
+				FormalApplicable: formalApplicable,
 				CourseId:         course.Id(),
 				Priority:         appPriority,
 				Ranking:          rank,
