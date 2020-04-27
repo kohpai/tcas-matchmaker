@@ -23,9 +23,9 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 
 	if !pq.IsFull() {
 		// rejected, admitted, or nothing
-		if !strategy.applySublist(rankedStudent) {
-			return false
-		}
+		// if !strategy.applySublist(rankedStudent) {
+		// 	return false
+		// }
 		heap.Push(pq, rankedStudent)
 		return true
 	}
@@ -37,30 +37,30 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 
 	switch {
 	case rank == lastRank:
-		if !strategy.applySublist(rankedStudent) {
-			return false
-		}
+		// if !strategy.applySublist(rankedStudent) {
+		// 	return false
+		// }
 		heap.Push(pq, rankedStudent)
 		return true
 	case rank > lastRank:
 		return false
 	}
 
-	if !strategy.applySublist(rankedStudent) {
-		return false
-	}
+	// if !strategy.applySublist(rankedStudent) {
+	// 	return false
+	// }
 
 	heap.Push(pq, rankedStudent)
 	count := strategy.countBeingRemovedReplicas(pq)
 
-	studentsBeingRemoved := make([]*Student, 0)
+	// studentsBeingRemoved := make([]*Student, 0)
 	for ; count > 0; count-- {
 		rs := heap.Pop(pq).(*RankedStudent)
 		student := rs.Student()
 		student.ClearCourse()
-		studentsBeingRemoved = append(studentsBeingRemoved, student)
+		// studentsBeingRemoved = append(studentsBeingRemoved, student)
 	}
-	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
+	// strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	return true
 }

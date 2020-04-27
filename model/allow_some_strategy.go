@@ -29,7 +29,7 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 
 	if !pq.IsFull() {
 		lrr := strategy.leastReplicatedRank
-		if (lrr < 1 || rank < lrr) && strategy.applySublist(rankedStudent) {
+		if lrr < 1 || rank < lrr /*&& strategy.applySublist(rankedStudent)*/ {
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -51,17 +51,17 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 		strategy.leastReplicatedRank = lastRank
 	}
 
-	studentsBeingRemoved := make([]*Student, 0)
+	// studentsBeingRemoved := make([]*Student, 0)
 	for i := 0; i < count; i++ {
 		rs := heap.Pop(pq).(*RankedStudent)
 		student := rs.Student()
 		student.ClearCourse()
-		studentsBeingRemoved = append(studentsBeingRemoved, student)
+		// studentsBeingRemoved = append(studentsBeingRemoved, student)
 	}
-	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
+	// strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	admitted := rank < lastRank || count < 1
-	if admitted && !strategy.applySublist(rankedStudent) {
+	if admitted /*&& !strategy.applySublist(rankedStudent)*/ {
 		heap.Remove(pq, rankedStudent.index)
 		return false
 	}
