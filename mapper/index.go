@@ -47,8 +47,8 @@ var _admitStatus admitStatus
 func AdmitStatuses() admitStatus {
 	once.Do(func() {
 		_admitStatus.Admitted = 9
-		_admitStatus.Full = -2
-		_admitStatus.Late = -3
+		_admitStatus.Full = -2 // rejected by the course
+		_admitStatus.Late = -3 // already admitted to some other course
 	})
 	return _admitStatus
 }
