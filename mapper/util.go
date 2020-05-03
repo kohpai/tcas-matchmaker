@@ -2,6 +2,7 @@ package mapper
 
 import (
 	"log"
+	"sort"
 	"strconv"
 
 	"github.com/kohpai/tcas-matchmaker/model"
@@ -14,6 +15,8 @@ type StudentMap map[string]*model.Student         // citizen ID -> student
 
 // type RankInfoMap map[string]RankInfo       // citizen ID -> rank info
 // type RankingInfoMap map[string]RankInfoMap // course ID -> citizen ID -> rank info
+
+type Apps []Application
 
 func createJointCourseMap(courses []Course) JointCourseMap {
 	jointCourseMap := make(JointCourseMap)
@@ -130,6 +133,26 @@ func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMa
 	return studentMap
 }
 
+func (apps Apps) Len() int {
+	return len(apps)
+}
+
+func (apps Apps) Swap(i, j int) {
+	apps[i], apps[j] = apps[j], apps[i]
+}
+
+func (apps Apps) Less(i, j int) bool {
+	appIdI := apps[i].ApplicationId
+	appIdJ := apps[j].ApplicationId
+	lenI := len(appIdI)
+	lenJ := len(appIdJ)
+
+	if lenI == lenJ {
+		return appIdI < appIdJ
+	}
+	return lenI < lenJ
+}
+
 func ToOutput(
 	students []*model.Student,
 	courseMap CourseMap,
@@ -184,5 +207,8 @@ func ToOutput(
 		}
 	}
 
-	return outputs
+	apps := Apps(outputs)
+	sort.Sort(apps)
+
+	return apps
 }
