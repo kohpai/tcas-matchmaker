@@ -173,10 +173,10 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowSome, 1)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1354": 1,
-		"1353": 2,
-		"1352": 2,
 		"1351": 2,
+		"1352": 2,
+		"1353": 2,
+		"1354": 1,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
