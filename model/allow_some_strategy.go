@@ -61,9 +61,9 @@ func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
 	// strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	admitted := rank < lastRank || count < 1
-	if admitted /*&& !strategy.applySublist(rankedStudent)*/ {
-		heap.Remove(pq, rankedStudent.index)
-		return false
-	}
+	// if admitted && !strategy.applySublist(rankedStudent) {
+	// 	heap.Remove(pq, rankedStudent.index)
+	// 	return false
+	// }
 	return admitted
 }
