@@ -46,9 +46,9 @@ var _admitStatus admitStatus
 // TransactionTypes returns the types of a transaction
 func AdmitStatuses() admitStatus {
 	once.Do(func() {
-		_admitStatus.Admitted = 9
-		_admitStatus.Full = -2 // rejected by the course
-		_admitStatus.Late = -3 // already admitted to some other course
+		_admitStatus.Admitted = 2
+		_admitStatus.Full = 8 // rejected by the course
+		_admitStatus.Late = 9 // already admitted to some other course
 	})
 	return _admitStatus
 }
