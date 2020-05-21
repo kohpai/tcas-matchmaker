@@ -107,7 +107,9 @@ func CreateStudentMap(applications []Application, courseMap CourseMap) StudentMa
 		if _, ok := studentMap[citizenId]; !ok {
 			gender := a.Gender
 			if gender < 1 || 2 < gender {
-				log.Fatal("wrong gender value")
+				gender = 1
+				// log.Fatal("wrong gender value")
+				log.Println("wrong gender value, defaulting to 1...")
 			}
 			program := a.SchoolProgram
 			if program < 1 || 4 < program {
