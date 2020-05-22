@@ -4,67 +4,67 @@ import (
 	"testing"
 )
 
-func TestExtractRankings_Always_ReturnRankingMap(t *testing.T) {
+func TestExtractRanks_Always_ReturnRankMap(t *testing.T) {
 	apps := []Application{
 		{
 			CourseId:  "1234",
 			CitizenId: "13499",
-			Ranking:   1,
+			Ranking:   123.4,
 		},
 		{
 			CourseId:  "1234",
 			CitizenId: "13501",
-			Ranking:   2,
+			Ranking:   99.8,
 		},
 		{
 			CourseId:  "1234",
 			CitizenId: "13502",
-			Ranking:   3,
+			Ranking:   50,
 		},
 		{
 			CourseId:  "1235",
 			CitizenId: "13500",
-			Ranking:   2,
+			Ranking:   99.8,
 		},
 		{
 			CourseId:  "1236",
 			CitizenId: "13499",
-			Ranking:   1,
+			Ranking:   123.4,
 		},
 		{
 			CourseId:  "1237",
 			CitizenId: "13500",
-			Ranking:   1,
+			Ranking:   123.4,
 		},
 		{
 			CourseId:  "1237",
 			CitizenId: "13499",
-			Ranking:   2,
+			Ranking:   99.8,
 		},
 	}
 
 	rankingMap := ExtractRankings(apps)
 
-	if rank := rankingMap["1234"]["13499"]; rank != 1 {
-		t.Error("Rank is incorrect, got", rank, apps[0])
+	if rank := rankingMap["1234"]["13499"]; rank != 123.4 {
+		t.Error("Ranking is incorrect, got", rank, apps[0])
 	}
-	if rank := rankingMap["1234"]["13501"]; rank != 2 {
-		t.Error("Rank is incorrect, got", rank, apps[1])
+	if rank := rankingMap["1234"]["13501"]; rank != 99.8 {
+		t.Error("Ranking is incorrect, got", rank, apps[1])
 	}
-	if rank := rankingMap["1234"]["13502"]; rank != 3 {
-		t.Error("Rank is incorrect, got", rank, apps[2])
+	if rank := rankingMap["1234"]["13502"]; rank != 50 {
+		t.Error("Ranking is incorrect, got", rank, apps[2])
 	}
-	if rank := rankingMap["1235"]["13500"]; rank != 2 {
-		t.Error("Rank is incorrect, got", apps[3])
+	if rank := rankingMap["1235"]["13500"]; rank != 99.8 {
+		t.Error("Ranking is incorrect, got", apps[3])
 	}
-	if rank := rankingMap["1236"]["13499"]; rank != 1 {
-		t.Error("Rank is incorrect, got", rank, apps[4])
+	if rank := rankingMap["1236"]["13499"]; rank != 123.4 {
+		t.Error("Ranking is incorrect, got", rank, apps[4])
 	}
-	if rank := rankingMap["1237"]["13500"]; rank != 1 {
-		t.Error("Rank is incorrect, got", rank, apps[5])
+	if rank := rankingMap["1237"]["13500"]; rank != 123.4 {
+		t.Error("Ranking is incorrect, got", rank, apps[5])
 	}
-	if rank := rankingMap["1237"]["13499"]; rank != 2 {
-		t.Error("Rank is incorrect, got", rank, apps[6])
+	if rank := rankingMap["1237"]["13499"]; rank != 99.8 {
+		t.Error("Ranking is incorrect, got", rank, apps[6])
 	}
 }
 
@@ -120,37 +120,37 @@ func TestCreateCourseMap_Always_ReturnsCourseMap(t *testing.T) {
 		{
 			CourseId:  "1234",
 			CitizenId: "13499",
-			Ranking:   1,
+			Ranking:   123.4,
 		},
 		{
 			CourseId:  "1234",
 			CitizenId: "13501",
-			Ranking:   2,
+			Ranking:   99.8,
 		},
 		{
 			CourseId:  "1234",
 			CitizenId: "13502",
-			Ranking:   3,
+			Ranking:   50,
 		},
 		{
 			CourseId:  "1235",
 			CitizenId: "13500",
-			Ranking:   2,
+			Ranking:   99.8,
 		},
 		{
 			CourseId:  "1236",
 			CitizenId: "13499",
-			Ranking:   1,
+			Ranking:   123.4,
 		},
 		{
 			CourseId:  "1237",
 			CitizenId: "13500",
-			Ranking:   1,
+			Ranking:   123.4,
 		},
 		{
 			CourseId:  "1237",
 			CitizenId: "13499",
-			Ranking:   2,
+			Ranking:   99.8,
 		},
 	}
 	rankingMap := ExtractRankings(apps)
@@ -221,7 +221,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CourseId:      "1234",
 			CitizenId:     "13499",
 			Priority:      1,
-			Ranking:       1,
+			Ranking:       123.4,
 			Gender:        1,
 			SchoolProgram: 1,
 		},
@@ -229,7 +229,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CourseId:      "1234",
 			CitizenId:     "13501",
 			Priority:      1,
-			Ranking:       2,
+			Ranking:       99.8,
 			Gender:        1,
 			SchoolProgram: 1,
 		},
@@ -237,7 +237,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CourseId:      "1234",
 			CitizenId:     "13502",
 			Priority:      1,
-			Ranking:       3,
+			Ranking:       50,
 			Gender:        1,
 			SchoolProgram: 1,
 		},
@@ -245,7 +245,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CourseId:      "1235",
 			CitizenId:     "13500",
 			Priority:      1,
-			Ranking:       2,
+			Ranking:       99.8,
 			Gender:        1,
 			SchoolProgram: 1,
 		},
@@ -253,7 +253,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CourseId:      "1236",
 			CitizenId:     "13499",
 			Priority:      2,
-			Ranking:       1,
+			Ranking:       123.4,
 			Gender:        1,
 			SchoolProgram: 1,
 		},
@@ -261,7 +261,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CourseId:      "1237",
 			CitizenId:     "13500",
 			Priority:      3,
-			Ranking:       1,
+			Ranking:       123.4,
 			Gender:        1,
 			SchoolProgram: 1,
 		},
@@ -269,7 +269,7 @@ func TestCreateStudentMap_Always_ReturnsStudentMap(t *testing.T) {
 			CourseId:      "1237",
 			CitizenId:     "13499",
 			Priority:      4,
-			Ranking:       2,
+			Ranking:       99.8,
 			Gender:        1,
 			SchoolProgram: 1,
 		},

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-type Ranking map[string]uint16
+type Ranking map[string]float32
 type RankCount map[uint16]uint16
 
 type Course struct {

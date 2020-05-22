@@ -23,7 +23,7 @@ func TestApply_CourseIsNotFull_ReturnsTrue(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(1, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1349": 1,
+		"1349": 123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -38,8 +38,8 @@ func TestApply_CourseIsFullAndStudentHasHigherRank_ReturnsTrue(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(1, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1349": 2,
-		"1350": 1,
+		"1349": -99.8,
+		"1350": -123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -67,8 +67,8 @@ func TestApply_CourseIsFullAndStudentHasLowerRank_ReturnsFalse(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(1, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1349": 1,
-		"1350": 2,
+		"1349": -123.4,
+		"1350": -99.8,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -96,7 +96,7 @@ func TestApply_OneSpotLeft_CourseIsFull(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(1, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1349": 1,
+		"1349": 123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -112,9 +112,9 @@ func TestApply_MoreSpotsLeft_StudentsAreEnrolled(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1351": 1,
-		"1350": 2,
-		"1349": 3,
+		"1351": -123.4,
+		"1350": -99.8,
+		"1349": -50,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 

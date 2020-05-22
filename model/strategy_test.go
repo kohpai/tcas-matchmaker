@@ -8,12 +8,12 @@ func TestApply_AllowAll_AdmitAll(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(4, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1352": 1,
-		"1351": 1,
-		"1350": 2,
-		"1349": 3,
-		"1348": 3,
-		"1347": 3,
+		"1352": -123.4,
+		"1351": -123.4,
+		"1350": -99.8,
+		"1349": -50,
+		"1348": -50,
+		"1347": -50,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -41,12 +41,12 @@ func TestApply_AllowAllNoReplicas_AdmitNone(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(5, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1352": 1,
-		"1351": 2,
-		"1350": 2,
-		"1349": 3,
-		"1348": 4,
-		"1347": 5,
+		"1352": -123.4,
+		"1351": -99.8,
+		"1350": -99.8,
+		"1349": -50,
+		"1348": -9,
+		"1347": -0.2,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -74,12 +74,12 @@ func TestApply_NoCondition_DuplicatedStudentsAreNotAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy("", 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1352": 1,
-		"1351": 1,
-		"1350": 2,
-		"1349": 3,
-		"1348": 3,
-		"1347": 3,
+		"1352": -123.4,
+		"1351": -123.4,
+		"1350": -99.8,
+		"1349": -50,
+		"1348": -50,
+		"1347": -50,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -107,14 +107,14 @@ func TestApply_DenyAll1_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().DenyAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(4, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1354": 1,
-		"1353": 1,
-		"1352": 2,
-		"1351": 2,
-		"1350": 2,
-		"1349": 3,
-		"1348": 3,
-		"1347": 3,
+		"1354": -123.4,
+		"1353": -123.4,
+		"1352": -99.8,
+		"1351": -99.8,
+		"1350": -99.8,
+		"1349": -50,
+		"1348": -50,
+		"1347": -50,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -144,10 +144,10 @@ func TestApply_DenyAll2_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().DenyAll, 0)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1354": 1,
-		"1353": 2,
-		"1352": 2,
-		"1351": 2,
+		"1354": -123.4,
+		"1353": -99.8,
+		"1352": -99.8,
+		"1351": -99.8,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -173,10 +173,10 @@ func TestApply_AllowSomeNotExceedLimit_AdmitAll(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowSome, 1)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1351": 2,
-		"1352": 2,
-		"1353": 2,
-		"1354": 1,
+		"1351": -99.8,
+		"1352": -99.8,
+		"1353": -99.8,
+		"1354": -123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -202,12 +202,12 @@ func TestApply_AllowSomeExceedLimit_AdmitNone(t *testing.T) {
 	strategy := NewApplyStrategy(Conditions().AllowSome, 2)
 	jointCourse := NewJointCourse("1234", NewAvailableSpots(3, 0, 0, 0, 0, 0, 0), strategy)
 	ranking := Ranking{
-		"1354": 1,
-		"1353": 1,
-		"1352": 2,
-		"1351": 3,
-		"1350": 3,
-		"1349": 3,
+		"1354": -123.4,
+		"1353": -123.4,
+		"1352": -99.8,
+		"1351": -50,
+		"1350": -50,
+		"1349": -50,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -236,12 +236,12 @@ func TestApply_Male_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	availableSpots := NewAvailableSpots(6, 3, 0, 0, 0, 0, 0)
 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
 	ranking := Ranking{
-		"1352": 3,
-		"1351": 3,
-		"1350": 2,
-		"1349": 2,
-		"1348": 2,
-		"1347": 1,
+		"1352": -50,
+		"1351": -50,
+		"1350": -99.8,
+		"1349": -99.8,
+		"1348": -99.8,
+		"1347": -123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -270,12 +270,12 @@ func TestApply_Female_NoDuplicatedStudentsAreAdmitted(t *testing.T) {
 	availableSpots := NewAvailableSpots(6, 0, 3, 0, 0, 0, 0)
 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
 	ranking := Ranking{
-		"1352": 3,
-		"1351": 3,
-		"1350": 2,
-		"1349": 2,
-		"1348": 2,
-		"1347": 1,
+		"1352": -50,
+		"1351": -50,
+		"1350": -99.8,
+		"1349": -99.8,
+		"1348": -99.8,
+		"1347": -123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -304,12 +304,12 @@ func TestApply_FormalJustInPlace_AdmitAllReplicas(t *testing.T) {
 	availableSpots := NewAvailableSpots(6, 0, 0, 3, 0, 0, 0)
 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
 	ranking := Ranking{
-		"1347": 2,
-		"1348": 2,
-		"1349": 3,
-		"1350": 3,
-		"1351": 1,
-		"1352": 1,
+		"1347": -99.8,
+		"1348": -99.8,
+		"1349": -50,
+		"1350": -50,
+		"1351": -123.4,
+		"1352": -123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -338,12 +338,12 @@ func TestApply_VocatExceeds_RejectReplicas(t *testing.T) {
 	availableSpots := NewAvailableSpots(6, 0, 0, 0, 0, 2, 0)
 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
 	ranking := Ranking{
-		"1347": 3,
-		"1348": 3,
-		"1349": 2,
-		"1350": 2,
-		"1351": 1,
-		"1352": 1,
+		"1347": -50,
+		"1348": -50,
+		"1349": -99.8,
+		"1350": -99.8,
+		"1351": -123.4,
+		"1352": -123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
@@ -372,12 +372,12 @@ func TestApply_FormalExceedsAsVocat_RejectReplicas(t *testing.T) {
 	availableSpots := NewAvailableSpots(6, 0, 0, 2, 0, 0, 0)
 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
 	ranking := Ranking{
-		"1347": 3,
-		"1348": 3,
-		"1349": 2,
-		"1350": 2,
-		"1351": 1,
-		"1352": 1,
+		"1347": -50,
+		"1348": -50,
+		"1349": -99.8,
+		"1350": -99.8,
+		"1351": -123.4,
+		"1352": -123.4,
 	}
 	course := NewCourse("1234", jointCourse, ranking)
 
