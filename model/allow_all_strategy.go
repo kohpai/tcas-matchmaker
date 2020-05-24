@@ -17,19 +17,64 @@ func (strategy *BaseStrategy) countBeingRemovedReplicas(pq *PriorityQueue) int {
 	return 0
 }
 
+func (strategy *AllowAllStrategy) applySublist(rankedStudent *RankedStudent) bool {
+	jc := strategy.jointCourse
+	student := rankedStudent.Student()
+
+	genders := Genders()
+	gender := student.Gender()
+
+	var pq *PriorityQueue
+	var metadata *Metadata
+
+	switch gender {
+	case genders.Male:
+		pq, metadata = jc.MaleQ(), strategy.maleMetadata
+	case genders.Female:
+		pq, metadata = jc.FemaleQ(), strategy.femaleMetadata
+	}
+
+	copiedRs := &RankedStudent{
+		rankedStudent.Student(),
+		rankedStudent.Rank(),
+		0,
+	}
+	if pq != nil && !strategy.apply(pq, metadata, copiedRs, true) {
+		return false
+	}
+
+	programs := Programs()
+	program := student.Program()
+
+	switch program {
+	case programs.Formal:
+		pq, metadata = jc.FormalQ(), strategy.formalMetadata
+	case programs.Inter:
+		pq, metadata = jc.InterQ(), strategy.interMetadata
+	case programs.Vocat:
+		pq, metadata = jc.VocatQ(), strategy.vocatMetadata
+	case programs.NonFormal:
+		pq, metadata = jc.NonFormalQ(), strategy.nonFormalMetadata
+	}
+
+	copiedRs = &RankedStudent{
+		rankedStudent.Student(),
+		rankedStudent.Rank(),
+		0,
+	}
+	if pq != nil && !strategy.apply(pq, metadata, copiedRs, true) {
+		return false
+	}
+
+	return true
+}
+
 func (strategy *AllowAllStrategy) apply(
 	pq *PriorityQueue,
 	metadata *Metadata,
 	rankedStudent *RankedStudent,
 	isSublist bool,
 ) bool {
-	// @TODO the caller is responsible for creating the copy
-	// copiedRs := &RankedStudent{
-	// 	rankedStudent.Student(),
-	// 	rank,
-	// 	0,
-	// }
-
 	if !pq.IsFull() {
 		// rejected, admitted, or nothing
 		if !isSublist && !strategy.applySublist(rankedStudent) {
@@ -61,7 +106,6 @@ func (strategy *AllowAllStrategy) apply(
 
 	heap.Push(pq, rankedStudent)
 	count := strategy.countBeingRemovedReplicas(pq)
-
 	studentsBeingRemoved := make([]*Student, 0)
 	for ; count > 0; count-- {
 		rs := heap.Pop(pq).(*RankedStudent)
