@@ -13,11 +13,11 @@ type admitStatus struct {
 }
 
 type Application struct {
-	ApplicationId    string      `csv:"id"`
-	CitizenId        string      `csv:"citizen_id"`
-	Gender           uint8       `csv:"gender"`
+	ApplicationId    string      `csv:"_id"`
+	CitizenId        string      `csv:"register_id"`
+	Gender           uint8       `csv:"title"`
 	SchoolProgram    uint8       `csv:"school_program"`
-	FormalApplicable uint8       `csv:"formal_niets"`
+	FormalApplicable uint8       `csv:"school_niets_formal"`
 	CourseId         string      `csv:"round_id"`
 	Priority         uint8       `csv:"priority"`
 	Ranking          float32     `csv:"score"`
