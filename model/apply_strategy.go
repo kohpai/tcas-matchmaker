@@ -231,6 +231,56 @@ func (strategy *BaseStrategy) applyDenyAll(
 	return rank < lastRank
 }
 
+func (strategy *BaseStrategy) applyAllowSome(
+	pq *PriorityQueue,
+	metadata *Metadata,
+	rankedStudent *RankedStudent,
+) bool {
+	rank := rankedStudent.Rank()
+	// @TODO make sure we're using copiedRs everywhere
+	copiedRs := &RankedStudent{
+		rankedStudent.Student(),
+		rank,
+		0,
+	}
+
+	if !pq.IsFull() {
+		lrr := metadata.leastReplicatedRank
+		if lrr < 1 || rank < lrr {
+			heap.Push(pq, copiedRs)
+			return true
+		}
+
+		return false
+	}
+
+	tmp := heap.Pop(pq).(*RankedStudent)
+	heap.Push(pq, tmp)
+	lastRank := tmp.Rank()
+	if rank > lastRank {
+		return false
+	}
+
+	heap.Push(pq, copiedRs)
+	// @TODO use the count function of allowsome
+	count := strategy.countBeingRemovedReplicas(pq)
+
+	if count > 0 {
+		metadata.leastReplicatedRank = lastRank
+	}
+
+	studentsBeingRemoved := make([]*Student, 0)
+	for i := 0; i < count; i++ {
+		rs := heap.Pop(pq).(*RankedStudent)
+		student := rs.Student()
+		student.ClearCourse()
+		studentsBeingRemoved = append(studentsBeingRemoved, student)
+	}
+	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
+
+	return rank < lastRank || count < 1
+}
+
 func (strategy *BaseStrategy) applyAllowAll(
 	pq *PriorityQueue,
 	metadata *Metadata,
