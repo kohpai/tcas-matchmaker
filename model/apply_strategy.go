@@ -44,12 +44,12 @@ func NewApplyStrategy(condition Condition, exceedLimit uint16) ApplyStrategy {
 	case conditions.DenyAll:
 		return &DenyAllStrategy{
 			base,
-			0,
+			Metadata{0},
 		}
 	case conditions.AllowSome:
 		return &AllowSomeStrategy{
 			base,
-			0,
+			Metadata{0},
 			exceedLimit,
 		}
 	}

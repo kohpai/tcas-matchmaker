@@ -6,8 +6,8 @@ import (
 
 type AllowSomeStrategy struct {
 	BaseStrategy
-	leastReplicatedRank float32
-	exceedLimit         uint16
+	Metadata
+	exceedLimit uint16
 }
 
 func (strategy *AllowSomeStrategy) countBeingRemovedReplicas(pq *PriorityQueue) int {
@@ -38,7 +38,7 @@ func (strategy *AllowSomeStrategy) apply(
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
-		lrr := strategy.leastReplicatedRank
+		lrr := metadata.leastReplicatedRank
 		if lrr < 1 || rank < lrr && strategy.applySublist(rankedStudent) {
 			heap.Push(pq, rankedStudent)
 			return true
@@ -58,7 +58,7 @@ func (strategy *AllowSomeStrategy) apply(
 	count := strategy.countBeingRemovedReplicas(pq)
 
 	if count > 0 {
-		strategy.leastReplicatedRank = lastRank
+		metadata.leastReplicatedRank = lastRank
 	}
 
 	studentsBeingRemoved := make([]*Student, 0)
@@ -79,5 +79,5 @@ func (strategy *AllowSomeStrategy) apply(
 }
 
 func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
-	return strategy.apply(strategy.jointCourse.Students(), nil, rankedStudent)
+	return strategy.apply(strategy.jointCourse.Students(), &strategy.Metadata, rankedStudent)
 }

@@ -4,7 +4,7 @@ import "container/heap"
 
 type DenyAllStrategy struct {
 	BaseStrategy
-	leastReplicatedRank float32
+	Metadata
 }
 
 func (strategy *DenyAllStrategy) apply(
@@ -22,7 +22,7 @@ func (strategy *DenyAllStrategy) apply(
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
-		lrr := strategy.leastReplicatedRank
+		lrr := metadata.leastReplicatedRank
 		if lrr < 1 || rank < lrr && strategy.applySublist(rankedStudent) {
 			heap.Push(pq, rankedStudent)
 			return true
@@ -48,8 +48,8 @@ func (strategy *DenyAllStrategy) apply(
 	}
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
-	if lrr := strategy.leastReplicatedRank; lrr < 1 || lastRank < lrr {
-		strategy.leastReplicatedRank = lastRank
+	if lrr := metadata.leastReplicatedRank; lrr < 1 || lastRank < lrr {
+		metadata.leastReplicatedRank = lastRank
 	}
 
 	if rank < lastRank && strategy.applySublist(rankedStudent) {
@@ -61,5 +61,5 @@ func (strategy *DenyAllStrategy) apply(
 }
 
 func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
-	return strategy.apply(strategy.jointCourse.Students(), nil, rankedStudent)
+	return strategy.apply(strategy.jointCourse.Students(), &strategy.Metadata, rankedStudent)
 }
