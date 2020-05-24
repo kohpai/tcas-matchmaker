@@ -75,11 +75,12 @@ func (strategy *AllowAllStrategy) apply(
 	rankedStudent *RankedStudent,
 	isSublist bool,
 ) bool {
+	if !isSublist && !strategy.applySublist(rankedStudent) {
+		return false
+	}
+
 	if !pq.IsFull() {
 		// rejected, admitted, or nothing
-		if !isSublist && !strategy.applySublist(rankedStudent) {
-			return false
-		}
 		heap.Push(pq, rankedStudent)
 		return true
 	}
@@ -91,16 +92,12 @@ func (strategy *AllowAllStrategy) apply(
 
 	switch {
 	case rank == lastRank:
-		if !isSublist && !strategy.applySublist(rankedStudent) {
-			return false
-		}
 		heap.Push(pq, rankedStudent)
 		return true
 	case rank > lastRank:
-		return false
-	}
-
-	if !isSublist && !strategy.applySublist(rankedStudent) {
+		if !isSublist {
+			strategy.findAndRemoveFromOthers(pq, []*Student{rankedStudent.Student()})
+		}
 		return false
 	}
 

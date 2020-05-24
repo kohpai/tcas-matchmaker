@@ -65,15 +65,15 @@ func (strategy *DenyAllStrategy) apply(
 	rankedStudent *RankedStudent,
 	isSublist bool,
 ) bool {
+	if !isSublist && !strategy.applySublist(rankedStudent) {
+		return false
+	}
+
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
 		if lrr == 0 || rank < lrr {
-			if !isSublist && !strategy.applySublist(rankedStudent) {
-				return false
-			}
-
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -85,6 +85,9 @@ func (strategy *DenyAllStrategy) apply(
 	heap.Push(pq, tmp)
 	lastRank := tmp.Rank()
 	if rank > lastRank {
+		if !isSublist {
+			strategy.findAndRemoveFromOthers(pq, []*Student{rankedStudent.Student()})
+		}
 		return false
 	}
 
@@ -103,10 +106,6 @@ func (strategy *DenyAllStrategy) apply(
 	}
 
 	if rank < lastRank {
-		if !isSublist && !strategy.applySublist(rankedStudent) {
-			return false
-		}
-
 		heap.Push(pq, rankedStudent)
 		return true
 	}
