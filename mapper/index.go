@@ -20,7 +20,7 @@ type Application struct {
 	FormalApplicable uint8       `csv:"school_niets_formal"`
 	CourseId         string      `csv:"round_id"`
 	Priority         uint8       `csv:"priority"`
-	Ranking          float32     `csv:"score"`
+	Ranking          float64     `csv:"score"`
 	Status           AdmitStatus `csv:"status"`
 }
 

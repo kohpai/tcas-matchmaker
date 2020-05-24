@@ -6,7 +6,7 @@ import (
 
 type RankedStudent struct {
 	student *Student
-	rank    float32
+	rank    float64
 	index   int
 }
 
@@ -72,7 +72,7 @@ func (rs *RankedStudent) Student() *Student {
 	return rs.student
 }
 
-func (rs *RankedStudent) Rank() float32 {
+func (rs *RankedStudent) Rank() float64 {
 	return rs.rank
 }
 

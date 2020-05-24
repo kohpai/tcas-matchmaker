@@ -10,7 +10,7 @@ type ApplyStrategy interface {
 }
 
 type Metadata struct {
-	leastReplicatedRank float32
+	leastReplicatedRank float64
 }
 
 type BaseStrategy struct {
