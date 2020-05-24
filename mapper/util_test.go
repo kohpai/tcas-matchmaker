@@ -45,25 +45,25 @@ func TestExtractRanks_Always_ReturnRankMap(t *testing.T) {
 
 	rankingMap := ExtractRankings(apps)
 
-	if rank := rankingMap["1234"]["13499"]; rank != 123.4 {
+	if rank := rankingMap["1234"]["13499"]; rank != -123.4 {
 		t.Error("Ranking is incorrect, got", rank, apps[0])
 	}
-	if rank := rankingMap["1234"]["13501"]; rank != 99.8 {
+	if rank := rankingMap["1234"]["13501"]; rank != -99.8 {
 		t.Error("Ranking is incorrect, got", rank, apps[1])
 	}
-	if rank := rankingMap["1234"]["13502"]; rank != 50 {
+	if rank := rankingMap["1234"]["13502"]; rank != -50 {
 		t.Error("Ranking is incorrect, got", rank, apps[2])
 	}
-	if rank := rankingMap["1235"]["13500"]; rank != 99.8 {
+	if rank := rankingMap["1235"]["13500"]; rank != -99.8 {
 		t.Error("Ranking is incorrect, got", apps[3])
 	}
-	if rank := rankingMap["1236"]["13499"]; rank != 123.4 {
+	if rank := rankingMap["1236"]["13499"]; rank != -123.4 {
 		t.Error("Ranking is incorrect, got", rank, apps[4])
 	}
-	if rank := rankingMap["1237"]["13500"]; rank != 123.4 {
+	if rank := rankingMap["1237"]["13500"]; rank != -123.4 {
 		t.Error("Ranking is incorrect, got", rank, apps[5])
 	}
-	if rank := rankingMap["1237"]["13499"]; rank != 99.8 {
+	if rank := rankingMap["1237"]["13499"]; rank != -99.8 {
 		t.Error("Ranking is incorrect, got", rank, apps[6])
 	}
 }
