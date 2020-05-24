@@ -70,7 +70,7 @@ func ExtractRankings(rankings []Application) RankingMap {
 			rankingMap[courseId] = make(model.Ranking)
 		}
 
-		rankingMap[courseId][citizenId] = r.Ranking
+		rankingMap[courseId][citizenId] = -r.Ranking
 	}
 
 	return rankingMap
@@ -174,7 +174,7 @@ func ToOutput(
 
 			citizenId := student.CitizenId()
 			course := app.Course()
-			rank := course.Ranking()[citizenId]
+			rank := -course.Ranking()[citizenId]
 			if rank == 0 {
 				continue
 			}
