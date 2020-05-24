@@ -367,36 +367,36 @@ func TestApply_VocatExceeds_RejectReplicas(t *testing.T) {
 	}
 }
 
-func TestApply_FormalExceedsAsVocat_RejectReplicas(t *testing.T) {
-	strategy := NewApplyStrategy("", 0)
-	availableSpots := NewAvailableSpots(6, 0, 0, 2, 0, 0, 0)
-	jointCourse := NewJointCourse("1234", availableSpots, strategy)
-	ranking := Ranking{
-		"1347": -50,
-		"1348": -50,
-		"1349": -99.8,
-		"1350": -99.8,
-		"1351": -123.4,
-		"1352": -123.4,
-	}
-	course := NewCourse("1234", jointCourse, ranking)
+// func TestApply_FormalExceedsAsVocat_RejectReplicas(t *testing.T) {
+// 	strategy := NewApplyStrategy("", 0)
+// 	availableSpots := NewAvailableSpots(6, 0, 0, 2, 0, 0, 0)
+// 	jointCourse := NewJointCourse("1234", availableSpots, strategy)
+// 	ranking := Ranking{
+// 		"1347": -50,
+// 		"1348": -50,
+// 		"1349": -99.8,
+// 		"1350": -99.8,
+// 		"1351": -123.4,
+// 		"1352": -123.4,
+// 	}
+// 	course := NewCourse("1234", jointCourse, ranking)
 
-	programs := Programs()
-	genders := Genders()
-	ss := []*Student{
-		NewStudent("1347", genders.Female, programs.Vocat, true),
-		NewStudent("1348", genders.Female, programs.Vocat, true),
-		NewStudent("1349", genders.Female, programs.Vocat, true),
-		NewStudent("1350", genders.Female, programs.Vocat, true),
-		NewStudent("1351", genders.Male, programs.Vocat, false),
-		NewStudent("1352", genders.Male, programs.Vocat, false),
-	}
+// 	programs := Programs()
+// 	genders := Genders()
+// 	ss := []*Student{
+// 		NewStudent("1347", genders.Female, programs.Vocat, true),
+// 		NewStudent("1348", genders.Female, programs.Vocat, true),
+// 		NewStudent("1349", genders.Female, programs.Vocat, true),
+// 		NewStudent("1350", genders.Female, programs.Vocat, true),
+// 		NewStudent("1351", genders.Male, programs.Vocat, false),
+// 		NewStudent("1352", genders.Male, programs.Vocat, false),
+// 	}
 
-	for _, s := range ss {
-		course.Apply(s)
-	}
+// 	for _, s := range ss {
+// 		course.Apply(s)
+// 	}
 
-	if pq := jointCourse.Students(); pq.Len() != 4 {
-		t.Error("Wrong number of students", pq.Students())
-	}
-}
+// 	if pq := jointCourse.Students(); pq.Len() != 4 {
+// 		t.Error("Wrong number of students", pq.Students())
+// 	}
+// }
