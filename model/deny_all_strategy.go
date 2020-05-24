@@ -11,6 +11,7 @@ func (strategy *DenyAllStrategy) apply(
 	pq *PriorityQueue,
 	metadata *Metadata,
 	rankedStudent *RankedStudent,
+	isSublist bool,
 ) bool {
 	// @TODO the caller is responsible for creating the copy
 	// copiedRs := &RankedStudent{
@@ -23,7 +24,11 @@ func (strategy *DenyAllStrategy) apply(
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
-		if lrr < 1 || rank < lrr && strategy.applySublist(rankedStudent) {
+		if lrr < 1 || rank < lrr {
+			if !isSublist && !strategy.applySublist(rankedStudent) {
+				return false
+			}
+
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -52,7 +57,11 @@ func (strategy *DenyAllStrategy) apply(
 		metadata.leastReplicatedRank = lastRank
 	}
 
-	if rank < lastRank && strategy.applySublist(rankedStudent) {
+	if rank < lastRank {
+		if !isSublist && !strategy.applySublist(rankedStudent) {
+			return false
+		}
+
 		heap.Push(pq, rankedStudent)
 		return true
 	}
@@ -61,5 +70,5 @@ func (strategy *DenyAllStrategy) apply(
 }
 
 func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
-	return strategy.apply(strategy.jointCourse.Students(), &strategy.Metadata, rankedStudent)
+	return strategy.apply(strategy.jointCourse.Students(), &strategy.Metadata, rankedStudent, false)
 }

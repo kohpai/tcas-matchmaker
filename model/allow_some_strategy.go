@@ -27,6 +27,7 @@ func (strategy *AllowSomeStrategy) apply(
 	//@TODO make use of this metadata
 	metadata *Metadata,
 	rankedStudent *RankedStudent,
+	isSublist bool,
 ) bool {
 	// @TODO the caller is responsible for creating the copy
 	// copiedRs := &RankedStudent{
@@ -39,7 +40,11 @@ func (strategy *AllowSomeStrategy) apply(
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
-		if lrr < 1 || rank < lrr && strategy.applySublist(rankedStudent) {
+		if lrr < 1 || rank < lrr {
+			if !isSublist && !strategy.applySublist(rankedStudent) {
+				return false
+			}
+
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -71,7 +76,7 @@ func (strategy *AllowSomeStrategy) apply(
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	admitted := rank < lastRank || count < 1
-	if admitted && !strategy.applySublist(rankedStudent) {
+	if admitted && !isSublist && !strategy.applySublist(rankedStudent) {
 		heap.Remove(pq, rankedStudent.index)
 		return false
 	}
@@ -79,5 +84,5 @@ func (strategy *AllowSomeStrategy) apply(
 }
 
 func (strategy *AllowSomeStrategy) Apply(rankedStudent *RankedStudent) bool {
-	return strategy.apply(strategy.jointCourse.Students(), &strategy.Metadata, rankedStudent)
+	return strategy.apply(strategy.jointCourse.Students(), &strategy.Metadata, rankedStudent, false)
 }
