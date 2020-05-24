@@ -84,7 +84,7 @@ func (strategy *AllowSomeStrategy) apply(
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
-		if lrr < 1 || rank < lrr {
+		if lrr == 0 || rank < lrr {
 			if !isSublist && !strategy.applySublist(rankedStudent) {
 				return false
 			}

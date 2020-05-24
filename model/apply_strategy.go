@@ -195,7 +195,7 @@ func (strategy *BaseStrategy) applyDenyAll(
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
-		if lrr < 1 || rank < lrr {
+		if lrr == 0 || rank < lrr {
 			heap.Push(pq, copiedRs)
 			return true
 		}
@@ -220,7 +220,7 @@ func (strategy *BaseStrategy) applyDenyAll(
 	}
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
-	if lrr := metadata.leastReplicatedRank; lrr < 1 || lastRank < lrr {
+	if lrr := metadata.leastReplicatedRank; lrr == 0 || lastRank < lrr {
 		metadata.leastReplicatedRank = lastRank
 	}
 
@@ -246,7 +246,7 @@ func (strategy *BaseStrategy) applyAllowSome(
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
-		if lrr < 1 || rank < lrr {
+		if lrr == 0 || rank < lrr {
 			heap.Push(pq, copiedRs)
 			return true
 		}

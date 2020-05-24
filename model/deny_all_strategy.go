@@ -69,7 +69,7 @@ func (strategy *DenyAllStrategy) apply(
 
 	if !pq.IsFull() {
 		lrr := metadata.leastReplicatedRank
-		if lrr < 1 || rank < lrr {
+		if lrr == 0 || rank < lrr {
 			if !isSublist && !strategy.applySublist(rankedStudent) {
 				return false
 			}
@@ -98,7 +98,7 @@ func (strategy *DenyAllStrategy) apply(
 	}
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
-	if lrr := metadata.leastReplicatedRank; lrr < 1 || lastRank < lrr {
+	if lrr := metadata.leastReplicatedRank; lrr == 0 || lastRank < lrr {
 		metadata.leastReplicatedRank = lastRank
 	}
 
