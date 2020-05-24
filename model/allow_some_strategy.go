@@ -87,8 +87,7 @@ func (strategy *AllowSomeStrategy) apply(
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
-		lrr := metadata.leastReplicatedRank
-		if lrr == 0 || rank < lrr {
+		if lrr := metadata.leastReplicatedRank; metadata.noRank || rank < lrr {
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -111,6 +110,7 @@ func (strategy *AllowSomeStrategy) apply(
 
 	if count > 0 {
 		metadata.leastReplicatedRank = lastRank
+		metadata.noRank = false
 	}
 
 	studentsBeingRemoved := make([]*Student, 0)

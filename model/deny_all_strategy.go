@@ -72,8 +72,7 @@ func (strategy *DenyAllStrategy) apply(
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
-		lrr := metadata.leastReplicatedRank
-		if lrr == 0 || rank < lrr {
+		if lrr := metadata.leastReplicatedRank; metadata.noRank || rank < lrr {
 			heap.Push(pq, rankedStudent)
 			return true
 		}
@@ -101,8 +100,9 @@ func (strategy *DenyAllStrategy) apply(
 	}
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
-	if lrr := metadata.leastReplicatedRank; lrr == 0 || lastRank < lrr {
+	if lrr := metadata.leastReplicatedRank; metadata.noRank || lastRank < lrr {
 		metadata.leastReplicatedRank = lastRank
+		metadata.noRank = false
 	}
 
 	if rank < lastRank {

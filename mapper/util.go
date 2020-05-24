@@ -174,8 +174,8 @@ func ToOutput(
 
 			citizenId := student.CitizenId()
 			course := app.Course()
-			rank := -course.Ranking()[citizenId]
-			if rank == 0 {
+			rank, ok := course.Ranking()[citizenId]
+			if !ok {
 				continue
 			}
 
@@ -192,7 +192,7 @@ func ToOutput(
 				FormalApplicable: formalApplicable,
 				CourseId:         course.Id(),
 				Priority:         appPriority,
-				Ranking:          rank,
+				Ranking:          -rank,
 			}
 
 			statuses := AdmitStatuses()

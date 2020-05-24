@@ -11,6 +11,7 @@ type ApplyStrategy interface {
 
 type Metadata struct {
 	leastReplicatedRank float64
+	noRank              bool
 }
 
 type BaseStrategy struct {
@@ -44,12 +45,12 @@ func NewApplyStrategy(condition Condition, exceedLimit uint16) ApplyStrategy {
 	case conditions.DenyAll:
 		return &DenyAllStrategy{
 			base,
-			Metadata{0},
+			Metadata{0, true},
 		}
 	case conditions.AllowSome:
 		return &AllowSomeStrategy{
 			base,
-			Metadata{0},
+			Metadata{0, true},
 			exceedLimit,
 		}
 	}
@@ -61,27 +62,27 @@ func (strategy *BaseStrategy) SetJointCourse(jc *JointCourse) {
 	strategy.jointCourse = jc
 
 	if jc.MaleQ() != nil {
-		strategy.maleMetadata = &Metadata{0}
+		strategy.maleMetadata = &Metadata{0, true}
 	}
 
 	if jc.FemaleQ() != nil {
-		strategy.femaleMetadata = &Metadata{0}
+		strategy.femaleMetadata = &Metadata{0, true}
 	}
 
 	if jc.FormalQ() != nil {
-		strategy.formalMetadata = &Metadata{0}
+		strategy.formalMetadata = &Metadata{0, true}
 	}
 
 	if jc.InterQ() != nil {
-		strategy.interMetadata = &Metadata{0}
+		strategy.interMetadata = &Metadata{0, true}
 	}
 
 	if jc.VocatQ() != nil {
-		strategy.vocatMetadata = &Metadata{0}
+		strategy.vocatMetadata = &Metadata{0, true}
 	}
 
 	if jc.NonFormalQ() != nil {
-		strategy.nonFormalMetadata = &Metadata{0}
+		strategy.nonFormalMetadata = &Metadata{0, true}
 	}
 }
 
