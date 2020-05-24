@@ -7,9 +7,18 @@ type DenyAllStrategy struct {
 	leastReplicatedRank float32
 }
 
-func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
-	jc := strategy.jointCourse
-	pq := jc.Students()
+func (strategy *DenyAllStrategy) apply(
+	pq *PriorityQueue,
+	metadata *Metadata,
+	rankedStudent *RankedStudent,
+) bool {
+	// @TODO the caller is responsible for creating the copy
+	// copiedRs := &RankedStudent{
+	// 	rankedStudent.Student(),
+	// 	rank,
+	// 	0,
+	// }
+
 	rank := rankedStudent.Rank()
 
 	if !pq.IsFull() {
@@ -49,4 +58,8 @@ func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	}
 
 	return false
+}
+
+func (strategy *DenyAllStrategy) Apply(rankedStudent *RankedStudent) bool {
+	return strategy.apply(strategy.jointCourse.Students(), nil, rankedStudent)
 }

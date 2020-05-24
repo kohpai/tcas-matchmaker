@@ -17,9 +17,17 @@ func (strategy *BaseStrategy) countBeingRemovedReplicas(pq *PriorityQueue) int {
 	return 0
 }
 
-func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
-	jc := strategy.jointCourse
-	pq := jc.Students()
+func (strategy *AllowAllStrategy) apply(
+	pq *PriorityQueue,
+	metadata *Metadata,
+	rankedStudent *RankedStudent,
+) bool {
+	// @TODO the caller is responsible for creating the copy
+	// copiedRs := &RankedStudent{
+	// 	rankedStudent.Student(),
+	// 	rank,
+	// 	0,
+	// }
 
 	if !pq.IsFull() {
 		// rejected, admitted, or nothing
@@ -63,4 +71,8 @@ func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
 	strategy.findAndRemoveFromOthers(pq, studentsBeingRemoved)
 
 	return true
+}
+
+func (strategy *AllowAllStrategy) Apply(rankedStudent *RankedStudent) bool {
+	return strategy.apply(strategy.jointCourse.Students(), nil, rankedStudent)
 }
